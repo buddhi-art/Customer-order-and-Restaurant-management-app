@@ -15,7 +15,10 @@ class OnboardingScreen extends StatelessWidget {
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
-          child: Column(
+          child: Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 480),
+              child: Column(
             children: [
               // ── Logo ────────────────────────────────────────────────────
               FadeInWidget(
@@ -32,6 +35,7 @@ class OnboardingScreen extends StatelessWidget {
                       'assets/logo.png',
                       height: 56,
                       width: 56,
+                      semanticLabel: 'Kalpa Coffee logo',
                     ),
                   ),
                 ),
@@ -130,7 +134,10 @@ class OnboardingScreen extends StatelessWidget {
                 delay: const Duration(milliseconds: 450),
                 child: SizedBox(
                   width: double.infinity,
-                  child: M3PressScale(
+                  child: Semantics(
+                    button: true,
+                    label: 'Get Started',
+                    child: M3PressScale(
                     onTap: () => context.push('/scan'),
                     child: Container(
                       padding: const EdgeInsets.all(8),
@@ -175,6 +182,7 @@ class OnboardingScreen extends StatelessWidget {
                       ),
                     ),
                   ),
+                  ),
                 ),
               ),
               const SizedBox(height: 36),
@@ -186,7 +194,10 @@ class OnboardingScreen extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    M3PressScale(
+                    Semantics(
+                      button: true,
+                      label: 'Log in',
+                      child: M3PressScale(
                       onTap: () => context.push('/login'),
                       child: Container(
                         padding: const EdgeInsets.symmetric(
@@ -202,6 +213,7 @@ class OnboardingScreen extends StatelessWidget {
                         ),
                       ),
                     ),
+                    ),
                     Container(
                       width: 4,
                       height: 4,
@@ -211,7 +223,10 @@ class OnboardingScreen extends StatelessWidget {
                         shape: BoxShape.circle,
                       ),
                     ),
-                    M3PressScale(
+                    Semantics(
+                      button: true,
+                      label: 'Admin Access',
+                      child: M3PressScale(
                       onTap: () => context.push('/admin/login'),
                       child: Container(
                         padding: const EdgeInsets.symmetric(
@@ -227,11 +242,14 @@ class OnboardingScreen extends StatelessWidget {
                         ),
                       ),
                     ),
+                    ),
                   ],
                 ),
               ),
               const SizedBox(height: 20),
             ],
+              ),
+            ),
           ),
         ),
       ),

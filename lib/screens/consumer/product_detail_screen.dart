@@ -69,7 +69,10 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
       backgroundColor: CafeColors.surface,
       body: SafeArea(
         bottom: false,
-        child: Column(
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 640),
+            child: Column(
           children: [
             // ── Top bar ──
             Padding(
@@ -77,7 +80,10 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  M3PressScale(
+                  Semantics(
+                    button: true,
+                    label: 'Back',
+                    child: M3PressScale(
                     onTap: () => context.pop(),
                     child: Container(
                       width: 44,
@@ -94,7 +100,11 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
                       ),
                     ),
                   ),
-                  M3PressScale(
+                  ),
+                  Semantics(
+                    button: true,
+                    label: isFav ? 'Remove from favorites' : 'Add to favorites',
+                    child: M3PressScale(
                     onTap: () {
                       HapticFeedback.lightImpact();
                       ref
@@ -118,13 +128,17 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
                       ),
                     ),
                   ),
+                  ),
                 ],
               ),
             ),
 
             // ── Hero image ──
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.32,
+              height: (MediaQuery.of(context).size.height * 0.32).clamp(
+                180.0,
+                320.0,
+              ),
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 20),
                 child: Hero(
@@ -490,7 +504,10 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
                     const SizedBox(height: 24),
 
                     // ── Add to Cart button ──
-                    M3PressScale(
+                    Semantics(
+                      button: true,
+                      label: 'Add to Cart',
+                      child: M3PressScale(
                       onTap: () {
                         HapticFeedback.lightImpact();
                         ref
@@ -538,12 +555,15 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
                         ),
                       ),
                     ),
+                    ),
                     const SizedBox(height: 40),
                   ],
                 ),
               ),
             ),
           ],
+            ),
+          ),
         ),
       ),
     );

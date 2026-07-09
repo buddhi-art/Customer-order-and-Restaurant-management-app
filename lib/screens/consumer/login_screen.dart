@@ -120,7 +120,10 @@ class _LoginScreenState extends State<LoginScreen> {
         elevation: 0,
         leading: Padding(
           padding: const EdgeInsets.all(8),
-          child: M3PressScale(
+          child: Semantics(
+            button: true,
+            label: 'Back',
+            child: M3PressScale(
             onTap: () => context.go('/'),
             child: Container(
               width: 44,
@@ -133,12 +136,16 @@ class _LoginScreenState extends State<LoginScreen> {
               child: const Icon(Icons.arrow_back_ios_new, size: 16, color: CafeColors.onSurface),
             ),
           ),
+          ),
         ),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 40.0),
-          child: Column(
+          child: Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 480),
+              child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Logo Header
@@ -157,6 +164,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       'assets/logo.png',
                       height: 80,
                       width: 80,
+                      semanticLabel: 'Kalpa Coffee logo',
                     ),
                   ),
                 ),
@@ -352,7 +360,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 duration: const Duration(milliseconds: 700),
                 delay: const Duration(milliseconds: 350),
                 slideOffset: const Offset(0, 0.1),
-                child: M3PressScale(
+                child: Semantics(
+                  button: true,
+                  enabled: !_isLoading,
+                  label: _otpSent ? 'Verify' : 'Continue',
+                  child: M3PressScale(
                   onTap: _isLoading
                       ? null
                       : (_otpSent ? _verifyOtp : _sendOtp),
@@ -419,8 +431,11 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                 ),
+                ),
               ),
             ],
+              ),
+            ),
           ),
         ),
       ),
