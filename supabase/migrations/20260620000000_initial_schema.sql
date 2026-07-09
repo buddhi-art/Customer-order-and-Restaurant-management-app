@@ -111,15 +111,27 @@ ALTER TABLE public.cafe_settings ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.menu_items ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.notifications ENABLE ROW LEVEL SECURITY;
 
+-- NOTE: Every policy below is preceded by DROP POLICY IF EXISTS so this
+-- migration is idempotent — it can be re-run against a database that already
+-- has these objects (e.g. `supabase db push`/`reset` onto a live DB) without
+-- failing on "policy ... already exists" (SQLSTATE 42710).
+
 -- Allow users to read/update their own profile
+DROP POLICY IF EXISTS "Users can view own profile." ON public.profiles;
 CREATE POLICY "Users can view own profile." ON public.profiles FOR SELECT USING (auth.uid() = id);
+DROP POLICY IF EXISTS "Users can update own profile." ON public.profiles;
 CREATE POLICY "Users can update own profile." ON public.profiles FOR UPDATE USING (auth.uid() = id);
 -- Allow public access to read tables
+DROP POLICY IF EXISTS "Anyone can view tables." ON public.cafe_tables;
 CREATE POLICY "Anyone can view tables." ON public.cafe_tables FOR SELECT USING (true);
 -- Allow users to read their own orders (and guests to read orders by table if managed via app logic)
+DROP POLICY IF EXISTS "Users can view own orders." ON public.orders;
 CREATE POLICY "Users can view own orders." ON public.orders FOR SELECT USING (auth.uid() = user_id OR user_id IS NULL);
+DROP POLICY IF EXISTS "Users can insert orders." ON public.orders;
 CREATE POLICY "Users can insert orders." ON public.orders FOR INSERT WITH CHECK (true);
+DROP POLICY IF EXISTS "Users can view own reservations." ON public.reservations;
 CREATE POLICY "Users can view own reservations." ON public.reservations FOR SELECT USING (auth.uid() = user_id OR user_id IS NULL);
+DROP POLICY IF EXISTS "Users can insert reservations." ON public.reservations;
 CREATE POLICY "Users can insert reservations." ON public.reservations FOR INSERT WITH CHECK (true);
 
 -- =============================================================================
@@ -127,59 +139,76 @@ CREATE POLICY "Users can insert reservations." ON public.reservations FOR INSERT
 -- =============================================================================
 
 -- cafe_tables: Authenticated users can INSERT/UPDATE/DELETE; anyone can SELECT
+DROP POLICY IF EXISTS "Authenticated users can insert tables" ON public.cafe_tables;
 CREATE POLICY "Authenticated users can insert tables"
   ON public.cafe_tables FOR INSERT
   WITH CHECK (auth.uid() IS NOT NULL);
 
+DROP POLICY IF EXISTS "Authenticated users can update tables" ON public.cafe_tables;
 CREATE POLICY "Authenticated users can update tables"
   ON public.cafe_tables FOR UPDATE
   USING (auth.uid() IS NOT NULL);
 
+DROP POLICY IF EXISTS "Authenticated users can delete tables" ON public.cafe_tables;
 CREATE POLICY "Authenticated users can delete tables"
   ON public.cafe_tables FOR DELETE
   USING (auth.uid() IS NOT NULL);
 
 -- orders: Users can UPDATE their own orders; authenticated users can UPDATE any
+DROP POLICY IF EXISTS "Users can update own orders" ON public.orders;
 CREATE POLICY "Users can update own orders"
   ON public.orders FOR UPDATE
   USING (auth.uid() = user_id OR auth.uid() IS NOT NULL);
 
+DROP POLICY IF EXISTS "Authenticated users can delete orders" ON public.orders;
 CREATE POLICY "Authenticated users can delete orders"
   ON public.orders FOR DELETE
   USING (auth.uid() IS NOT NULL);
 
 -- reservations: Users can UPDATE/DELETE own reservations
+DROP POLICY IF EXISTS "Users can update own reservations" ON public.reservations;
 CREATE POLICY "Users can update own reservations"
   ON public.reservations FOR UPDATE
   USING (auth.uid() = user_id OR auth.uid() IS NOT NULL);
 
+DROP POLICY IF EXISTS "Users can delete own reservations" ON public.reservations;
 CREATE POLICY "Users can delete own reservations"
   ON public.reservations FOR DELETE
   USING (auth.uid() = user_id OR auth.uid() IS NOT NULL);
 
 -- profiles: Authenticated users can read any profile
+DROP POLICY IF EXISTS "Authenticated users can view any profile" ON public.profiles;
 CREATE POLICY "Authenticated users can view any profile"
   ON public.profiles FOR SELECT
   USING (auth.uid() = id OR auth.uid() IS NOT NULL);
 
+DROP POLICY IF EXISTS "Authenticated users can update any profile" ON public.profiles;
 CREATE POLICY "Authenticated users can update any profile"
   ON public.profiles FOR UPDATE
   USING (auth.uid() IS NOT NULL);
 
 -- inventory: Authenticated users can do everything, anyone can SELECT
+DROP POLICY IF EXISTS "Anyone can view inventory" ON public.inventory;
 CREATE POLICY "Anyone can view inventory" ON public.inventory FOR SELECT USING (true);
+DROP POLICY IF EXISTS "Authenticated users can manage inventory" ON public.inventory;
 CREATE POLICY "Authenticated users can manage inventory" ON public.inventory USING (auth.uid() IS NOT NULL);
 
 -- cafe_settings: Authenticated users can do everything, anyone can SELECT
+DROP POLICY IF EXISTS "Anyone can view cafe_settings" ON public.cafe_settings;
 CREATE POLICY "Anyone can view cafe_settings" ON public.cafe_settings FOR SELECT USING (true);
+DROP POLICY IF EXISTS "Authenticated users can manage cafe_settings" ON public.cafe_settings;
 CREATE POLICY "Authenticated users can manage cafe_settings" ON public.cafe_settings USING (auth.uid() IS NOT NULL);
 
 -- menu_items: Authenticated users can do everything, anyone can SELECT
+DROP POLICY IF EXISTS "Anyone can view menu_items" ON public.menu_items;
 CREATE POLICY "Anyone can view menu_items" ON public.menu_items FOR SELECT USING (true);
+DROP POLICY IF EXISTS "Authenticated users can manage menu_items" ON public.menu_items;
 CREATE POLICY "Authenticated users can manage menu_items" ON public.menu_items USING (auth.uid() IS NOT NULL);
 
 -- notifications: Authenticated users can do everything, anyone can SELECT
+DROP POLICY IF EXISTS "Anyone can view notifications" ON public.notifications;
 CREATE POLICY "Anyone can view notifications" ON public.notifications FOR SELECT USING (true);
+DROP POLICY IF EXISTS "Authenticated users can manage notifications" ON public.notifications;
 CREATE POLICY "Authenticated users can manage notifications" ON public.notifications USING (auth.uid() IS NOT NULL);
 
 -- =============================================================================
@@ -208,6 +237,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
+DROP TRIGGER IF EXISTS on_order_payment_success ON public.orders;
 CREATE TRIGGER on_order_payment_success
   AFTER UPDATE OF payment_status ON public.orders
   FOR EACH ROW

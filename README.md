@@ -15,7 +15,7 @@
 [![Riverpod](https://img.shields.io/badge/State-Riverpod_3.3+-9B59B6)](https://riverpod.dev)
 [![GoRouter](https://img.shields.io/badge/Routing-GoRouter_17-00BCD4)](https://pub.dev/packages/go_router)
 [![Platforms](https://img.shields.io/badge/Platform-Android_•_iOS_•_Web_•_macOS_•_Windows_•_Linux-6B9B7A)](https://flutter.dev)
-[![License](https://img.shields.io/badge/License-All_Rights_Reserved-9A6B3A)](LICENSE)
+![License](https://img.shields.io/badge/License-All_Rights_Reserved-9A6B3A)
 
 ---
 
@@ -77,8 +77,6 @@ onSurface:     Color(0xFF1F1B16)  // Ink — warm near-black text
 error:         Color(0xFFBA1A1A)  // Error red
 success:       Color(0xFF2E8555)  // Success green
 ```
-
-Full design system documented in [`DESIGN.md`](DESIGN.md).
 
 ### Typography
 
@@ -158,7 +156,7 @@ GoRouter's `redirect` callback guards every route:
 | Route | Guard |
 |---|---|
 | `/admin/*` | Requires Supabase auth session + `profiles.role == 'admin'` |
-| `/home` | Requires `table_id` in secure storage (from QR scan) |
+| `/home` | Requires `table_id` in SharedPreferences (from QR scan) |
 | `/scan` | Public — QR scanner entry point |
 | `/login` | Public — Phone OTP sign-in |
 
@@ -180,7 +178,7 @@ Admin status is cached in a Riverpod provider to avoid a Supabase query on every
 | **QR scanning** | [mobile_scanner](https://pub.dev/packages/mobile_scanner) |
 | **QR generation** | [qr_flutter](https://pub.dev/packages/qr_flutter) |
 | **Charts** | [fl_chart](https://pub.dev/packages/fl_chart) |
-| **Animations** | [flutter_animate](https://pub.dev/packages/fl_animate) |
+| **Animations** | [flutter_animate](https://pub.dev/packages/flutter_animate) |
 | **Environment** | [flutter_dotenv](https://pub.dev/packages/flutter_dotenv) |
 | **Fonts** | [Google Fonts](https://pub.dev/packages/google_fonts) (Outfit + Plus Jakarta Sans) |
 | **Geo-security** | [geolocator](https://pub.dev/packages/geolocator) + [network_info_plus](https://pub.dev/packages/network_info_plus) |
@@ -196,7 +194,7 @@ Admin status is cached in a Riverpod provider to avoid a Supabase query on every
 
 - Flutter SDK 3.10+
 - A Supabase project ([free tier](https://supabase.com) works)
-- A `.env` file at the project root
+- An `assets/app.env` file (client-safe values — see below)
 
 ### Setup
 
@@ -215,11 +213,23 @@ flutter run                    # Auto-detect device
 
 ### Environment Variables
 
+The app loads its config from **`assets/app.env`**, which is bundled into the
+build. It must contain **only client-safe values** — anything here is readable
+by anyone who unpacks a build, so never put the Supabase secret key or database
+URL in it (those are protected server-side by Row-Level Security):
+
 ```env
+# assets/app.env — bundled, client-safe only
 SUPABASE_URL=https://your-project.supabase.co
-SUPABASE_PUBLISHABLE_KEY=your-anon-key
+SUPABASE_PUBLISHABLE_KEY=your-publishable-key
 QR_HMAC_SECRET=your-secret-for-qr-token-signing
 ```
+
+Server-side secrets (`SUPABASE_SECRET_KEY`, `DATABASE_URL`) belong in a
+root-level `.env` that is **gitignored and never bundled** — used only for
+local tooling such as running migrations. See [`main.dart`](lib/main.dart),
+which calls `dotenv.load(fileName: "assets/app.env")` and validates the
+required keys at startup.
 
 ### Database Migrations
 
@@ -235,6 +245,13 @@ supabase db push
 | `20260701000000_add_order_update_rls.sql` | Tightens order update policy to owner-only |
 | `20260708000001_add_customer_to_enum.sql` | Adds missing `'customer'` value to `user_role` enum |
 | `20260708000002_create_trigger_and_backfill.sql` | Auto-creates profile row on signup + backfill for existing users |
+| `20260709000000_security_hardening.sql` | Owner/admin-only order UPDATE policy + server-side order-total validation trigger |
+| `20260709000001_drop_drifted_objects.sql` | Removes ad-hoc dashboard objects not in migration history (idempotent) |
+| `20260709000002_security_hardening_linter.sql` | Resolves Supabase advisor/linter warnings (RLS, policy hygiene) |
+
+> The initial schema migration is idempotent (`DROP … IF EXISTS` before each
+> policy/trigger), so it is safe to re-run against a database that already has
+> these objects.
 
 ### Build for Release
 
@@ -254,6 +271,7 @@ flutter build linux --release             # Linux
 All tables have RLS enabled. The key protections:
 
 - **Orders:** Anyone can view their own; only the owner or an admin can update status/payment
+- **Order totals:** A `BEFORE INSERT/UPDATE` trigger recomputes the authoritative total from live `menu_items` prices + tax and rejects client-tampered amounts
 - **Profiles:** Users see and edit their own profile; any authenticated user can read
 - **Menu/Tables:** Public read, authenticated write
 - **Inventory/Settings/Notifications:** Public read, authenticated write
@@ -271,7 +289,7 @@ All tables have RLS enabled. The key protections:
 | **4. Staff tools** | Menu/table/expense/staff management, notifications | ✅ Complete |
 | **5. Kitchen Display** | Real-time order queue, preparation status, expediting | 🔜 Planned |
 | **6. Analytics v2** | Labour, customer insights, custom reports, export | 🔜 Planned |
-| **8. Offline mode** | Local-first with background sync on connectivity restore | 🔜 Planned |
+| **7. Offline mode** | Local-first with background sync on connectivity restore | 🔜 Planned |
 
 ---
 
