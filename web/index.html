@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <base href="$FLUTTER_BASE_HREF">
+
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="description" content="Kalpa Café — Premium coffee ordering experience.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+  <!-- iOS meta tags -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Kalpa Café">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png" />
+
+  <!-- Preconnect to critical origins -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://supabase.co" crossorigin>
+
+  <!-- Passkeys WebAuthn stub (required by supabase_flutter's passkeys_web plugin) -->
+  <script src="bundle.js"></script>
+
+  <!-- Theme Color -->
+  <meta name="theme-color" content="#FDFBF7">
+
+  <title>Kalpa Café</title>
+  <link rel="manifest" href="manifest.json">
+
+  <!-- Prevent FOUC -->
+  <style>
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #FDFBF7;
+      overflow: hidden;
+    }
+
+    #loading {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #FDFBF7;
+      z-index: 9999;
+      transition: opacity 0.3s ease;
+    }
+
+    #loading.fade-out {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid #D4CBC0;
+      border-top-color: #3D2010;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="loading">
+    <div class="spinner"></div>
+  </div>
+  <script src="flutter_bootstrap.js" async></script>
+  <script>
+    // Remove loading spinner after Flutter app initializes
+    window.addEventListener('load', function () {
+      const loading = document.getElementById('loading');
+      if (loading) {
+        setTimeout(function () {
+          loading.classList.add('fade-out');
+          setTimeout(function () { loading.style.display = 'none'; }, 300);
+        }, 200);
+      }
+    });
+  </script>
+</body>
+
+</html>

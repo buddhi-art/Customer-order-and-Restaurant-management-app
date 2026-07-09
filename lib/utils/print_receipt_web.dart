@@ -1,0 +1,155 @@
+// ignore_for_file: avoid_web_libraries_in_flutter
+
+import 'dart:js_interop';
+import 'package:web/web.dart' as web;
+
+void printReceipt({
+  required String cafeName,
+  required String tableId,
+  required List<Map<String, dynamic>> items,
+  required double total,
+  String? paymentMethod,
+  String? orderId,
+}) {
+  final itemsHtml = items
+      .map((item) {
+        final name = item['name'] ?? '';
+        final qty = item['quantity'] ?? 1;
+        final price = (item['price'] as num?)?.toDouble() ?? 0.0;
+        final size = item['size'];
+        final lineTotal = price * qty;
+        final sizeTag = size != null && size != 'Medium'
+            ? ' <span style="color:#888;font-size:11px;">($size)</span>'
+            : '';
+        return '''
+    <tr>
+      <td style="padding:4px 0;">$qty x $name$sizeTag</td>
+      <td style="padding:4px 0;text-align:right;">\$${lineTotal.toStringAsFixed(2)}</td>
+    </tr>
+  ''';
+      })
+      .join('\n');
+
+  final receiptHtml =
+      '''
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Receipt - Table $tableId</title>
+  <style>
+    @media print {
+      body { margin: 0; padding: 0; }
+      .no-print { display: none; }
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Courier New', Courier, monospace;
+      background: #fff;
+      color: #222;
+      padding: 32px;
+      display: flex;
+      justify-content: center;
+    }
+    .receipt {
+      max-width: 380px;
+      width: 100%;
+      border: 2px solid #222;
+      border-radius: 16px;
+      padding: 28px 24px;
+      background: #fff;
+      box-shadow: 6px 6px 0 #222;
+    }
+    .header {
+      text-align: center;
+      border-bottom: 2px dashed #222;
+      padding-bottom: 16px;
+      margin-bottom: 16px;
+    }
+    .header h1 { font-size: 24px; letter-spacing: 2px; }
+    .header p { font-size: 12px; color: #555; margin-top: 4px; }
+    .info {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      margin-bottom: 12px;
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    thead th {
+      border-bottom: 1px solid #222;
+      padding-bottom: 6px;
+      text-align: left;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    thead th:last-child { text-align: right; }
+    tbody td { vertical-align: top; }
+    .total {
+      border-top: 2px solid #222;
+      margin-top: 12px;
+      padding-top: 12px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 18px;
+      font-weight: bold;
+    }
+    .payment {
+      text-align: center;
+      margin-top: 16px;
+      padding-top: 12px;
+      border-top: 1px dashed #ccc;
+      font-size: 12px;
+      color: #555;
+    }
+    .footer {
+      text-align: center;
+      margin-top: 16px;
+      font-size: 11px;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+  <div class="receipt">
+    <div class="header">
+      <h1>$cafeName</h1>
+      <p>कल्प • Since 2026</p>
+    </div>
+    <div class="info">
+      <span><strong>Table:</strong> ${tableId.replaceAll('table_', '').toUpperCase()}</span>
+      <span><strong>#${orderId != null ? orderId.substring(0, 8) : '---'}</strong></span>
+    </div>
+    <table>
+      <thead>
+        <tr><th>Item</th><th style="text-align:right;">Amount</th></tr>
+      </thead>
+      <tbody>
+        $itemsHtml
+      </tbody>
+    </table>
+    <div class="total">
+      <span>TOTAL</span>
+      <span>\$${total.toStringAsFixed(2)}</span>
+    </div>
+    ${paymentMethod != null ? '<div class="payment">Paid via ${paymentMethod.toUpperCase()}</div>' : ''}
+    <div class="footer">
+      Thank you for visiting कल्प!<br>
+      <button class="no-print" onclick="window.print()" style="margin-top:12px;padding:8px 24px;font-family:inherit;font-size:13px;border:2px solid #222;border-radius:8px;background:#fff;cursor:pointer;box-shadow:3px 3px 0 #222;">🖨 Print / Save PDF</button>
+    </div>
+  </div>
+  <script>
+    setTimeout(() => window.print(), 300);
+  </script>
+</body>
+</html>
+''';
+
+  final receiptDoc = web.window.open('', '_blank', 'width=500,height=700');
+  if (receiptDoc != null) {
+    final doc = receiptDoc.document;
+    doc.open();
+    doc.write(receiptHtml.toJS);
+    doc.close();
+  }
+}

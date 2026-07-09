@@ -1,0 +1,381 @@
+{
+    "schemaVersion": 2,
+    "generatedAt": "2026-07-08T16:27:00+05:45",
+    "title": "Design System: Kalpa Coffee",
+    "extensions": {
+        "colorMeta": {
+            "copper-bronze": {
+                "role": "primary",
+                "displayName": "Copper Bronze",
+                "canonical": "#9A6B3A",
+                "tonalRamp": [
+                    "#3D2010",
+                    "#5C3318",
+                    "#7D4A24",
+                    "#9A6B3A",
+                    "#BF8A54",
+                    "#D4A76E",
+                    "#E8C99A",
+                    "#F5E6D0"
+                ]
+            },
+            "copper-bronze-light": {
+                "role": "primary-container",
+                "displayName": "Copper Bronze Light",
+                "canonical": "#BF8A54",
+                "tonalRamp": [
+                    "#5C3318",
+                    "#7D4A24",
+                    "#9A6B3A",
+                    "#BF8A54",
+                    "#D4A76E",
+                    "#E8C99A",
+                    "#F0D8B5",
+                    "#F5E6D0"
+                ]
+            },
+            "espresso-dark": {
+                "role": "secondary",
+                "displayName": "Espresso Dark",
+                "canonical": "#2A1A0E",
+                "tonalRamp": [
+                    "#0A0A0A",
+                    "#1A1008",
+                    "#2A1A0E",
+                    "#3D2A18",
+                    "#5C4028",
+                    "#7D5A3A",
+                    "#9A7650",
+                    "#C4A882"
+                ]
+            },
+            "sage-green": {
+                "role": "tertiary",
+                "displayName": "Sage Green",
+                "canonical": "#7D8F79",
+                "tonalRamp": [
+                    "#1E2B1C",
+                    "#2E4028",
+                    "#4A5C3E",
+                    "#6B7D5E",
+                    "#7D8F79",
+                    "#9AAB94",
+                    "#BCC8B0",
+                    "#D6E4D2"
+                ]
+            },
+            "warm-cream": {
+                "role": "surface",
+                "displayName": "Warm Cream",
+                "canonical": "#FCFAF0",
+                "tonalRamp": [
+                    "#EBE6D8",
+                    "#F2ECE0",
+                    "#F3EFE1",
+                    "#F7F4E8",
+                    "#FCFAF0",
+                    "#FDFCF6",
+                    "#FEFDF8",
+                    "#FFFFFF"
+                ]
+            },
+            "ink": {
+                "role": "on-surface",
+                "displayName": "Ink",
+                "canonical": "#1F1B16",
+                "tonalRamp": [
+                    "#0A0A0A",
+                    "#141210",
+                    "#1F1B16",
+                    "#3D362E",
+                    "#5A5248",
+                    "#7A7066",
+                    "#9A9086",
+                    "#C4BDB6"
+                ]
+            },
+            "muted": {
+                "role": "on-surface-variant",
+                "displayName": "Muted",
+                "canonical": "#5A5248",
+                "tonalRamp": [
+                    "#2A221A",
+                    "#3D362E",
+                    "#5A5248",
+                    "#7A7066",
+                    "#9A9086",
+                    "#B5ADA4",
+                    "#D4CBC0",
+                    "#EBE6D8"
+                ]
+            },
+            "error-red": {
+                "role": "error",
+                "displayName": "Error Red",
+                "canonical": "#BA1A1A",
+                "tonalRamp": [
+                    "#410002",
+                    "#690005",
+                    "#93000A",
+                    "#BA1A1A",
+                    "#DE3730",
+                    "#FF5449",
+                    "#FF897D",
+                    "#FFDAD6"
+                ]
+            },
+            "success-green": {
+                "role": "success",
+                "displayName": "Success Green",
+                "canonical": "#2E8555",
+                "tonalRamp": [
+                    "#0A2E1A",
+                    "#174A2A",
+                    "#2E8555",
+                    "#4CA878",
+                    "#72C99A",
+                    "#9DE0BC",
+                    "#C5F0D8",
+                    "#D9F2E6"
+                ]
+            },
+            "warning-amber": {
+                "role": "warning",
+                "displayName": "Warning Amber",
+                "canonical": "#D97706",
+                "tonalRamp": [
+                    "#5C3A00",
+                    "#8B5A00",
+                    "#B47A00",
+                    "#D97706",
+                    "#F59E0B",
+                    "#FBBF24",
+                    "#FDE68A",
+                    "#FEF3C7"
+                ]
+            }
+        },
+        "typographyMeta": {
+            "display": {
+                "displayName": "Display",
+                "purpose": "Hero headlines only — at most once per screen. Onboarding, login greeting, dashboard welcome."
+            },
+            "headline": {
+                "displayName": "Headline",
+                "purpose": "Section titles, card headings, screen titles. The workhorse heading."
+            },
+            "title": {
+                "displayName": "Title",
+                "purpose": "Subheadings, card titles, list item leads. Bridges heading structure and body readability."
+            },
+            "body": {
+                "displayName": "Body",
+                "purpose": "All running text. Max line length 65–75ch."
+            },
+            "label": {
+                "displayName": "Label",
+                "purpose": "Buttons, chips, navigation labels, form labels. Uppercase only where semantically appropriate."
+            }
+        },
+        "shadows": [
+            {
+                "name": "ambient-subtle",
+                "value": "0 2px 8px rgba(42,26,14,0.04)",
+                "purpose": "Card hover lift. Barely perceptible; more texture than shadow."
+            },
+            {
+                "name": "ambient-medium",
+                "value": "0 4px 16px rgba(42,26,14,0.08)",
+                "purpose": "Elevated card, dropdown panel. Gentle surface separation."
+            },
+            {
+                "name": "ambient-deep",
+                "value": "0 12px 32px rgba(42,26,14,0.12)",
+                "purpose": "Modal backdrop, bottom sheet. Clear elevation without drama."
+            },
+            {
+                "name": "button-press",
+                "value": "0 12px 24px rgba(42,26,14,0.15)",
+                "purpose": "Primary CTA button. The only shadow with presence — reserved for the most important action."
+            }
+        ],
+        "motion": [
+            {
+                "name": "ease-standard",
+                "value": "cubic-bezier(0.4, 0, 0.2, 1)",
+                "purpose": "Default easing for state transitions — color, background, opacity changes."
+            },
+            {
+                "name": "ease-emphatic",
+                "value": "cubic-bezier(0.32, 0.72, 0, 1)",
+                "purpose": "Emphasized transitions — chip selection, card appearance, morph page transitions."
+            },
+            {
+                "name": "duration-fast",
+                "value": "200ms",
+                "purpose": "Micro-interactions: button press, ripple, toggle."
+            },
+            {
+                "name": "duration-standard",
+                "value": "300ms",
+                "purpose": "Standard transitions: chip toggle, card hover, navigation state change."
+            },
+            {
+                "name": "duration-slow",
+                "value": "600ms",
+                "purpose": "Entrance animations: fade-in with slide, staggered list reveals. Never faster than 500ms for entrance."
+            }
+        ],
+        "breakpoints": [
+            {
+                "name": "mobile",
+                "value": "0-599px",
+                "purpose": "Single column, bottom navigation, stacked layouts."
+            },
+            {
+                "name": "tablet",
+                "value": "600-1023px",
+                "purpose": "Two-column grid, optional side navigation on admin."
+            },
+            {
+                "name": "desktop",
+                "value": "1024px+",
+                "purpose": "Multi-column grid, top navigation bar, split-panel layouts (checkout, analytics)."
+            }
+        ]
+    },
+    "components": [
+        {
+            "name": "Primary Button",
+            "kind": "button",
+            "refersTo": "button-primary",
+            "description": "The main call-to-action. Pill-shaped, espresso-dark fill, warm cream text. Reserved for the single most important action per screen.",
+            "html": "<button class=\"ds-btn-primary\">Continue</button>",
+            "css": ".ds-btn-primary { background: #2A1A0E; color: #FCFAF0; padding: 24px 32px; border: none; border-radius: 100px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 16px; font-weight: 700; cursor: pointer; transition: box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.2s cubic-bezier(0.4, 0, 0.2, 1); } .ds-btn-primary:hover { box-shadow: 0 12px 24px rgba(42,26,14,0.15); transform: translateY(-1px); } .ds-btn-primary:active { transform: scale(0.98); } .ds-btn-primary:focus-visible { outline: 2px solid #9A6B3A; outline-offset: 2px; } .ds-btn-primary:disabled { opacity: 0.4; cursor: not-allowed; box-shadow: none; transform: none; }"
+        },
+        {
+            "name": "Secondary Button",
+            "kind": "button",
+            "refersTo": "button-secondary",
+            "description": "Outlined alternative action. Transparent fill with warm border, used alongside or instead of primary buttons.",
+            "html": "<button class=\"ds-btn-secondary\">View All</button>",
+            "css": ".ds-btn-secondary { background: transparent; color: #1F1B16; padding: 16px 24px; border: 1px solid #E8E2D2; border-radius: 100px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; font-weight: 600; cursor: pointer; transition: background 0.3s cubic-bezier(0.4, 0, 0.2, 1); } .ds-btn-secondary:hover { background: #EBE6D8; } .ds-btn-secondary:focus-visible { outline: 2px solid #9A6B3A; outline-offset: 2px; }"
+        },
+        {
+            "name": "Card (Double Bezel)",
+            "kind": "card",
+            "refersTo": "card-default",
+            "description": "Kalpa's signature surface — a nested frame with outer stroke and inner surface creating a crafted, object-like bezel effect.",
+            "html": "<div class=\"ds-card\"><div class=\"ds-card-inner\"><h3 class=\"ds-card-title\">Title</h3><p class=\"ds-card-body\">Card content goes here.</p></div></div>",
+            "css": ".ds-card { padding: 4px; background: transparent; border: 1px solid #F2ECE0; border-radius: 32px; overflow: hidden; } .ds-card-inner { background: #FDFCF6; border-radius: 28px; padding: 32px; } .ds-card-title { font-family: 'Outfit', sans-serif; font-size: 24px; font-weight: 700; color: #1F1B16; margin: 0 0 16px 0; letter-spacing: -0.5px; } .ds-card-body { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 16px; color: #5A5248; margin: 0; line-height: 1.6; } .ds-card:hover { box-shadow: 0 2px 8px rgba(42,26,14,0.04); }"
+        },
+        {
+            "name": "Chip (Selected)",
+            "kind": "chip",
+            "refersTo": "chip-selected",
+            "description": "Active filter or category chip. Filled with espresso-dark, white text. Used in horizontal scrolling category bars.",
+            "html": "<span class=\"ds-chip ds-chip-selected\">All</span>",
+            "css": ".ds-chip { display: inline-block; padding: 12px 24px; border-radius: 100px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.3s cubic-bezier(0.32, 0.72, 0, 1); margin-right: 12px; } .ds-chip-selected { background: #2A1A0E; color: #FCFAF0; border: 1px solid #2A1A0E; } .ds-chip-unselected { background: transparent; color: #5A5248; border: 1px solid #E8E2D2; } .ds-chip-unselected:hover { background: #EBE6D8; }"
+        },
+        {
+            "name": "Text Input",
+            "kind": "input",
+            "refersTo": null,
+            "description": "Soft, filled text field with warm cream background. Approachable, not clinical.",
+            "html": "<input type=\"text\" class=\"ds-input\" placeholder=\"Search the menu...\" />",
+            "css": ".ds-input { background: #FDFCF6; border: 1px solid #E8E2D2; border-radius: 12px; padding: 14px 16px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 16px; font-weight: 500; color: #1F1B16; outline: none; width: 100%; box-sizing: border-box; transition: border-color 0.2s cubic-bezier(0.4, 0, 0.2, 1); } .ds-input::placeholder { color: rgba(90,82,72,0.7); font-weight: 500; } .ds-input:focus { border-color: #9A6B3A; border-width: 2px; } .ds-input.error { border-color: #BA1A1A; background: rgba(255,218,214,0.3); }"
+        },
+        {
+            "name": "Bottom Navigation Item",
+            "kind": "nav",
+            "refersTo": null,
+            "description": "Mobile bottom nav item with pill indicator on selected state. Flat surface, no elevation.",
+            "html": "<nav class=\"ds-bottom-nav\"><a class=\"ds-nav-item ds-nav-item-selected\" href=\"#\"><svg class=\"ds-nav-icon\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\"><path d=\"M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2V9z\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg><span>Home</span></a><a class=\"ds-nav-item\" href=\"#\"><span>Orders</span></a></nav>",
+            "css": ".ds-bottom-nav { display: flex; justify-content: space-around; background: #FCFAF0; padding: 8px 0; } .ds-nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 8px 16px; border-radius: 100px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 12px; font-weight: 500; color: #5A5248; text-decoration: none; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); } .ds-nav-item-selected { background: #EBE6D8; color: #1F1B16; font-weight: 700; } .ds-nav-icon { width: 24px; height: 24px; }"
+        },
+        {
+            "name": "Coffee Card",
+            "kind": "card",
+            "refersTo": null,
+            "description": "Signature product card with warm brown gradient background. Displays coffee image, name, price, and quick-add button.",
+            "html": "<div class=\"ds-coffee-card\"><div class=\"ds-coffee-card-image\">☕</div><div class=\"ds-coffee-card-info\"><h3>Espresso</h3><span class=\"ds-coffee-card-price\">$3.50</span><button class=\"ds-coffee-card-add\">+</button></div></div>",
+            "css": ".ds-coffee-card { background: linear-gradient(135deg, #5C3318, #3D2010); border-radius: 32px; padding: 24px; display: flex; flex-direction: column; gap: 16px; cursor: pointer; transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1); } .ds-coffee-card:active { transform: scale(0.97); } .ds-coffee-card:hover { box-shadow: 0 2px 8px rgba(42,26,14,0.04); } .ds-coffee-card-image { font-size: 64px; text-align: center; } .ds-coffee-card-info { display: flex; justify-content: space-between; align-items: center; } .ds-coffee-card-info h3 { font-family: 'Outfit', sans-serif; font-size: 20px; font-weight: 700; color: #FFFFFF; margin: 0; } .ds-coffee-card-price { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 16px; font-weight: 600; color: rgba(255,255,255,0.8); } .ds-coffee-card-add { background: rgba(255,255,255,0.1); border: none; color: #FFFFFF; width: 36px; height: 36px; border-radius: 12px; font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; }"
+        }
+    ],
+    "narrative": {
+        "northStar": "Handmade in Light",
+        "overview": "Kalpa's visual system is a warm, light-filled workshop. Every surface feels tactile — like ceramic, wood grain, linen — rendered through modern restraint. The palette is drawn from the physical world of a cafe at golden hour: copper, cream, deep espresso, and the quiet green of a plant on the windowsill. Nothing is cold. Nothing is rushed.\n\nThe system is intentionally calm. Motion breathes rather than snaps. Surfaces are flat at rest, with subtle warm shadows appearing only on interaction — a card lifts slightly on hover, a button deepens on press. The primary accent (copper bronze) is used sparingly; most of the interface lives in warm creams and deep browns, letting the accent's rarity carry meaning.\n\nThis system explicitly rejects dark mode (the cafe is a sunlit space), neon accents, glassmorphism as decoration, uppercase tracked eyebrows over every section, gradient text, and side-stripe borders. It is soft and welcoming, never aggressive. It is crafted, never templated.",
+        "keyCharacteristics": [
+            "Light-only; the cafe lives in daylight and warm lamplight",
+            "Flat surfaces with warm ambient shadows reserved for interactive elements",
+            "Generous rounded corners (32px cards, pill-shaped buttons and chips)",
+            "Copper bronze accent used on ≤10% of any screen; its rarity is the point",
+            "Outfit for headings (geometric warmth), Plus Jakarta Sans for body (neutral legibility)",
+            "Typographic hierarchy, not color, carries information"
+        ],
+        "rules": [
+            {
+                "name": "The ≤10% Accent Rule",
+                "body": "Copper Bronze appears on at most 10% of any screen by surface area. If it feels abundant, it's wrong. Its rarity communicates that it matters.",
+                "section": "colors"
+            },
+            {
+                "name": "The No Dark Mode Rule",
+                "body": "Kalpa is a sunlit cafe. There is no dark theme. The deepest color (Espresso Dark, #2A1A0E) provides contrast without a mode switch.",
+                "section": "colors"
+            },
+            {
+                "name": "The Warm-Neutral Rule",
+                "body": "Every neutral in the system carries a barely-perceptible warm tint toward Copper Bronze's hue. No cool grays. No pure #000 or #FFF.",
+                "section": "colors"
+            },
+            {
+                "name": "The One Display Rule",
+                "body": "Display weight (w800, clamp up to 4rem) appears exactly once per screen. If two elements compete at display scale, neither wins.",
+                "section": "typography"
+            },
+            {
+                "name": "The No Eyebrow Rule",
+                "body": "Small uppercase tracked text above every section heading is AI grammar. Kalpa uses weight and spacing to create hierarchy, not repetitive micro-labels.",
+                "section": "typography"
+            },
+            {
+                "name": "The No Shadow by Default Rule",
+                "body": "Surfaces are flat at rest. Shadows appear only as a response to state. If a shadow exists without an interaction, it's decorative and should be removed.",
+                "section": "elevation"
+            },
+            {
+                "name": "The Warm Shadow Rule",
+                "body": "Every shadow color is Espresso Dark (#2A1A0E) at varying alpha. Never pure black, never cool gray. Shadows should feel like they're cast by the cafe's ambient light.",
+                "section": "elevation"
+            },
+            {
+                "name": "The Bezel Rule",
+                "body": "Every card and container uses the double-bezel pattern (outer stroke + inner surface with inset padding). If a card lacks the bezel, it's not a Kalpa card.",
+                "section": "components"
+            }
+        ],
+        "dos": [
+            "Use Copper Bronze (#9A6B3A) sparingly — at most 10% of any screen. Its rarity is the point.",
+            "Use the DoubleBezelContainer for any card-like surface. Consistency in the bezel pattern is the system's signature.",
+            "Use weight (w700 vs w500), not color, to differentiate active/inactive states in navigation.",
+            "Set body text in Ink (#1F1B16) on Warm Cream (#FCFAF0) — this pairing guarantees WCAG AA contrast.",
+            "Respect reduced motion: all animations must have an instant/crossfade fallback.",
+            "Use Outfit for headings only (Display through Headline). Never for body text, never for labels.",
+            "Maintain 44×44pt minimum touch targets on all interactive elements.",
+            "Use warm-tinted shadows (Espresso Dark at low alpha) — never pure black shadows."
+        ],
+        "donts": [
+            "Don't use neon colors, loud pop colors, or any saturation above what exists in the palette. Kalpa is not a bubble tea chain.",
+            "Don't implement dark mode. The cafe lives in light. Espresso Dark (#2A1A0E) provides all needed contrast.",
+            "Don't use glassmorphism (backdrop-filter blur on surfaces) as decoration.",
+            "Don't put small uppercase tracked eyebrows above every section — this is AI grammar.",
+            "Don't use gradient text (background-clip: text). Emphasis comes from weight and size.",
+            "Don't use side-stripe borders (border-left/border-right > 1px as accent).",
+            "Don't use cursive script fonts, burlap textures, or kraft paper brown.",
+            "Don't apply shadows to static, non-interactive surfaces.",
+            "Don't let any animation feel jarring or abrupt. Kalpa motion breathes.",
+            "Don't use pure black (#000) or pure white (#FFF) anywhere. Every neutral carries a warm tint."
+        ]
+    }
+}

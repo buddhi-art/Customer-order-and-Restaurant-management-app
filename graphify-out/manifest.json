@@ -1,0 +1,807 @@
+{
+  "/Users/buddhirajgautam/Documents/flutter app/.vscode/extensions.json": {
+    "mtime": 1781933543.3308325,
+    "ast_hash": "9056b8e896427ed2c2be9330fdfe97b3",
+    "semantic_hash": "9056b8e896427ed2c2be9330fdfe97b3"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/.vscode/settings.json": {
+    "mtime": 1781933543.3309674,
+    "ast_hash": "e6ec93578e8d896fa199e2a16ba22a65",
+    "semantic_hash": "e6ec93578e8d896fa199e2a16ba22a65"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/android/app/build.gradle.kts": {
+    "mtime": 1781933329.7933683,
+    "ast_hash": "aa16a26c7604890871991d9dbd973ac8",
+    "semantic_hash": "aa16a26c7604890871991d9dbd973ac8"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/android/app/src/main/java/io/flutter/plugins/GeneratedPluginRegistrant.java": {
+    "mtime": 1781934767.461468,
+    "ast_hash": "8b708a86ad0bbdb1afdb714fa99a7d81",
+    "semantic_hash": "8b708a86ad0bbdb1afdb714fa99a7d81"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/android/app/src/main/kotlin/com/example/kalpa_coffee/MainActivity.kt": {
+    "mtime": 1781933329.794033,
+    "ast_hash": "bb4fb16b0cd5c1747e4a2aa38d77d1f7",
+    "semantic_hash": "bb4fb16b0cd5c1747e4a2aa38d77d1f7"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/android/build.gradle.kts": {
+    "mtime": 1781933329.7930324,
+    "ast_hash": "f11f360aed44d4f6871b398346af14f0",
+    "semantic_hash": "f11f360aed44d4f6871b398346af14f0"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/android/gradlew": {
+    "mtime": 1781933329.8075695,
+    "ast_hash": "7f1cd7eb3f75a1dc85cd37753972a6e2",
+    "semantic_hash": "7f1cd7eb3f75a1dc85cd37753972a6e2"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/android/settings.gradle.kts": {
+    "mtime": 1781933329.7914333,
+    "ast_hash": "094e3cafe85d4dbf756dfe0bd754c6cb",
+    "semantic_hash": "094e3cafe85d4dbf756dfe0bd754c6cb"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/ios/Flutter/ephemeral/flutter_lldb_helper.py": {
+    "mtime": 1781933330.8529549,
+    "ast_hash": "98fc75412162af387e2e3461e4e58094",
+    "semantic_hash": "98fc75412162af387e2e3461e4e58094"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/ios/Flutter/flutter_export_environment.sh": {
+    "mtime": 1781933330.8573644,
+    "ast_hash": "06be4f7ba1c414c919653d4910bb515f",
+    "semantic_hash": "06be4f7ba1c414c919653d4910bb515f"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/ios/Runner/AppDelegate.swift": {
+    "mtime": 1763740075.0,
+    "ast_hash": "303ca46dbd58544be7b816861d70a27c",
+    "semantic_hash": "303ca46dbd58544be7b816861d70a27c"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/ios/Runner/Assets.xcassets/AppIcon.appiconset/Contents.json": {
+    "mtime": 1763740075.0,
+    "ast_hash": "c3cdf9688b604d14f2e76a8287e16167",
+    "semantic_hash": "c3cdf9688b604d14f2e76a8287e16167"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/ios/Runner/Assets.xcassets/LaunchImage.imageset/Contents.json": {
+    "mtime": 1763740075.0,
+    "ast_hash": "770f4f65e02ca2fc57f46f4f4148d15d",
+    "semantic_hash": "770f4f65e02ca2fc57f46f4f4148d15d"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/ios/Runner/GeneratedPluginRegistrant.h": {
+    "mtime": 1781933330.9024746,
+    "ast_hash": "decb9041b5e91a07e66f4664e5dac408",
+    "semantic_hash": "decb9041b5e91a07e66f4664e5dac408"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/ios/Runner/GeneratedPluginRegistrant.m": {
+    "mtime": 1781934767.4696226,
+    "ast_hash": "b787443fe1389cb97ca51d0fe1b2ed00",
+    "semantic_hash": "b787443fe1389cb97ca51d0fe1b2ed00"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/ios/Runner/Runner-Bridging-Header.h": {
+    "mtime": 1763740075.0,
+    "ast_hash": "e07862ac930ed4d8479185d52c6cc66d",
+    "semantic_hash": "e07862ac930ed4d8479185d52c6cc66d"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/ios/RunnerTests/RunnerTests.swift": {
+    "mtime": 1781933329.7453842,
+    "ast_hash": "a225a382d14d7b16b6f602a5c1d49331",
+    "semantic_hash": "a225a382d14d7b16b6f602a5c1d49331"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/lib/main.dart": {
+    "mtime": 1781940630.8271701,
+    "ast_hash": "1f9634c7cdba3f3e297f25247977c419",
+    "semantic_hash": "1f9634c7cdba3f3e297f25247977c419"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/lib/models/cart_item.dart": {
+    "mtime": 1781934800.0687406,
+    "ast_hash": "123c25e8cdf379f2dc813e2e3e7bbce5",
+    "semantic_hash": "123c25e8cdf379f2dc813e2e3e7bbce5"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/lib/models/menu_item.dart": {
+    "mtime": 1781947755.8384526,
+    "ast_hash": "a089917315b13a4f8f421609426c1b81",
+    "semantic_hash": "a089917315b13a4f8f421609426c1b81"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/lib/models/notification.dart": {
+    "mtime": 1781956959.3562562,
+    "ast_hash": "d7ae5d05db8e607ff1f1a881b150afd8",
+    "semantic_hash": "d7ae5d05db8e607ff1f1a881b150afd8"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/lib/models/order.dart": {
+    "mtime": 1781934846.5126116,
+    "ast_hash": "53e2aaf4b3a1dfc24c05824c323ea588",
+    "semantic_hash": "53e2aaf4b3a1dfc24c05824c323ea588"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/lib/providers/cart_provider.dart": {
+    "mtime": 1781945203.8427522,
+    "ast_hash": "a14e559b24f583853c5611d85f5dfc5d",
+    "semantic_hash": "a14e559b24f583853c5611d85f5dfc5d"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/lib/providers/favorites_provider.dart": {
+    "mtime": 1781947753.8178184,
+    "ast_hash": "e822974e2d34cb3b750c0d7e31f08713",
+    "semantic_hash": "e822974e2d34cb3b750c0d7e31f08713"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/lib/providers/menu_provider.dart": {
+    "mtime": 1781947770.718913,
+    "ast_hash": "439561a5c98da5ef298d27d29cecf7d1",
+    "semantic_hash": "439561a5c98da5ef298d27d29cecf7d1"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/lib/providers/notification_provider.dart": {
+    "mtime": 1781957110.2302012,
+    "ast_hash": "5cd2c58980d3c2914d75e13e96bbae17",
+    "semantic_hash": "5cd2c58980d3c2914d75e13e96bbae17"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/lib/providers/order_provider.dart": {
+    "mtime": 1781947871.632918,
+    "ast_hash": "5c5f5c180efabd154c55e220320af091",
+    "semantic_hash": "5c5f5c180efabd154c55e220320af091"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/lib/providers/table_provider.dart": {
+    "mtime": 1781945152.0471954,
+    "ast_hash": "66ac313cfe078a2347fa4170232d2471",
+    "semantic_hash": "66ac313cfe078a2347fa4170232d2471"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/lib/router.dart": {
+    "mtime": 1781957024.8536978,
+    "ast_hash": "ce2758276c5d5ee401725eb6c3ec0fd3",
+    "semantic_hash": "ce2758276c5d5ee401725eb6c3ec0fd3"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/lib/screens/admin/admin_login_screen.dart": {
+    "mtime": 1781957647.289795,
+    "ast_hash": "bb1016aa54626d62e1bffade88d1f68a",
+    "semantic_hash": "bb1016aa54626d62e1bffade88d1f68a"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/lib/screens/admin/dashboard_screen.dart": {
+    "mtime": 1781957027.6495082,
+    "ast_hash": "cc197ba79bd0ed30e2d8d5c4efe4a041",
+    "semantic_hash": "cc197ba79bd0ed30e2d8d5c4efe4a041"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/lib/screens/admin/menu_management_screen.dart": {
+    "mtime": 1781957029.6674602,
+    "ast_hash": "6f8cbd6bae1ab3cfc1cd3bb57b96371c",
+    "semantic_hash": "6f8cbd6bae1ab3cfc1cd3bb57b96371c"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/lib/screens/admin/notifications_management_screen.dart": {
+    "mtime": 1781956992.0204616,
+    "ast_hash": "f7a860a1e3779eb02d387973001624a8",
+    "semantic_hash": "f7a860a1e3779eb02d387973001624a8"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/lib/screens/admin/table_management_screen.dart": {
+    "mtime": 1781957031.6901526,
+    "ast_hash": "a09723b774b6388018d78518ef77ba3f",
+    "semantic_hash": "a09723b774b6388018d78518ef77ba3f"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/lib/screens/consumer/checkout_screen.dart": {
+    "mtime": 1781957294.7653005,
+    "ast_hash": "fc9bfecbd99fd21491412a52655a431a",
+    "semantic_hash": "fc9bfecbd99fd21491412a52655a431a"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/lib/screens/consumer/home_screen.dart": {
+    "mtime": 1781957079.6702049,
+    "ast_hash": "f17ca42b894bacb850302d10f8f715ab",
+    "semantic_hash": "f17ca42b894bacb850302d10f8f715ab"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/lib/screens/consumer/onboarding_screen.dart": {
+    "mtime": 1781951025.505739,
+    "ast_hash": "4f6cbdab757b6de13223909564674547",
+    "semantic_hash": "4f6cbdab757b6de13223909564674547"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/lib/screens/consumer/order_status_screen.dart": {
+    "mtime": 1781950930.2578266,
+    "ast_hash": "67ebc23d8996787441d3e2d5884a4ecf",
+    "semantic_hash": "67ebc23d8996787441d3e2d5884a4ecf"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/lib/screens/consumer/product_detail_screen.dart": {
+    "mtime": 1781950730.560861,
+    "ast_hash": "861b92e8af33cbc043f3d9564371bfd2",
+    "semantic_hash": "861b92e8af33cbc043f3d9564371bfd2"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/lib/screens/consumer/qr_scanner_screen.dart": {
+    "mtime": 1781950941.3943264,
+    "ast_hash": "92ec9525ec7a170fa82cc501de87a621",
+    "semantic_hash": "92ec9525ec7a170fa82cc501de87a621"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/lib/theme/app_colors.dart": {
+    "mtime": 1781950592.2817888,
+    "ast_hash": "3ada0409e3846bf9bf4e25e47c9a5d2d",
+    "semantic_hash": "3ada0409e3846bf9bf4e25e47c9a5d2d"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/lib/widgets/coffee_card.dart": {
+    "mtime": 1781950637.498807,
+    "ast_hash": "49cf8c46e52697288c8eadb6fbbdc638",
+    "semantic_hash": "49cf8c46e52697288c8eadb6fbbdc638"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/lib/widgets/morph_transitions.dart": {
+    "mtime": 1781937496.8466105,
+    "ast_hash": "037304d02d537528fb61e715fb06ec38",
+    "semantic_hash": "037304d02d537528fb61e715fb06ec38"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/lib/widgets/staggered_animations.dart": {
+    "mtime": 1781937516.5954597,
+    "ast_hash": "ade0704f1cd35bd0aa63ea9fdb228e6e",
+    "semantic_hash": "ade0704f1cd35bd0aa63ea9fdb228e6e"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/linux/flutter/generated_plugin_registrant.cc": {
+    "mtime": 1781933348.1623044,
+    "ast_hash": "638422954f06f3ff805e3bb23521f938",
+    "semantic_hash": "638422954f06f3ff805e3bb23521f938"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/linux/flutter/generated_plugin_registrant.h": {
+    "mtime": 1781933330.8994715,
+    "ast_hash": "d295462c9da9f7fef22dc86c34492318",
+    "semantic_hash": "d295462c9da9f7fef22dc86c34492318"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/linux/runner/main.cc": {
+    "mtime": 1763740075.0,
+    "ast_hash": "0643b8609698e96b3abd63c210361a87",
+    "semantic_hash": "0643b8609698e96b3abd63c210361a87"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/linux/runner/my_application.cc": {
+    "mtime": 1781933329.799831,
+    "ast_hash": "a829f737bdb167a05b45e1a178a58bd1",
+    "semantic_hash": "a829f737bdb167a05b45e1a178a58bd1"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/linux/runner/my_application.h": {
+    "mtime": 1763740075.0,
+    "ast_hash": "326a85d68857137fdfe8698a0c071baf",
+    "semantic_hash": "326a85d68857137fdfe8698a0c071baf"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/macos/Flutter/GeneratedPluginRegistrant.swift": {
+    "mtime": 1781934767.470351,
+    "ast_hash": "d127dedea03895916d120a1b1672212f",
+    "semantic_hash": "d127dedea03895916d120a1b1672212f"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/macos/Flutter/ephemeral/flutter_export_environment.sh": {
+    "mtime": 1781933330.8628435,
+    "ast_hash": "b57e38006fd631c992610131f34eb843",
+    "semantic_hash": "b57e38006fd631c992610131f34eb843"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/macos/Runner/AppDelegate.swift": {
+    "mtime": 1763740075.0,
+    "ast_hash": "2a7411ae3e7c6715525b94b6f8d2e80b",
+    "semantic_hash": "2a7411ae3e7c6715525b94b6f8d2e80b"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/macos/Runner/Assets.xcassets/AppIcon.appiconset/Contents.json": {
+    "mtime": 1763740075.0,
+    "ast_hash": "5bd47c3ef1d1a261037c87fb3ddb9cfd",
+    "semantic_hash": "5bd47c3ef1d1a261037c87fb3ddb9cfd"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/macos/Runner/MainFlutterWindow.swift": {
+    "mtime": 1763740075.0,
+    "ast_hash": "4a747b1f256d62a2bbb79bd976891eb5",
+    "semantic_hash": "4a747b1f256d62a2bbb79bd976891eb5"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/macos/RunnerTests/RunnerTests.swift": {
+    "mtime": 1781933329.7709215,
+    "ast_hash": "97d3a20fd20a063c192e886d1822b4a8",
+    "semantic_hash": "97d3a20fd20a063c192e886d1822b4a8"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/package.json": {
+    "mtime": 1781933504.5527468,
+    "ast_hash": "de631859438872ac84e2e6dc6f5850d1",
+    "semantic_hash": "de631859438872ac84e2e6dc6f5850d1"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/skills-lock.json": {
+    "mtime": 1781933942.890177,
+    "ast_hash": "2f3530b6acbf0944c98f441e64f4b9de",
+    "semantic_hash": "2f3530b6acbf0944c98f441e64f4b9de"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/supabase/functions/todos/deno.json": {
+    "mtime": 1781933543.23018,
+    "ast_hash": "c67b349b14a67ef36e462028509432b7",
+    "semantic_hash": "c67b349b14a67ef36e462028509432b7"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/supabase/functions/todos/index.ts": {
+    "mtime": 1781933550.1691322,
+    "ast_hash": "7942a94cdb160c6049e8edad7cf6577a",
+    "semantic_hash": "7942a94cdb160c6049e8edad7cf6577a"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/test/widget_test.dart": {
+    "mtime": 1781933329.801975,
+    "ast_hash": "b5e781daac45c2a39b5bafe65e5c9472",
+    "semantic_hash": "b5e781daac45c2a39b5bafe65e5c9472"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/web/flutter_bootstrap.js": {
+    "mtime": 1781945355.422238,
+    "ast_hash": "ddd0445cf497d4cc54126c7c003e444d",
+    "semantic_hash": "ddd0445cf497d4cc54126c7c003e444d"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/web/manifest.json": {
+    "mtime": 1781933329.767258,
+    "ast_hash": "a17e8b465964cbf7826b8c275c94b8b9",
+    "semantic_hash": "a17e8b465964cbf7826b8c275c94b8b9"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/windows/flutter/generated_plugin_registrant.cc": {
+    "mtime": 1781933348.1653383,
+    "ast_hash": "83b88884e33c846504bb6e953fc5c01f",
+    "semantic_hash": "83b88884e33c846504bb6e953fc5c01f"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/windows/flutter/generated_plugin_registrant.h": {
+    "mtime": 1781933330.9009216,
+    "ast_hash": "0ea33875f9f8e118f9c2ded03e2e2835",
+    "semantic_hash": "0ea33875f9f8e118f9c2ded03e2e2835"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/windows/runner/flutter_window.cpp": {
+    "mtime": 1763740075.0,
+    "ast_hash": "9b92b95a9eecce25e3e9d356688d0cb6",
+    "semantic_hash": "9b92b95a9eecce25e3e9d356688d0cb6"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/windows/runner/flutter_window.h": {
+    "mtime": 1763740075.0,
+    "ast_hash": "79bea736711adda00c49419a39a4a0b4",
+    "semantic_hash": "79bea736711adda00c49419a39a4a0b4"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/windows/runner/main.cpp": {
+    "mtime": 1781933329.7387147,
+    "ast_hash": "c105833be4a7888bd0f041ea931108cc",
+    "semantic_hash": "c105833be4a7888bd0f041ea931108cc"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/windows/runner/resource.h": {
+    "mtime": 1763740075.0,
+    "ast_hash": "c8f809a4f8d3f2f625e358fd90f72fee",
+    "semantic_hash": "c8f809a4f8d3f2f625e358fd90f72fee"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/windows/runner/utils.cpp": {
+    "mtime": 1763740075.0,
+    "ast_hash": "9b5697b276c8ad67a02ec12ad2c09851",
+    "semantic_hash": "9b5697b276c8ad67a02ec12ad2c09851"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/windows/runner/utils.h": {
+    "mtime": 1763740075.0,
+    "ast_hash": "c741fb9cddbf3a62f4688b6cca39ddcc",
+    "semantic_hash": "c741fb9cddbf3a62f4688b6cca39ddcc"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/windows/runner/win32_window.cpp": {
+    "mtime": 1763740075.0,
+    "ast_hash": "928e86a2be27eca688669dce6c9177d9",
+    "semantic_hash": "928e86a2be27eca688669dce6c9177d9"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/windows/runner/win32_window.h": {
+    "mtime": 1763740075.0,
+    "ast_hash": "5a4cf051798d7e6931ee0405a4523c8f",
+    "semantic_hash": "5a4cf051798d7e6931ee0405a4523c8f"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/.agents/rules/graphify.md": {
+    "mtime": 1781621106.8297532,
+    "ast_hash": "f1e53ecc9194573d3c28fc116c743a2e",
+    "semantic_hash": "f1e53ecc9194573d3c28fc116c743a2e"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/.agents/skills/supabase-postgres-best-practices/CHANGELOG.md": {
+    "mtime": 1781933912.2183871,
+    "ast_hash": "c2431bd02e1717ed5f6a728643953695",
+    "semantic_hash": "c2431bd02e1717ed5f6a728643953695"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/.agents/skills/supabase-postgres-best-practices/SKILL.md": {
+    "mtime": 1781933912.2182872,
+    "ast_hash": "0e31e4a19cccde79afd7fee73982a158",
+    "semantic_hash": "0e31e4a19cccde79afd7fee73982a158"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/.agents/skills/supabase-postgres-best-practices/references/_contributing.md": {
+    "mtime": 1781933912.2188845,
+    "ast_hash": "19edd365b47667a9b81108cacfd75775",
+    "semantic_hash": "19edd365b47667a9b81108cacfd75775"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/.agents/skills/supabase-postgres-best-practices/references/_sections.md": {
+    "mtime": 1781933912.2189536,
+    "ast_hash": "7cc4829a3718c745dfdbec554c30485f",
+    "semantic_hash": "7cc4829a3718c745dfdbec554c30485f"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/.agents/skills/supabase-postgres-best-practices/references/_template.md": {
+    "mtime": 1781933912.219034,
+    "ast_hash": "384ee769a417d3001e81d81b139acbf6",
+    "semantic_hash": "384ee769a417d3001e81d81b139acbf6"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/.agents/skills/supabase-postgres-best-practices/references/advanced-full-text-search.md": {
+    "mtime": 1781933912.2203283,
+    "ast_hash": "f32a27eab306ad2a29db0a2a8a55b03c",
+    "semantic_hash": "f32a27eab306ad2a29db0a2a8a55b03c"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/.agents/skills/supabase-postgres-best-practices/references/advanced-jsonb-indexing.md": {
+    "mtime": 1781933912.219346,
+    "ast_hash": "5b4fbcc451879892d366fa02194bb536",
+    "semantic_hash": "5b4fbcc451879892d366fa02194bb536"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/.agents/skills/supabase-postgres-best-practices/references/conn-idle-timeout.md": {
+    "mtime": 1781933912.2211986,
+    "ast_hash": "c73ea45eecdb007786cd3b3e08e31640",
+    "semantic_hash": "c73ea45eecdb007786cd3b3e08e31640"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/.agents/skills/supabase-postgres-best-practices/references/conn-limits.md": {
+    "mtime": 1781933912.2191865,
+    "ast_hash": "59025fe12439048e81296f28feca4ce1",
+    "semantic_hash": "59025fe12439048e81296f28feca4ce1"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/.agents/skills/supabase-postgres-best-practices/references/conn-pooling.md": {
+    "mtime": 1781933912.2192187,
+    "ast_hash": "8561b805a5e0bdfa348840266861de66",
+    "semantic_hash": "8561b805a5e0bdfa348840266861de66"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/.agents/skills/supabase-postgres-best-practices/references/conn-prepared-statements.md": {
+    "mtime": 1781933912.2193925,
+    "ast_hash": "fe941145678825d273baac1fe66d4dce",
+    "semantic_hash": "fe941145678825d273baac1fe66d4dce"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/.agents/skills/supabase-postgres-best-practices/references/data-batch-inserts.md": {
+    "mtime": 1781933912.2195091,
+    "ast_hash": "75a4e92f80b90818221fae51f8b994f1",
+    "semantic_hash": "75a4e92f80b90818221fae51f8b994f1"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/.agents/skills/supabase-postgres-best-practices/references/data-n-plus-one.md": {
+    "mtime": 1781933912.2197618,
+    "ast_hash": "4fc111bb51121f5181910b3759061ada",
+    "semantic_hash": "4fc111bb51121f5181910b3759061ada"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/.agents/skills/supabase-postgres-best-practices/references/data-pagination.md": {
+    "mtime": 1781933912.219575,
+    "ast_hash": "0e9b3211df99b3d35f7083c984b03ccb",
+    "semantic_hash": "0e9b3211df99b3d35f7083c984b03ccb"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/.agents/skills/supabase-postgres-best-practices/references/data-upsert.md": {
+    "mtime": 1781933912.2196763,
+    "ast_hash": "51a26138848f5fec547cd56b9bcb33d4",
+    "semantic_hash": "51a26138848f5fec547cd56b9bcb33d4"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/.agents/skills/supabase-postgres-best-practices/references/lock-advisory.md": {
+    "mtime": 1781933912.2203648,
+    "ast_hash": "3f3523b7b0a812a6906f92a6610a5a9b",
+    "semantic_hash": "3f3523b7b0a812a6906f92a6610a5a9b"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/.agents/skills/supabase-postgres-best-practices/references/lock-deadlock-prevention.md": {
+    "mtime": 1781933912.219892,
+    "ast_hash": "07eae98867b47074d82528df59d2135e",
+    "semantic_hash": "07eae98867b47074d82528df59d2135e"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/.agents/skills/supabase-postgres-best-practices/references/lock-short-transactions.md": {
+    "mtime": 1781933912.2201126,
+    "ast_hash": "aea973297ac14bba2586a2ff57fd8ff7",
+    "semantic_hash": "aea973297ac14bba2586a2ff57fd8ff7"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/.agents/skills/supabase-postgres-best-practices/references/lock-skip-locked.md": {
+    "mtime": 1781933912.220016,
+    "ast_hash": "26e9bd402801299afce06ee506a9f864",
+    "semantic_hash": "26e9bd402801299afce06ee506a9f864"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/.agents/skills/supabase-postgres-best-practices/references/monitor-explain-analyze.md": {
+    "mtime": 1781933912.2202044,
+    "ast_hash": "93d5998318098652ac380cd354718924",
+    "semantic_hash": "93d5998318098652ac380cd354718924"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/.agents/skills/supabase-postgres-best-practices/references/monitor-pg-stat-statements.md": {
+    "mtime": 1781933912.221175,
+    "ast_hash": "ee51d9586cf18c848563799c14dcc638",
+    "semantic_hash": "ee51d9586cf18c848563799c14dcc638"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/.agents/skills/supabase-postgres-best-practices/references/monitor-vacuum-analyze.md": {
+    "mtime": 1781933912.220515,
+    "ast_hash": "e3d1e4f8831a37bdb1c7f364b911f7a6",
+    "semantic_hash": "e3d1e4f8831a37bdb1c7f364b911f7a6"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/.agents/skills/supabase-postgres-best-practices/references/query-composite-indexes.md": {
+    "mtime": 1781933912.2209105,
+    "ast_hash": "bd959891036289cfaf3d54e49599b2d0",
+    "semantic_hash": "bd959891036289cfaf3d54e49599b2d0"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/.agents/skills/supabase-postgres-best-practices/references/query-covering-indexes.md": {
+    "mtime": 1781933912.2205832,
+    "ast_hash": "5e62afcfe9289405caec1f32f351dd29",
+    "semantic_hash": "5e62afcfe9289405caec1f32f351dd29"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/.agents/skills/supabase-postgres-best-practices/references/query-index-types.md": {
+    "mtime": 1781933912.2203734,
+    "ast_hash": "ef0d4ad9d1eb0466a0bde542ade59de2",
+    "semantic_hash": "ef0d4ad9d1eb0466a0bde542ade59de2"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/.agents/skills/supabase-postgres-best-practices/references/query-missing-indexes.md": {
+    "mtime": 1781933912.2206783,
+    "ast_hash": "1bd5f85a9c930219dd479825986bd6ad",
+    "semantic_hash": "1bd5f85a9c930219dd479825986bd6ad"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/.agents/skills/supabase-postgres-best-practices/references/query-partial-indexes.md": {
+    "mtime": 1781933912.2205758,
+    "ast_hash": "a6c64f9136f8a7880e53df3e259d90c9",
+    "semantic_hash": "a6c64f9136f8a7880e53df3e259d90c9"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/.agents/skills/supabase-postgres-best-practices/references/schema-constraints.md": {
+    "mtime": 1781933912.220598,
+    "ast_hash": "e7362385f5b79c28f5e495d7c45a7a52",
+    "semantic_hash": "e7362385f5b79c28f5e495d7c45a7a52"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/.agents/skills/supabase-postgres-best-practices/references/schema-data-types.md": {
+    "mtime": 1781933912.2207427,
+    "ast_hash": "a10f1ec17bd499622d9201af3d00e0d4",
+    "semantic_hash": "a10f1ec17bd499622d9201af3d00e0d4"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/.agents/skills/supabase-postgres-best-practices/references/schema-foreign-key-indexes.md": {
+    "mtime": 1781933912.221023,
+    "ast_hash": "6bc02b38edd88e56c89bab863f5c789b",
+    "semantic_hash": "6bc02b38edd88e56c89bab863f5c789b"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/.agents/skills/supabase-postgres-best-practices/references/schema-lowercase-identifiers.md": {
+    "mtime": 1781933912.2210126,
+    "ast_hash": "1df2eae336d542d365f99abdfa968367",
+    "semantic_hash": "1df2eae336d542d365f99abdfa968367"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/.agents/skills/supabase-postgres-best-practices/references/schema-partitioning.md": {
+    "mtime": 1781933912.220855,
+    "ast_hash": "e95568857288b614ba0d4b8cd1b4fb72",
+    "semantic_hash": "e95568857288b614ba0d4b8cd1b4fb72"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/.agents/skills/supabase-postgres-best-practices/references/schema-primary-keys.md": {
+    "mtime": 1781933912.2213957,
+    "ast_hash": "63412819d632d8cbe39f14630e5de085",
+    "semantic_hash": "63412819d632d8cbe39f14630e5de085"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/.agents/skills/supabase-postgres-best-practices/references/security-privileges.md": {
+    "mtime": 1781933912.2214077,
+    "ast_hash": "212beb5d93e7c02cb61c95e117af3aaa",
+    "semantic_hash": "212beb5d93e7c02cb61c95e117af3aaa"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/.agents/skills/supabase-postgres-best-practices/references/security-rls-basics.md": {
+    "mtime": 1781933912.2212734,
+    "ast_hash": "2349e490ff266b1c2b81a2368c054baa",
+    "semantic_hash": "2349e490ff266b1c2b81a2368c054baa"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/.agents/skills/supabase-postgres-best-practices/references/security-rls-performance.md": {
+    "mtime": 1781933912.2214518,
+    "ast_hash": "6c87b7d050ba714a95a2b88eb0b6caf0",
+    "semantic_hash": "6c87b7d050ba714a95a2b88eb0b6caf0"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/.agents/skills/supabase-server/SKILL.md": {
+    "mtime": 1781933942.8865557,
+    "ast_hash": "b772b8c2717bbea41f76fed17c7bad4a",
+    "semantic_hash": "b772b8c2717bbea41f76fed17c7bad4a"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/.agents/skills/supabase/CHANGELOG.md": {
+    "mtime": 1781933912.2468042,
+    "ast_hash": "bd88eabad50a89d284a0f737bda015af",
+    "semantic_hash": "bd88eabad50a89d284a0f737bda015af"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/.agents/skills/supabase/SKILL.md": {
+    "mtime": 1781933912.2468073,
+    "ast_hash": "24a2e7ad2c7e071f98c021cd4c32bccf",
+    "semantic_hash": "24a2e7ad2c7e071f98c021cd4c32bccf"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/.agents/skills/supabase/assets/feedback-issue-template.md": {
+    "mtime": 1781933912.2469907,
+    "ast_hash": "a38bcf7c09794faf287d91a992830b47",
+    "semantic_hash": "a38bcf7c09794faf287d91a992830b47"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/.agents/skills/supabase/references/skill-feedback.md": {
+    "mtime": 1781933912.246941,
+    "ast_hash": "38a53e95ded880782190ddf2f2810317",
+    "semantic_hash": "38a53e95ded880782190ddf2f2810317"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/.agents/workflows/graphify.md": {
+    "mtime": 1781621106.8299906,
+    "ast_hash": "0bc020d491fca99550c1ea3de0a5f862",
+    "semantic_hash": "0bc020d491fca99550c1ea3de0a5f862"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/README.md": {
+    "mtime": 1781933329.7952495,
+    "ast_hash": "c216d6fd5d4dd118a5be743206c981c2",
+    "semantic_hash": "c216d6fd5d4dd118a5be743206c981c2"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/analysis_options.yaml": {
+    "mtime": 1781933329.796449,
+    "ast_hash": "66d03d7647c8e438164feaf5b922d44a",
+    "semantic_hash": "66d03d7647c8e438164feaf5b922d44a"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/ios/Runner/Assets.xcassets/LaunchImage.imageset/README.md": {
+    "mtime": 1763740075.0,
+    "ast_hash": "e175e436acacf76c814d83532d0b662c",
+    "semantic_hash": "e175e436acacf76c814d83532d0b662c"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/linux/CMakeLists.txt": {
+    "mtime": 1781933329.801513,
+    "ast_hash": "66718c67f4a8ac60c96ac23aa62dfa4d",
+    "semantic_hash": "66718c67f4a8ac60c96ac23aa62dfa4d"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/linux/flutter/CMakeLists.txt": {
+    "mtime": 1763740075.0,
+    "ast_hash": "46690fb8ffaf7d227d8bc4713f31140d",
+    "semantic_hash": "46690fb8ffaf7d227d8bc4713f31140d"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/linux/runner/CMakeLists.txt": {
+    "mtime": 1763740075.0,
+    "ast_hash": "6d75431dc21756981b53a7494c836311",
+    "semantic_hash": "6d75431dc21756981b53a7494c836311"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/pubspec.yaml": {
+    "mtime": 1781940553.0280318,
+    "ast_hash": "5448718f351ed4eae53715ee1a9725a1",
+    "semantic_hash": "5448718f351ed4eae53715ee1a9725a1"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/web/index.html": {
+    "mtime": 1781936297.6380014,
+    "ast_hash": "27ac9e521b6df97345cea9d2e60d1b70",
+    "semantic_hash": "27ac9e521b6df97345cea9d2e60d1b70"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/windows/CMakeLists.txt": {
+    "mtime": 1781933329.7427897,
+    "ast_hash": "f00dea64e044415f3778c534a856663b",
+    "semantic_hash": "f00dea64e044415f3778c534a856663b"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/windows/flutter/CMakeLists.txt": {
+    "mtime": 1763740075.0,
+    "ast_hash": "0c500410e3259a9a053797dc1c28070e",
+    "semantic_hash": "0c500410e3259a9a053797dc1c28070e"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/windows/runner/CMakeLists.txt": {
+    "mtime": 1763740075.0,
+    "ast_hash": "e99a99b5cc82a168fc557eb23b8d5a96",
+    "semantic_hash": "e99a99b5cc82a168fc557eb23b8d5a96"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/android/app/src/main/res/mipmap-hdpi/ic_launcher.png": {
+    "mtime": 1763740075.0,
+    "ast_hash": "13e9c72ec37fac220397aa819fa1ef2d",
+    "semantic_hash": "13e9c72ec37fac220397aa819fa1ef2d"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/android/app/src/main/res/mipmap-mdpi/ic_launcher.png": {
+    "mtime": 1763740075.0,
+    "ast_hash": "6270344430679711b81476e29878caa7",
+    "semantic_hash": "6270344430679711b81476e29878caa7"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/android/app/src/main/res/mipmap-xhdpi/ic_launcher.png": {
+    "mtime": 1763740075.0,
+    "ast_hash": "a0a8db5985280b3679d99a820ae2db79",
+    "semantic_hash": "a0a8db5985280b3679d99a820ae2db79"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png": {
+    "mtime": 1763740075.0,
+    "ast_hash": "afe1b655b9f32da22f9a4301bb8e6ba8",
+    "semantic_hash": "afe1b655b9f32da22f9a4301bb8e6ba8"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png": {
+    "mtime": 1763740075.0,
+    "ast_hash": "57838d52c318faff743130c3fcfae0c6",
+    "semantic_hash": "57838d52c318faff743130c3fcfae0c6"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-1024x1024@1x.png": {
+    "mtime": 1764309642.9492128,
+    "ast_hash": "c785f8932297af4acd5f5ccb7630f01c",
+    "semantic_hash": "c785f8932297af4acd5f5ccb7630f01c"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@1x.png": {
+    "mtime": 1764309642.949334,
+    "ast_hash": "a2f8558fb1d42514111fbbb19fb67314",
+    "semantic_hash": "a2f8558fb1d42514111fbbb19fb67314"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@2x.png": {
+    "mtime": 1764309642.9489574,
+    "ast_hash": "2247a840b6ee72b8a069208af170e5b1",
+    "semantic_hash": "2247a840b6ee72b8a069208af170e5b1"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@3x.png": {
+    "mtime": 1764309642.9495897,
+    "ast_hash": "1b3b1538136316263c7092951e923e9d",
+    "semantic_hash": "1b3b1538136316263c7092951e923e9d"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@1x.png": {
+    "mtime": 1764309642.9499543,
+    "ast_hash": "be8887071dd7ec39cb754d236aa9584f",
+    "semantic_hash": "be8887071dd7ec39cb754d236aa9584f"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@2x.png": {
+    "mtime": 1764309642.9485564,
+    "ast_hash": "043119ef4faa026ff82bd03f241e5338",
+    "semantic_hash": "043119ef4faa026ff82bd03f241e5338"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@3x.png": {
+    "mtime": 1764309642.9494634,
+    "ast_hash": "2b1452c4c1bda6177b4fbbb832df217f",
+    "semantic_hash": "2b1452c4c1bda6177b4fbbb832df217f"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@1x.png": {
+    "mtime": 1764309642.9486613,
+    "ast_hash": "2247a840b6ee72b8a069208af170e5b1",
+    "semantic_hash": "2247a840b6ee72b8a069208af170e5b1"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@2x.png": {
+    "mtime": 1764309642.9498317,
+    "ast_hash": "8245359312aea1b0d2412f79a07b0ca5",
+    "semantic_hash": "8245359312aea1b0d2412f79a07b0ca5"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@3x.png": {
+    "mtime": 1764309642.9487603,
+    "ast_hash": "5b3c0902200ce596e9848f22e1f0fe0e",
+    "semantic_hash": "5b3c0902200ce596e9848f22e1f0fe0e"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-60x60@2x.png": {
+    "mtime": 1764309642.9490838,
+    "ast_hash": "5b3c0902200ce596e9848f22e1f0fe0e",
+    "semantic_hash": "5b3c0902200ce596e9848f22e1f0fe0e"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-60x60@3x.png": {
+    "mtime": 1764309642.948438,
+    "ast_hash": "e419d22a37bc40ba185aca1acb6d4ac6",
+    "semantic_hash": "e419d22a37bc40ba185aca1acb6d4ac6"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-76x76@1x.png": {
+    "mtime": 1764309642.9488587,
+    "ast_hash": "36c0d7a7132bdde18898ffdfcfcdc4d2",
+    "semantic_hash": "36c0d7a7132bdde18898ffdfcfcdc4d2"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-76x76@2x.png": {
+    "mtime": 1764309642.950076,
+    "ast_hash": "643842917530acf4c5159ae851b0baf2",
+    "semantic_hash": "643842917530acf4c5159ae851b0baf2"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-83.5x83.5@2x.png": {
+    "mtime": 1764309642.949711,
+    "ast_hash": "665cb5e3c5729da6d639d26eff47a503",
+    "semantic_hash": "665cb5e3c5729da6d639d26eff47a503"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage.png": {
+    "mtime": 1764309642.9477253,
+    "ast_hash": "978c1bee49d7ad5fc1a4d81099b13e18",
+    "semantic_hash": "978c1bee49d7ad5fc1a4d81099b13e18"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage@2x.png": {
+    "mtime": 1764309642.9476287,
+    "ast_hash": "978c1bee49d7ad5fc1a4d81099b13e18",
+    "semantic_hash": "978c1bee49d7ad5fc1a4d81099b13e18"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage@3x.png": {
+    "mtime": 1764309642.9475276,
+    "ast_hash": "978c1bee49d7ad5fc1a4d81099b13e18",
+    "semantic_hash": "978c1bee49d7ad5fc1a4d81099b13e18"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/macos/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_1024.png": {
+    "mtime": 1764309642.9469492,
+    "ast_hash": "c9becc9105f8cabce934d20c7bfb6aac",
+    "semantic_hash": "c9becc9105f8cabce934d20c7bfb6aac"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/macos/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_128.png": {
+    "mtime": 1764309642.945895,
+    "ast_hash": "3ded30823804caaa5ccc944067c54a36",
+    "semantic_hash": "3ded30823804caaa5ccc944067c54a36"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/macos/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_16.png": {
+    "mtime": 1764309642.946124,
+    "ast_hash": "8bf511604bc6ed0a6aeb380c5113fdcf",
+    "semantic_hash": "8bf511604bc6ed0a6aeb380c5113fdcf"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/macos/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_256.png": {
+    "mtime": 1764309642.9472172,
+    "ast_hash": "dfe2c93d1536ae02f085cc63faa3430e",
+    "semantic_hash": "dfe2c93d1536ae02f085cc63faa3430e"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/macos/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_32.png": {
+    "mtime": 1764309642.9462278,
+    "ast_hash": "8e0ae58e362a6636bdfccbc04da2c58c",
+    "semantic_hash": "8e0ae58e362a6636bdfccbc04da2c58c"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/macos/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_512.png": {
+    "mtime": 1764309642.946021,
+    "ast_hash": "0ad44039155424738917502c69667699",
+    "semantic_hash": "0ad44039155424738917502c69667699"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/macos/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_64.png": {
+    "mtime": 1764309642.9457824,
+    "ast_hash": "04e7b6ef05346c70b663ca1d97de3ad5",
+    "semantic_hash": "04e7b6ef05346c70b663ca1d97de3ad5"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/web/favicon.png": {
+    "mtime": 1763740075.0,
+    "ast_hash": "5dcef449791fa27946b3d35ad8803796",
+    "semantic_hash": "5dcef449791fa27946b3d35ad8803796"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/web/icons/Icon-192.png": {
+    "mtime": 1763740075.0,
+    "ast_hash": "ac9a721a12bbc803b44f645561ecb1e1",
+    "semantic_hash": "ac9a721a12bbc803b44f645561ecb1e1"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/web/icons/Icon-512.png": {
+    "mtime": 1763740075.0,
+    "ast_hash": "96e752610906ba2a93c65f8abe1645f1",
+    "semantic_hash": "96e752610906ba2a93c65f8abe1645f1"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/web/icons/Icon-maskable-192.png": {
+    "mtime": 1764309642.9591532,
+    "ast_hash": "c457ef57daa1d16f64b27b786ec2ea3c",
+    "semantic_hash": "c457ef57daa1d16f64b27b786ec2ea3c"
+  },
+  "/Users/buddhirajgautam/Documents/flutter app/web/icons/Icon-maskable-512.png": {
+    "mtime": 1764309642.9589972,
+    "ast_hash": "301a7604d45b3e739efc881eb04896ea",
+    "semantic_hash": "301a7604d45b3e739efc881eb04896ea"
+  }
+}
