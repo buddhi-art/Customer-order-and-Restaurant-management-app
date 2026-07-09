@@ -19,7 +19,10 @@ class InventoryNotifier extends Notifier<List<InventoryItem>> {
     _repo = ref.read(inventoryRepositoryProvider);
     _listenToInventory();
     ref.onDispose(() => _inventorySubscription?.cancel());
-    return _mockInventory;
+    // Start empty; the realtime stream populates real data. Do NOT seed with
+    // mock inventory — showing fake stock during a backend outage is dangerous
+    // for an admin making reorder decisions. (Issue 17)
+    return const [];
   }
 
   void _listenToInventory() {
@@ -96,116 +99,6 @@ class InventoryNotifier extends Notifier<List<InventoryItem>> {
     }
   }
 
-  static final List<InventoryItem> _mockInventory = [
-    const InventoryItem(
-      id: 'inv-1',
-      name: 'Coffee Beans - Arabica',
-      category: 'Coffee',
-      currentStock: 25,
-      minStock: 10,
-      unit: 'kg',
-      costPerUnit: 12.50,
-    ),
-    const InventoryItem(
-      id: 'inv-2',
-      name: 'Coffee Beans - Robusta',
-      category: 'Coffee',
-      currentStock: 8,
-      minStock: 10,
-      unit: 'kg',
-      costPerUnit: 9.75,
-    ),
-    const InventoryItem(
-      id: 'inv-3',
-      name: 'Milk - Whole',
-      category: 'Dairy',
-      currentStock: 40,
-      minStock: 20,
-      unit: 'L',
-      costPerUnit: 1.20,
-    ),
-    const InventoryItem(
-      id: 'inv-4',
-      name: 'Milk - Oat',
-      category: 'Dairy',
-      currentStock: 12,
-      minStock: 10,
-      unit: 'L',
-      costPerUnit: 2.50,
-    ),
-    const InventoryItem(
-      id: 'inv-5',
-      name: 'Sugar - Brown',
-      category: 'Sweeteners',
-      currentStock: 5,
-      minStock: 5,
-      unit: 'kg',
-      costPerUnit: 3.00,
-    ),
-    const InventoryItem(
-      id: 'inv-6',
-      name: 'Sugar - White',
-      category: 'Sweeteners',
-      currentStock: 15,
-      minStock: 8,
-      unit: 'kg',
-      costPerUnit: 2.00,
-    ),
-    const InventoryItem(
-      id: 'inv-7',
-      name: 'Chocolate Syrup',
-      category: 'Syrups',
-      currentStock: 3,
-      minStock: 5,
-      unit: 'L',
-      costPerUnit: 8.00,
-    ),
-    const InventoryItem(
-      id: 'inv-8',
-      name: 'Vanilla Syrup',
-      category: 'Syrups',
-      currentStock: 7,
-      minStock: 5,
-      unit: 'L',
-      costPerUnit: 7.50,
-    ),
-    const InventoryItem(
-      id: 'inv-9',
-      name: 'Paper Cups - Small',
-      category: 'Packaging',
-      currentStock: 200,
-      minStock: 100,
-      unit: 'pcs',
-      costPerUnit: 0.15,
-    ),
-    const InventoryItem(
-      id: 'inv-10',
-      name: 'Paper Cups - Large',
-      category: 'Packaging',
-      currentStock: 80,
-      minStock: 100,
-      unit: 'pcs',
-      costPerUnit: 0.20,
-    ),
-    const InventoryItem(
-      id: 'inv-11',
-      name: 'Napkins',
-      category: 'Packaging',
-      currentStock: 500,
-      minStock: 200,
-      unit: 'pcs',
-      costPerUnit: 0.05,
-    ),
-    const InventoryItem(
-      id: 'inv-12',
-      name: 'Cinnamon Powder',
-      category: 'Toppings',
-      currentStock: 2,
-      minStock: 3,
-      unit: 'kg',
-      costPerUnit: 15.00,
-    ),
-  ];
 }
 
 final inventoryProvider =

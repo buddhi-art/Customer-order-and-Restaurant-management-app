@@ -527,74 +527,33 @@ class _OrderCard extends ConsumerWidget {
   }
 
   void _showPaymentDialog(BuildContext context, WidgetRef ref) {
-    final cs = Theme.of(context).colorScheme;
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Payment Method'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Text('How did this customer pay?'),
-            const SizedBox(height: 20),
-            SizedBox(
-              width: double.infinity,
-              child: FilledButton.icon(
-                onPressed: () {
-                  Navigator.of(ctx).pop();
-                  _handlePayment(context, ref, 'cash');
-                },
-                icon: const Icon(Icons.money_rounded),
-                label: const Text('Cash'),
-                style: FilledButton.styleFrom(
-                  backgroundColor: CafeColors.success,
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 12),
-            SizedBox(
-              width: double.infinity,
-              child: FilledButton.icon(
-                onPressed: () {
-                  Navigator.of(ctx).pop();
-                  _handlePayment(context, ref, 'card');
-                },
-                icon: const Icon(Icons.credit_card_rounded),
-                label: const Text('Card'),
-                style: FilledButton.styleFrom(
-                  backgroundColor: CafeColors.primary,
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 12),
-            SizedBox(
-              width: double.infinity,
-              child: FilledButton.icon(
-                onPressed: () {
-                  Navigator.of(ctx).pop();
-                  _handlePayment(context, ref, 'qr');
-                },
-                icon: const Icon(Icons.qr_code_rounded),
-                label: const Text('QR'),
-                style: FilledButton.styleFrom(
-                  backgroundColor: cs.secondary,
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-              ),
-            ),
-          ],
+        title: const Text('Confirm Payment'),
+        content: const Text(
+          'Mark this order as paid in cash at the counter?',
         ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(),
+            child: const Text('Cancel'),
+          ),
+          FilledButton.icon(
+            onPressed: () {
+              Navigator.of(ctx).pop();
+              _handlePayment(context, ref, 'cash');
+            },
+            icon: const Icon(Icons.money_rounded),
+            label: const Text('Mark Paid — Cash'),
+            style: FilledButton.styleFrom(
+              backgroundColor: CafeColors.success,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

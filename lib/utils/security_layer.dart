@@ -12,8 +12,21 @@ class SecurityLayer {
 
   /// Shared HMAC secret used to sign/verify QR table tokens.
   /// Loaded from the .env file (`QR_HMAC_SECRET`).
-  static String get _qrSecret =>
-      dotenv.env['QR_HMAC_SECRET'] ?? 'kalpa-cafe-shared-secret-change-me';
+  ///
+  /// There is deliberately NO hardcoded fallback: a known default secret would
+  /// let anyone forge valid table tokens. If the secret is missing we fail loud.
+  /// Startup validation (`validateEnv` in main) already guarantees it is set, so
+  /// reaching the throw here means the app was misconfigured.
+  static String get _qrSecret {
+    final secret = dotenv.env['QR_HMAC_SECRET'];
+    if (secret == null || secret.trim().isEmpty) {
+      throw StateError(
+        'QR_HMAC_SECRET is not configured. Refusing to sign/verify QR '
+        'tokens with an insecure default.',
+      );
+    }
+    return secret;
+  }
 
   /// Reads cafe location and WiFi credentials from secure storage.
   /// Falls back to defaults quietly if not configured.

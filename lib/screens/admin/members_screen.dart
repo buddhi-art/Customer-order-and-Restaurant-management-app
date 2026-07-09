@@ -16,6 +16,7 @@ class MembersScreen extends ConsumerStatefulWidget {
 class _MembersScreenState extends ConsumerState<MembersScreen> {
   List<Map<String, dynamic>> _members = [];
   bool _isLoading = true;
+  bool _hasError = false;
   String _searchQuery = '';
 
   @override
@@ -33,15 +34,19 @@ class _MembersScreenState extends ConsumerState<MembersScreen> {
       if (mounted) {
         setState(() {
           _members = List<Map<String, dynamic>>.from(response);
+          _hasError = false;
           _isLoading = false;
         });
       }
     } catch (e) {
       debugPrint('Error fetching members: $e');
-      // Fallback to mock data
+      // Do NOT fall back to fake data — surface a real error state so the admin
+      // knows the list failed to load rather than trusting fabricated members.
+      // (Issue 17)
       if (mounted) {
         setState(() {
-          _members = _mockMembers;
+          _members = [];
+          _hasError = true;
           _isLoading = false;
         });
       }
@@ -59,39 +64,6 @@ class _MembersScreenState extends ConsumerState<MembersScreen> {
       return name.contains(q) || phone.contains(q);
     }).toList();
   }
-
-  static const List<Map<String, dynamic>> _mockMembers = [
-    {
-      'full_name': 'Aarav Sharma',
-      'phone': '+977-9841234567',
-      'loyalty_points': 2480,
-      'total_orders': 42,
-    },
-    {
-      'full_name': 'Priya Patel',
-      'phone': '+977-9852345678',
-      'loyalty_points': 1890,
-      'total_orders': 31,
-    },
-    {
-      'full_name': 'Ravi Kumar',
-      'phone': '+977-9863456789',
-      'loyalty_points': 1520,
-      'total_orders': 27,
-    },
-    {
-      'full_name': 'Sita Thapa',
-      'phone': '+977-9874567890',
-      'loyalty_points': 1280,
-      'total_orders': 22,
-    },
-    {
-      'full_name': 'Deepak Gurung',
-      'phone': '+977-9885678901',
-      'loyalty_points': 960,
-      'total_orders': 18,
-    },
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -211,19 +183,42 @@ class _MembersScreenState extends ConsumerState<MembersScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(
-                          Icons.person_search_rounded,
+                          _hasError
+                              ? Icons.cloud_off_rounded
+                              : Icons.person_search_rounded,
                           size: 64,
                           color: CafeColors.outlineVariant,
                         ),
                         const SizedBox(height: 16),
                         Text(
-                          'No members found',
+                          _hasError
+                              ? 'Could not load members'
+                              : 'No members found',
                           style: TextStyle(
                             color: CafeColors.onSurfaceVariant,
                             fontSize: 18,
                             fontWeight: FontWeight.w700,
                           ),
                         ),
+                        if (_hasError) ...[
+                          const SizedBox(height: 8),
+                          Text(
+                            'Check your connection and try again.',
+                            style: TextStyle(
+                              color: CafeColors.onSurfaceVariant,
+                              fontSize: 14,
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          FilledButton.icon(
+                            onPressed: () {
+                              setState(() => _isLoading = true);
+                              _fetchMembers();
+                            },
+                            icon: const Icon(Icons.refresh_rounded),
+                            label: const Text('Retry'),
+                          ),
+                        ],
                       ],
                     ),
                   ).animate().fade(duration: 600.ms)

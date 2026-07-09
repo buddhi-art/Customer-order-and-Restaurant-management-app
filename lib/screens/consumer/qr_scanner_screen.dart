@@ -3,10 +3,11 @@ import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../theme/app_colors.dart';
 import '../../providers/table_provider.dart';
 import '../../providers/cart_provider.dart';
+import '../../router.dart';
 import '../../utils/security_layer.dart';
 
 class QRScannerScreen extends ConsumerStatefulWidget {
@@ -43,9 +44,10 @@ class _QRScannerScreenState extends ConsumerState<QRScannerScreen> {
                   // Save to global provider
                   ref.read(tableProvider.notifier).setTable(tableId);
 
-                  // Write to secure storage so router guard passes
-                  const storage = FlutterSecureStorage();
-                  await storage.write(key: 'table_id', value: tableId);
+                  // Persist table id so the router guard passes.
+                  // SharedPreferences is web-safe (unlike secure storage).
+                  final prefs = await SharedPreferences.getInstance();
+                  await prefs.setString(kTableIdKey, tableId);
 
                   if (!context.mounted) return;
                   ScaffoldMessenger.of(context).showSnackBar(

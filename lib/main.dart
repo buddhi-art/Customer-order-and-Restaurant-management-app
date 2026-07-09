@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -36,10 +39,20 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   _enableImpeller();
 
+  // Issue 32: friendly fallback instead of the default red error screen when a
+  // widget build throws (e.g. a provider fails during build). In debug the red
+  // screen is kept so problems stay visible during development.
+  if (kReleaseMode) {
+    ErrorWidget.builder = (FlutterErrorDetails details) => const _AppErrorView();
+  }
+
   // Set high refresh rate on Android only (no-op on web)
   await setHighRefreshRate();
 
-  await dotenv.load(fileName: ".env");
+  // Load client-safe env bundled as an asset. This file contains ONLY public
+  // values (URL, publishable key, QR secret) — never the Supabase secret key or
+  // database URL. See assets/app.env.
+  await dotenv.load(fileName: "assets/app.env");
 
   if (!validateEnv(dotenv.env)) {
     throw StateError(
@@ -78,6 +91,8 @@ class _AuthStateListener extends ConsumerStatefulWidget {
 }
 
 class _AuthStateListenerState extends ConsumerState<_AuthStateListener> {
+  StreamSubscription<AuthState>? _authSub;
+
   @override
   void initState() {
     super.initState();
@@ -85,7 +100,7 @@ class _AuthStateListenerState extends ConsumerState<_AuthStateListener> {
   }
 
   void _setupListener() {
-    Supabase.instance.client.auth.onAuthStateChange.listen((event) {
+    _authSub = Supabase.instance.client.auth.onAuthStateChange.listen((event) {
       // On sign-out, invalidate session-scoped providers (Issue 14)
       if (event.event == AuthChangeEvent.signedOut) {
         ref.invalidate(cartProvider);
@@ -102,6 +117,12 @@ class _AuthStateListenerState extends ConsumerState<_AuthStateListener> {
   }
 
   @override
+  void dispose() {
+    _authSub?.cancel();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) => widget.child;
 }
 
@@ -115,6 +136,49 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: M3Theme.light,
       routerConfig: router,
+    );
+  }
+}
+
+/// Friendly fallback shown (in release builds) when a widget fails to build,
+/// instead of Flutter's default red error screen. (Issue 32)
+class _AppErrorView extends StatelessWidget {
+  const _AppErrorView();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Directionality(
+      textDirection: TextDirection.ltr,
+      child: ColoredBox(
+        color: Color(0xFFFFF8F0),
+        child: Center(
+          child: Padding(
+            padding: EdgeInsets.all(32),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(Icons.coffee_rounded, size: 48, color: Color(0xFF6F4E37)),
+                SizedBox(height: 16),
+                Text(
+                  'Something went wrong',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w700,
+                    color: Color(0xFF3A2C22),
+                  ),
+                ),
+                SizedBox(height: 8),
+                Text(
+                  'Please restart the app or try again in a moment.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 14, color: Color(0xFF6B5B4F)),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

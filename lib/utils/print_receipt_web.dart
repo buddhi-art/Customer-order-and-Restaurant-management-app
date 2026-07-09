@@ -3,6 +3,19 @@
 import 'dart:js_interop';
 import 'package:web/web.dart' as web;
 
+/// Escape a string for safe interpolation into HTML text/attribute context.
+/// Prevents XSS when order/menu data (item names, sizes, etc.) is rendered into
+/// the receipt window.
+String _esc(Object? value) {
+  return (value ?? '')
+      .toString()
+      .replaceAll('&', '&amp;')
+      .replaceAll('<', '&lt;')
+      .replaceAll('>', '&gt;')
+      .replaceAll('"', '&quot;')
+      .replaceAll("'", '&#39;');
+}
+
 void printReceipt({
   required String cafeName,
   required String tableId,
@@ -13,13 +26,13 @@ void printReceipt({
 }) {
   final itemsHtml = items
       .map((item) {
-        final name = item['name'] ?? '';
-        final qty = item['quantity'] ?? 1;
+        final name = _esc(item['name']);
+        final qty = (item['quantity'] as num?)?.toInt() ?? 1;
         final price = (item['price'] as num?)?.toDouble() ?? 0.0;
         final size = item['size'];
         final lineTotal = price * qty;
         final sizeTag = size != null && size != 'Medium'
-            ? ' <span style="color:#888;font-size:11px;">($size)</span>'
+            ? ' <span style="color:#888;font-size:11px;">(${_esc(size)})</span>'
             : '';
         return '''
     <tr>
@@ -30,13 +43,20 @@ void printReceipt({
       })
       .join('\n');
 
+  final safeCafeName = _esc(cafeName);
+  final safeTableNumber = _esc(tableId.replaceAll('table_', '').toUpperCase());
+  final safeOrderId = orderId != null ? _esc(orderId.substring(0, 8)) : '---';
+  final safePaymentMethod = paymentMethod != null
+      ? _esc(paymentMethod.toUpperCase())
+      : null;
+
   final receiptHtml =
       '''
 <!DOCTYPE html>
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Receipt - Table $tableId</title>
+  <title>Receipt - Table $safeTableNumber</title>
   <style>
     @media print {
       body { margin: 0; padding: 0; }
@@ -113,12 +133,12 @@ void printReceipt({
 <body>
   <div class="receipt">
     <div class="header">
-      <h1>$cafeName</h1>
+      <h1>$safeCafeName</h1>
       <p>कल्प • Since 2026</p>
     </div>
     <div class="info">
-      <span><strong>Table:</strong> ${tableId.replaceAll('table_', '').toUpperCase()}</span>
-      <span><strong>#${orderId != null ? orderId.substring(0, 8) : '---'}</strong></span>
+      <span><strong>Table:</strong> $safeTableNumber</span>
+      <span><strong>#$safeOrderId</strong></span>
     </div>
     <table>
       <thead>
@@ -132,7 +152,7 @@ void printReceipt({
       <span>TOTAL</span>
       <span>\$${total.toStringAsFixed(2)}</span>
     </div>
-    ${paymentMethod != null ? '<div class="payment">Paid via ${paymentMethod.toUpperCase()}</div>' : ''}
+    ${safePaymentMethod != null ? '<div class="payment">Paid via $safePaymentMethod</div>' : ''}
     <div class="footer">
       Thank you for visiting कल्प!<br>
       <button class="no-print" onclick="window.print()" style="margin-top:12px;padding:8px 24px;font-family:inherit;font-size:13px;border:2px solid #222;border-radius:8px;background:#fff;cursor:pointer;box-shadow:3px 3px 0 #222;">🖨 Print / Save PDF</button>

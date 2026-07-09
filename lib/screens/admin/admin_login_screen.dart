@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -18,14 +20,53 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
   String? _errorMessage;
   bool _obscurePassword = true;
 
+  // Client-side brute-force throttle (defense-in-depth; Supabase also rate
+  // limits server-side). After [_maxAttempts] failures, Sign In is disabled
+  // for [_lockoutSeconds] with a visible countdown. (Issue 9)
+  static const int _maxAttempts = 5;
+  static const int _lockoutSeconds = 30;
+  int _failedAttempts = 0;
+  int _lockoutRemaining = 0;
+  Timer? _lockoutTimer;
+
+  bool get _isLockedOut => _lockoutRemaining > 0;
+
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
+    _lockoutTimer?.cancel();
     super.dispose();
   }
 
+  void _startLockout() {
+    _lockoutRemaining = _lockoutSeconds;
+    _lockoutTimer?.cancel();
+    _lockoutTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (!mounted) {
+        timer.cancel();
+        return;
+      }
+      setState(() {
+        _lockoutRemaining--;
+        if (_lockoutRemaining <= 0) {
+          timer.cancel();
+          _failedAttempts = 0; // reset after the cooldown
+        }
+      });
+    });
+  }
+
+  void _registerFailedAttempt() {
+    _failedAttempts++;
+    if (_failedAttempts >= _maxAttempts) {
+      _startLockout();
+    }
+  }
+
   Future<void> _signIn() async {
+    if (_isLockedOut) return;
+
     final email = _emailController.text.trim();
     final password = _passwordController.text;
 
@@ -72,6 +113,7 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
 
       if (!isAdmin) {
         await Supabase.instance.client.auth.signOut();
+        _registerFailedAttempt();
         setState(() {
           _isLoading = false;
           _errorMessage =
@@ -81,14 +123,19 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
         return;
       }
 
-      // Admin verified — navigate to dashboard.
+      // Admin verified — reset throttle and navigate to dashboard.
+      _failedAttempts = 0;
       if (mounted) context.go('/admin');
     } on AuthException catch (e) {
+      _registerFailedAttempt();
       setState(() {
         _isLoading = false;
-        _errorMessage = e.message;
+        _errorMessage = _isLockedOut
+            ? 'Too many failed attempts. Try again in $_lockoutRemaining s.'
+            : e.message;
       });
     } catch (e) {
+      _registerFailedAttempt();
       setState(() {
         _isLoading = false;
         _errorMessage = 'An unexpected error occurred. Please try again.';
@@ -428,11 +475,13 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
                 duration: const Duration(milliseconds: 700),
                 delay: const Duration(milliseconds: 450),
                 child: M3PressScale(
-                  onTap: _isLoading ? null : _signIn,
+                  onTap: (_isLoading || _isLockedOut) ? null : _signIn,
                   child: Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: CafeColors.onSurface,
+                      color: _isLockedOut
+                          ? CafeColors.onSurface.withValues(alpha: 0.4)
+                          : CafeColors.onSurface,
                       borderRadius: BorderRadius.circular(100),
                       boxShadow: [
                         BoxShadow(
@@ -447,7 +496,9 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
                         const SizedBox(width: 24),
                         Expanded(
                           child: Text(
-                            'Sign In',
+                            _isLockedOut
+                                ? 'Locked — retry in ${_lockoutRemaining}s'
+                                : 'Sign In',
                             style: textTheme.titleMedium?.copyWith(
                               color: CafeColors.surface,
                               fontWeight: FontWeight.w700,

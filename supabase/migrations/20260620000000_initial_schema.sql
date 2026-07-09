@@ -213,7 +213,7 @@ CREATE TRIGGER on_order_payment_success
   FOR EACH ROW
   EXECUTE FUNCTION public.handle_order_payment_success();
 
--- 4. RPC: Merge Guest Orderswtf is tha
+-- 4. RPC: Merge Guest Orders
 
 CREATE OR REPLACE FUNCTION public.merge_guest_orders(guest_table_id INT, authenticated_user_id UUID)
 RETURNS void AS $$

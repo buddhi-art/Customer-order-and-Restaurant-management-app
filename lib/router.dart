@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:toastification/toastification.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'screens/consumer/onboarding_screen.dart';
 import 'screens/consumer/login_screen.dart';
 import 'screens/consumer/profile_completion_screen.dart';
@@ -30,7 +30,10 @@ import 'screens/admin/settings_screen.dart';
 import 'providers/auth_provider.dart';
 import 'widgets/morph_transitions.dart';
 
-final storage = const FlutterSecureStorage();
+/// Key used to persist the scanned table id. Stored in [SharedPreferences]
+/// (web-safe) rather than secure storage — a table number is not a secret and
+/// FlutterSecureStorage crashes on web.
+const String kTableIdKey = 'table_id';
 
 /// Check admin status by querying the profiles table.
 /// Returns true only if the user has role == 'admin'.
@@ -110,7 +113,8 @@ final router = GoRouter(
 
     // Enforce Table Scanning for /home
     if (path == '/home') {
-      final tableId = await storage.read(key: 'table_id');
+      final prefs = await SharedPreferences.getInstance();
+      final tableId = prefs.getString(kTableIdKey);
       if (tableId == null) {
         return '/scan';
       }

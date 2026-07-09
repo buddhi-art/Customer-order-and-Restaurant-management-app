@@ -26,8 +26,9 @@ class CheckoutScreen extends ConsumerStatefulWidget {
 }
 
 class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
-  String selectedPayment = 'eSewa';
-  final payments = ['eSewa', 'Khalti', 'FonePay', 'Pay at Counter'];
+  // Premium cash-at-counter venue: all orders are settled in cash at the
+  // counter. No online payment options.
+  static const String _paymentMethod = 'Pay at Counter';
   bool isCheckingOut = false;
 
   @override
@@ -262,61 +263,51 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
             ),
             const SizedBox(height: 48),
 
-            // Payment method selector
+            // Payment — cash at counter only (premium venue, no online payments)
             Text(
-              'Pay With',
+              'Payment',
               style: Theme.of(context).textTheme.labelLarge?.copyWith(
                 fontWeight: FontWeight.w700,
                 color: CafeColors.onSurfaceVariant,
               ),
             ),
             const SizedBox(height: 12),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              clipBehavior: Clip.none,
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+              decoration: BoxDecoration(
+                color: CafeColors.surfaceContainerLow,
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: CafeColors.outline),
+              ),
               child: Row(
-                children: payments.map((payment) {
-                  final isSelected = selectedPayment == payment;
-                  return Padding(
-                    padding: const EdgeInsets.only(right: 12),
-                    child: M3PressScale(
-                      onTap: () {
-                        HapticFeedback.selectionClick();
-                        setState(() => selectedPayment = payment);
-                      },
-                      child: AnimatedContainer(
-                        duration: const Duration(milliseconds: 250),
-                        curve: const Cubic(0.32, 0.72, 0, 1),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 20,
-                          vertical: 12,
+                children: [
+                  const Icon(
+                    Icons.storefront_outlined,
+                    size: 20,
+                    color: CafeColors.primary,
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Pay at Counter',
+                          style: Theme.of(context).textTheme.titleSmall
+                              ?.copyWith(fontWeight: FontWeight.w700),
                         ),
-                        decoration: BoxDecoration(
-                          color: isSelected
-                              ? CafeColors.onSurface
-                              : Colors.transparent,
-                          borderRadius: BorderRadius.circular(100),
-                          border: Border.all(
-                            color: isSelected
-                                ? CafeColors.onSurface
-                                : CafeColors.outline,
+                        const SizedBox(height: 2),
+                        Text(
+                          'Settle your bill in cash at the counter.',
+                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: CafeColors.onSurfaceVariant,
                           ),
                         ),
-                        child: Text(
-                          payment,
-                          style: TextStyle(
-                            color: isSelected
-                                ? CafeColors.surface
-                                : CafeColors.onSurfaceVariant,
-                            fontWeight: isSelected
-                                ? FontWeight.w700
-                                : FontWeight.w600,
-                          ),
-                        ),
-                      ),
+                      ],
                     ),
-                  );
-                }).toList(),
+                  ),
+                ],
               ),
             ),
             const SizedBox(height: 48),
@@ -379,7 +370,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                           totalAmount: grandTotal,
                           createdAt: DateTime.now(),
                           status: OrderStatus.pending,
-                          paymentMethod: selectedPayment,
+                          paymentMethod: _paymentMethod,
                           paymentStatus: 'unpaid',
                         );
 

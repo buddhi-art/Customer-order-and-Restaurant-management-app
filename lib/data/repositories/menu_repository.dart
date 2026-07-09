@@ -46,13 +46,22 @@ class MenuRepository {
 
   /// Parse a `menu_items` row into a [MenuItem].
   ///
-  /// Description is stored as `"free text # Category"`. The trailing hash
-  /// separates the user-visible description from the implicit category.
+  /// Description is stored as `"free text # Category"`. Only the *last* `#`
+  /// separates the user-visible description from the implicit category, so a
+  /// `#` inside the description body no longer corrupts the split.
   static MenuItem _parseMenuItem(Map<String, dynamic> json) {
     final rawDesc = json['description']?.toString() ?? '';
-    final parts = rawDesc.split('#');
-    final description = parts.first.trim();
-    final category = parts.length > 1 ? parts.last.trim() : 'Coffee';
+    final hashIndex = rawDesc.lastIndexOf('#');
+    final String description;
+    final String category;
+    if (hashIndex >= 0) {
+      description = rawDesc.substring(0, hashIndex).trim();
+      final rawCategory = rawDesc.substring(hashIndex + 1).trim();
+      category = rawCategory.isNotEmpty ? rawCategory : 'Coffee';
+    } else {
+      description = rawDesc.trim();
+      category = 'Coffee';
+    }
 
     return MenuItem(
       id: json['item_id'] ?? json['id'] ?? '',

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:uuid/uuid.dart';
 import '../../theme/m3_theme.dart';
 import '../../providers/menu_provider.dart';
 import '../../models/menu_item.dart';
@@ -143,8 +144,7 @@ class MenuManagementScreen extends ConsumerWidget {
                         await Supabase.instance.client
                             .from('menu_items')
                             .insert({
-                              'item_id': DateTime.now().millisecondsSinceEpoch
-                                  .toString(),
+                              'item_id': const Uuid().v4(),
                               'name': name,
                               'category':
                                   categoryController.text.trim().isNotEmpty

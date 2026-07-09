@@ -80,7 +80,9 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - .env
+    # Client-safe env only. The root .env (with SUPABASE_SECRET_KEY /
+    # DATABASE_URL) is intentionally NOT bundled — it stays local & gitignored.
+    - assets/app.env
     - assets/logo.png
     - assets/coffees/
   #   - images/a_dot_burr.jpeg

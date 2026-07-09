@@ -47,6 +47,19 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> _sendOtp() async {
+    // Rate-limit: block resends while a countdown from a previous send is
+    // still running, so a user cannot spam SMS. (Issue 10)
+    if (_otpSent && _countdown > 0) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Please wait $_formattedTime before requesting another code.',
+          ),
+        ),
+      );
+      return;
+    }
+
     final phone = _phoneController.text.trim();
     if (phone.isEmpty || phone.length < 10) {
       ScaffoldMessenger.of(context).showSnackBar(
