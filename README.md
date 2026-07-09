@@ -271,7 +271,6 @@ All tables have RLS enabled. The key protections:
 | **4. Staff tools** | Menu/table/expense/staff management, notifications | ✅ Complete |
 | **5. Kitchen Display** | Real-time order queue, preparation status, expediting | 🔜 Planned |
 | **6. Analytics v2** | Labour, customer insights, custom reports, export | 🔜 Planned |
-| **7. Payments** | Stripe/PayPal integration, split bills, tipping | 🔜 Planned |
 | **8. Offline mode** | Local-first with background sync on connectivity restore | 🔜 Planned |
 
 ---
