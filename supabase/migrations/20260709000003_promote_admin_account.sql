@@ -2,28 +2,37 @@
 --
 -- The backfill in 20260708000002_create_trigger_and_backfill.sql assigns
 -- 'customer' to every pre-existing auth user, which demotes any account that
--- should be an admin. This migration re-promotes one account.
+-- should be an admin. This migration re-promotes one account on every run.
 --
 -- SECURITY: No admin email is hardcoded here. The target email is read from a
--- runtime setting so real credentials stay out of version control. Provide it
--- one of two ways:
+-- Supabase Vault secret named 'admin_email', so the real address stays out of
+-- version control while still persisting across database rebuilds.
 --
---   1. Per-session, immediately before applying this migration:
---        SET app.admin_email = 'you@example.com';
+-- One-time setup (run in the SQL editor, NOT committed anywhere):
 --
---   2. Persisted on the database (survives future runs):
---        ALTER DATABASE postgres SET app.admin_email = 'you@example.com';
+--     select vault.create_secret('you@example.com', 'admin_email');
 --
--- If the setting is absent or empty, this migration is a safe no-op.
+--   To rotate later:
+--     select vault.update_secret(
+--       (select id from vault.secrets where name = 'admin_email'),
+--       'new@example.com');
+--
+-- If the secret is absent or empty, this migration is a safe no-op.
 
 DO $$
 DECLARE
-  admin_email text := current_setting('app.admin_email', true);
+  admin_email text;
 BEGIN
+  SELECT decrypted_secret
+  INTO admin_email
+  FROM vault.decrypted_secrets
+  WHERE name = 'admin_email'
+  LIMIT 1;
+
   IF admin_email IS NULL OR btrim(admin_email) = '' THEN
     RAISE NOTICE
-      'app.admin_email is not set; skipping admin promotion. '
-      'Set it (see comments) or run the UPDATE manually in the SQL editor.';
+      'Vault secret "admin_email" is not set; skipping admin promotion. '
+      'Create it with vault.create_secret(...) — see this file''s comments.';
     RETURN;
   END IF;
 
@@ -34,6 +43,6 @@ BEGIN
     AND u.email = btrim(admin_email);
 
   IF NOT FOUND THEN
-    RAISE NOTICE 'No profile matched app.admin_email = %; nothing promoted.', admin_email;
+    RAISE NOTICE 'No profile matched the admin_email secret; nothing promoted.';
   END IF;
 END $$;
