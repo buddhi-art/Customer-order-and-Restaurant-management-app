@@ -90,53 +90,53 @@ class _AdminAnalyticsScreenState extends ConsumerState<AdminAnalyticsScreen>
     return AdminShell(
       title: 'Analytics',
       selectedIndex: 5,
-      body: SingleChildScrollView(
+      body: ListView(
+        physics: const BouncingScrollPhysics(),
         padding: EdgeInsets.all(isMobile ? 16 : 24),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Header
-            FadeTransition(
-              opacity: _staggeredAnimations[0],
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Analytics & Insights',
-                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                      fontWeight: FontWeight.w600,
-                    ),
+        children: [
+          // Header
+          FadeTransition(
+            opacity: _staggeredAnimations[0],
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Analytics & Insights',
+                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                    fontWeight: FontWeight.w600,
                   ),
-                  const SizedBox(height: 4),
-                  Text(
-                    'Track your café\'s performance',
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: colorScheme.onSurfaceVariant,
-                    ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  'Track your café\'s performance',
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: colorScheme.onSurfaceVariant,
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-            const SizedBox(height: 24),
+          ),
+          const SizedBox(height: 24),
 
-            // Date Range Selector
-            FadeTransition(
-              opacity: _staggeredAnimations[1],
-              child: _DateRangeSelector(
-                selected: _selectedRange,
-                onChanged: (range) {
-                  setState(() {
-                    _selectedRange = range;
-                    _animationController.reset();
-                    _animationController.forward();
-                  });
-                },
-              ),
+          // Date Range Selector
+          FadeTransition(
+            opacity: _staggeredAnimations[1],
+            child: _DateRangeSelector(
+              selected: _selectedRange,
+              onChanged: (range) {
+                setState(() {
+                  _selectedRange = range;
+                  _animationController.reset();
+                  _animationController.forward();
+                });
+              },
             ),
-            const SizedBox(height: 28),
+          ),
+          const SizedBox(height: 28),
 
-            // KPI Row - 2×2 on mobile, 4-column on desktop
-            FadeTransition(
+          // KPI Row — wrap in RepaintBoundary to isolate from charts
+          RepaintBoundary(
+            child: FadeTransition(
               opacity: _staggeredAnimations[2],
               child: isMobile
                   ? Wrap(
@@ -237,10 +237,12 @@ class _AdminAnalyticsScreenState extends ConsumerState<AdminAnalyticsScreen>
                       ],
                     ),
             ),
-            const SizedBox(height: 28),
+          ),
+          const SizedBox(height: 28),
 
-            // Revenue Trend Chart
-            FadeTransition(
+          // Revenue Trend Chart — isolated in its own RepaintBoundary
+          RepaintBoundary(
+            child: FadeTransition(
               opacity: _staggeredAnimations[3],
               child: _ChartCard(
                 title: 'Revenue Trend',
@@ -252,35 +254,40 @@ class _AdminAnalyticsScreenState extends ConsumerState<AdminAnalyticsScreen>
                 ),
               ),
             ),
-            const SizedBox(height: 20),
+          ),
+          const SizedBox(height: 20),
 
-            // Popular Items & Hourly Heatmap - stack on mobile
-            ResponsiveTwoPanel(
-              flexLeft: 3,
-              flexRight: 2,
-              left: FadeTransition(
-                opacity: _staggeredAnimations[4],
-                child: _ChartCard(
-                  title: 'Popular Items',
-                  subtitle: 'Most ordered menu items',
-                  height: 380,
-                  child: _PopularItemsChart(orders: filteredOrders),
-                ),
-              ),
-              right: FadeTransition(
-                opacity: _staggeredAnimations[5],
-                child: _ChartCard(
-                  title: 'Hourly Distribution',
-                  subtitle: 'Orders by hour of day',
-                  height: 380,
-                  child: _HourlyHeatmapChart(orders: filteredOrders),
-                ),
+          // Popular Items & Hourly Heatmap
+          RepaintBoundary(
+            child: FadeTransition(
+              opacity: _staggeredAnimations[4],
+              child: _ChartCard(
+                title: 'Popular Items',
+                subtitle: 'Most ordered menu items',
+                height: 380,
+                child: _PopularItemsChart(orders: filteredOrders),
               ),
             ),
-            const SizedBox(height: 20),
+          ),
+          const SizedBox(height: 20),
 
-            // Order Status Distribution
-            FadeTransition(
+          // Hourly Distribution
+          RepaintBoundary(
+            child: FadeTransition(
+              opacity: _staggeredAnimations[5],
+              child: _ChartCard(
+                title: 'Hourly Distribution',
+                subtitle: 'Orders by hour of day',
+                height: 380,
+                child: _HourlyHeatmapChart(orders: filteredOrders),
+              ),
+            ),
+          ),
+          const SizedBox(height: 20),
+
+          // Order Status Distribution
+          RepaintBoundary(
+            child: FadeTransition(
               opacity: _staggeredAnimations[6],
               child: _ChartCard(
                 title: 'Order Status Distribution',
@@ -289,10 +296,12 @@ class _AdminAnalyticsScreenState extends ConsumerState<AdminAnalyticsScreen>
                 child: _StatusDistributionChart(orders: filteredOrders),
               ),
             ),
-            const SizedBox(height: 28),
+          ),
+          const SizedBox(height: 28),
 
-            // Summary Section - 2×2 on mobile
-            FadeTransition(
+          // Summary Section
+          RepaintBoundary(
+            child: FadeTransition(
               opacity: _staggeredAnimations[7],
               child: _SummarySection(
                 orders: filteredOrders,
@@ -300,8 +309,8 @@ class _AdminAnalyticsScreenState extends ConsumerState<AdminAnalyticsScreen>
                 colorScheme: colorScheme,
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

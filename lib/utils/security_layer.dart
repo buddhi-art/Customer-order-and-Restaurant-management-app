@@ -79,6 +79,17 @@ class SecurityLayer {
     return _constantTimeEquals(expected, providedHmac);
   }
 
+  /// Generate a signed QR token for a table: `kalpa://<id>.<ts>.<hmac>`.
+  ///
+  /// The token is valid for 24 hours from the time of generation. The admin
+  /// panel should regenerate the QR periodically (or on-demand) to keep tokens
+  /// fresh.
+  static String generateQrToken(String tableId) {
+    final nowSeconds = DateTime.now().millisecondsSinceEpoch ~/ 1000;
+    final hmac = _hmacSha256('$tableId.$nowSeconds', _qrSecret);
+    return 'kalpa://$tableId.$nowSeconds.$hmac';
+  }
+
   /// Extract the tableId from a signed `kalpa://` token, or null if invalid.
   static String? extractTableId(String code) {
     if (!verifyQrToken(code)) return null;

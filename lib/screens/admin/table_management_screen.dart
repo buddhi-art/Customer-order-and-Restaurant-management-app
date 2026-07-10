@@ -5,6 +5,7 @@ import '../../theme/m3_theme.dart';
 import '../../providers/order_provider.dart';
 import '../../models/order.dart';
 import '../../ui/core/widgets/double_bezel_container.dart';
+import '../../utils/security_layer.dart';
 import 'admin_shell.dart';
 
 class TableManagementScreen extends ConsumerStatefulWidget {
@@ -273,7 +274,7 @@ class _TableCard extends StatelessWidget {
                       border: Border.all(color: colorScheme.outlineVariant),
                     ),
                     child: QrImageView(
-                      data: 'kalpa://table_$tableNumber',
+                      data: SecurityLayer.generateQrToken('table_$tableNumber'),
                       version: QrVersions.auto,
                       size: 80,
                       backgroundColor: Colors.white,
