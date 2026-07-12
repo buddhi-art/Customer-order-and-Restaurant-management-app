@@ -37,6 +37,7 @@ class _AdminSettingsScreenState extends ConsumerState<AdminSettingsScreen> {
           .maybeSingle();
 
       if (response != null) {
+        if (!mounted) return;
         setState(() {
           _settings = CafeSettings(
             cafeName: response['cafe_name'] as String? ?? 'कल्प Café',
@@ -65,13 +66,15 @@ class _AdminSettingsScreenState extends ConsumerState<AdminSettingsScreen> {
           );
         });
       } else {
+        if (!mounted) return;
         setState(() => _settings = const CafeSettings());
       }
     } catch (e) {
       debugPrint('Failed to load settings from Supabase: $e');
+      if (!mounted) return;
       setState(() => _settings = const CafeSettings());
     } finally {
-      setState(() => _isLoading = false);
+      if (mounted) setState(() => _isLoading = false);
     }
   }
 

@@ -5,13 +5,10 @@ import '../data/repositories/cart_repository.dart';
 import '../data/repositories/menu_repository.dart';
 import '../models/cart_item.dart';
 import '../models/menu_item.dart';
+import 'menu_provider.dart';
 
 final cartRepositoryProvider = Provider<CartRepository>(
   (ref) => CartRepository(),
-);
-
-final menuRepositoryProviderForCart = Provider<MenuRepository>(
-  (ref) => MenuRepository(),
 );
 
 class CartNotifier extends Notifier<List<CartItem>> {
@@ -21,7 +18,9 @@ class CartNotifier extends Notifier<List<CartItem>> {
   @override
   List<CartItem> build() {
     _cartRepo = ref.read(cartRepositoryProvider);
-    _menuRepo = ref.read(menuRepositoryProviderForCart);
+    // Reuse the single canonical MenuRepository provider instead of a
+    // duplicate instance.
+    _menuRepo = ref.read(menuRepositoryProvider);
     // Kick off async hydration; state starts empty until load completes.
     _loadFromPrefs();
     return <CartItem>[];

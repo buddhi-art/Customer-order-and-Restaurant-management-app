@@ -106,8 +106,14 @@ class AdminShell extends StatelessWidget {
                 // Double-Bezel Logout Button
                 M3PressScale(
                   onTap: () async {
-                    await Supabase.instance.client.auth.signOut();
-                    if (context.mounted) context.go('/admin/login');
+                    try {
+                      await Supabase.instance.client.auth.signOut();
+                    } catch (_) {
+                      // Ignore network/auth errors; the local session is
+                      // cleared and we still route the user out.
+                    } finally {
+                      if (context.mounted) context.go('/admin/login');
+                    }
                   },
                   child: Container(
                     width: 44,

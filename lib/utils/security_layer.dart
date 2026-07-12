@@ -1,8 +1,4 @@
-import 'dart:convert';
-
-import 'package:crypto/crypto.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:network_info_plus/network_info_plus.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -10,34 +6,22 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 class SecurityLayer {
   static const FlutterSecureStorage _storage = FlutterSecureStorage();
 
-  /// Shared HMAC secret used to sign/verify QR table tokens.
-  /// Loaded from the .env file (`QR_HMAC_SECRET`).
-  ///
-  /// There is deliberately NO hardcoded fallback: a known default secret would
-  /// let anyone forge valid table tokens. If the secret is missing we fail loud.
-  /// Startup validation (`validateEnv` in main) already guarantees it is set, so
-  /// reaching the throw here means the app was misconfigured.
-  static String get _qrSecret {
-    final secret = dotenv.env['QR_HMAC_SECRET'];
-    if (secret == null || secret.trim().isEmpty) {
-      throw StateError(
-        'QR_HMAC_SECRET is not configured. Refusing to sign/verify QR '
-        'tokens with an insecure default.',
-      );
-    }
-    return secret;
-  }
+  // NOTE: QR table-token signing/verification moved server-side. The HMAC
+  // secret now lives only in Supabase Vault and tokens are minted/checked via
+  // the generate_table_qr / redeem_table_qr RPCs (see QrService). Nothing
+  // QR-related is done on the client anymore, so the shared secret is no longer
+  // bundled in the app. Geofence + WiFi proximity checks remain below.
 
   /// Reads cafe location and WiFi credentials from secure storage.
   /// Falls back to defaults quietly if not configured.
   static Future<_CafeCredentials> _loadCredentials() async {
     return _CafeCredentials(
-      latitude:
-          double.tryParse(await _storage.read(key: 'cafe_latitude') ?? '') ??
-          26.648111,
-      longitude:
-          double.tryParse(await _storage.read(key: 'cafe_longitude') ?? '') ??
-          87.978717,
+      latitude: double.tryParse(
+        await _storage.read(key: 'cafe_latitude') ?? '',
+      ),
+      longitude: double.tryParse(
+        await _storage.read(key: 'cafe_longitude') ?? '',
+      ),
       maxDistanceMeters:
           double.tryParse(
             await _storage.read(key: 'geofence_radius_meters') ?? '',
@@ -47,69 +31,6 @@ class SecurityLayer {
       approvedWifiBSSID: (await _storage.read(key: 'wifi_bssid') ?? '')
           .toLowerCase(),
     );
-  }
-
-  /// Verify a scanned QR code is a genuine `kalpa://<id>.<ts>.<hmac>` token.
-  ///
-  /// Rules:
-  ///  * must start with `kalpa://`
-  ///  * exactly 3 dot-separated parts after the prefix
-  ///  * timestamp is unix-seconds and not older than 24h
-  ///  * the trailing segment is HMAC-SHA256(tableId + '.' + ts, secret)
-  static bool verifyQrToken(String code) {
-    if (!code.startsWith('kalpa://')) return false;
-    final parts = code.replaceFirst('kalpa://', '').split('.');
-    if (parts.length != 3) return false;
-
-    final tableId = parts[0];
-    final timestampStr = parts[1];
-    final providedHmac = parts[2];
-
-    final timestamp = int.tryParse(timestampStr);
-    if (timestamp == null) return false;
-
-    // Reject tokens older than 24 hours.
-    final nowSeconds = DateTime.now().millisecondsSinceEpoch ~/ 1000;
-    final age = nowSeconds - timestamp;
-    if (age > 86400) return false;
-    // Also reject timestamps in the far future (clock-skew abuse).
-    if (age < -300) return false;
-
-    final expected = _hmacSha256('$tableId.$timestampStr', _qrSecret);
-    return _constantTimeEquals(expected, providedHmac);
-  }
-
-  /// Generate a signed QR token for a table: `kalpa://<id>.<ts>.<hmac>`.
-  ///
-  /// The token is valid for 24 hours from the time of generation. The admin
-  /// panel should regenerate the QR periodically (or on-demand) to keep tokens
-  /// fresh.
-  static String generateQrToken(String tableId) {
-    final nowSeconds = DateTime.now().millisecondsSinceEpoch ~/ 1000;
-    final hmac = _hmacSha256('$tableId.$nowSeconds', _qrSecret);
-    return 'kalpa://$tableId.$nowSeconds.$hmac';
-  }
-
-  /// Extract the tableId from a signed `kalpa://` token, or null if invalid.
-  static String? extractTableId(String code) {
-    if (!verifyQrToken(code)) return null;
-    return code.replaceFirst('kalpa://', '').split('.').first;
-  }
-
-  static String _hmacSha256(String message, String secret) {
-    final key = utf8.encode(secret);
-    final bytes = utf8.encode(message);
-    final hmac = Hmac(sha256, key);
-    return hmac.convert(bytes).toString();
-  }
-
-  static bool _constantTimeEquals(String a, String b) {
-    if (a.length != b.length) return false;
-    var diff = 0;
-    for (var i = 0; i < a.length; i++) {
-      diff |= a.codeUnitAt(i) ^ b.codeUnitAt(i);
-    }
-    return diff == 0;
   }
 
   static Future<bool> verifyCheckoutSecurity() async {
@@ -125,6 +46,18 @@ class SecurityLayer {
   }
 
   static Future<bool> _verifyLocation(_CafeCredentials creds) async {
+    // Fail closed when no cafe coordinates are configured, mirroring the WiFi
+    // branch. A baked-in fallback location would let anyone pass the geofence.
+    if (creds.latitude == null || creds.longitude == null) {
+      assert(() {
+        debugPrint(
+          "Security Check: No cafe coordinates configured – denying by default.",
+        );
+        return true;
+      }());
+      return false;
+    }
+
     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
       assert(() {
@@ -157,9 +90,17 @@ class SecurityLayer {
     }
 
     final Position position = await Geolocator.getCurrentPosition();
+    // Reject mocked/faked positions (reliable on Android; no-op on iOS).
+    if (position.isMocked) {
+      assert(() {
+        debugPrint("Security Check: Mocked location detected – denying.");
+        return true;
+      }());
+      return false;
+    }
     final double distanceInMeters = Geolocator.distanceBetween(
-      creds.latitude,
-      creds.longitude,
+      creds.latitude!,
+      creds.longitude!,
       position.latitude,
       position.longitude,
     );
@@ -205,11 +146,13 @@ class SecurityLayer {
         return true;
       }());
 
-      if (cleanWifiName == creds.approvedWifiSSID ||
-          cleanWifiBSSID == creds.approvedWifiBSSID) {
-        return true;
+      // BSSID (the AP's MAC) is far harder to spoof than the SSID name. When a
+      // BSSID is configured, require it to match; only fall back to the weaker
+      // SSID comparison when no BSSID is set.
+      if (creds.approvedWifiBSSID.isNotEmpty) {
+        return cleanWifiBSSID == creds.approvedWifiBSSID;
       }
-      return false;
+      return cleanWifiName == creds.approvedWifiSSID;
     } catch (e) {
       assert(() {
         debugPrint("Security Check Error: Network verification failed with $e");
@@ -221,8 +164,8 @@ class SecurityLayer {
 }
 
 class _CafeCredentials {
-  final double latitude;
-  final double longitude;
+  final double? latitude;
+  final double? longitude;
   final double maxDistanceMeters;
   final String approvedWifiSSID;
   final String approvedWifiBSSID;

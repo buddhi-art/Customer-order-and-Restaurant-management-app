@@ -12,24 +12,32 @@ final orderRepositoryProvider = Provider<OrderRepository>(
 
 class OrderNotifier extends Notifier<List<AppOrder>> {
   StreamSubscription<List<Map<String, dynamic>>>? _orderSubscription;
+  Timer? _midnightTimer;
   late final OrderRepository _repo;
 
   @override
   List<AppOrder> build() {
     _repo = ref.read(orderRepositoryProvider);
     _listenToOrders();
-    ref.onDispose(() => _orderSubscription?.cancel());
+    ref.onDispose(() {
+      _orderSubscription?.cancel();
+      _midnightTimer?.cancel();
+    });
     return <AppOrder>[];
   }
 
   void _listenToOrders() {
     // Only show today's orders on initial load. We filter client-side because
     // the supabase stream() API doesn't accept `.gte()`. The cutoff is
-    // computed once when the provider builds and stays in scope for the
-    // lifetime of this subscription.
+    // recomputed each time this runs, and a timer re-runs it at the next local
+    // midnight so a long-open dashboard advances its "today" window instead of
+    // freezing the boundary at build time.
     final now = DateTime.now();
     final todayMidnight = DateTime(now.year, now.month, now.day);
 
+    _scheduleMidnightRefresh(now);
+
+    _orderSubscription?.cancel();
     _orderSubscription = _repo.stream().listen(
       (List<Map<String, dynamic>> data) {
         final todays = data.where((row) {
@@ -52,8 +60,20 @@ class OrderNotifier extends Notifier<List<AppOrder>> {
     );
   }
 
+  void _scheduleMidnightRefresh(DateTime now) {
+    _midnightTimer?.cancel();
+    final nextMidnight = DateTime(now.year, now.month, now.day + 1);
+    _midnightTimer = Timer(nextMidnight.difference(now), _listenToOrders);
+  }
+
   Future<void> addOrder(AppOrder order) async {
     await _repo.insert(order);
+    // Optimistically add so id-based lookups (OrderStatusScreen) resolve
+    // immediately, before the realtime stream echoes the insert. The next
+    // stream snapshot replaces state wholesale and reconciles this entry.
+    if (state.every((o) => o.id != order.id)) {
+      state = [...state, order];
+    }
   }
 
   Future<void> updateOrderStatus(String orderId, OrderStatus newStatus) async {
@@ -70,6 +90,7 @@ class OrderNotifier extends Notifier<List<AppOrder>> {
       await _repo.updatePaymentMethod(orderId, method);
     } catch (e) {
       debugPrint('Error updating payment method: $e');
+      rethrow;
     }
   }
 

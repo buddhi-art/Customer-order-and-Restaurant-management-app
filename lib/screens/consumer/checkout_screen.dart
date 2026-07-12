@@ -31,6 +31,10 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
   static const String _paymentMethod = 'Pay at Counter';
   bool isCheckingOut = false;
 
+  /// Stable id reused across retries so a failed submit that is retried does
+  /// not create a duplicate order. Cleared once an insert succeeds.
+  String? _pendingOrderId;
+
   @override
   Widget build(BuildContext context) {
     final cartItems = ref.watch(cartProvider);
@@ -338,33 +342,43 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
 
                         final isSecure =
                             await SecurityLayer.verifyCheckoutSecurity();
-                        if (!isSecure && context.mounted) {
-                          setState(() => isCheckingOut = false);
-                          showDialog(
-                            context: context,
-                            builder: (ctx) => AlertDialog(
-                              backgroundColor: CafeColors.surface,
-                              title: Text(
-                                'Security Check Failed',
-                                style: Theme.of(context).textTheme.titleLarge,
-                              ),
-                              content: const Text(
-                                'You must be connected to Kalpa WiFi and be inside the cafe to order.',
-                              ),
-                              actions: [
-                                PremiumCtaButton(
-                                  text: 'OK',
-                                  trailingIcon: Icons.check,
-                                  onPressed: () => Navigator.pop(ctx),
+                        // The abort must run unconditionally when the check
+                        // fails — even if the widget was disposed during the
+                        // async gap — otherwise an order could still be built
+                        // and submitted. UI feedback stays guarded by mounted.
+                        if (!isSecure) {
+                          if (context.mounted) {
+                            setState(() => isCheckingOut = false);
+                            showDialog(
+                              context: context,
+                              builder: (ctx) => AlertDialog(
+                                backgroundColor: CafeColors.surface,
+                                title: Text(
+                                  'Security Check Failed',
+                                  style: Theme.of(context).textTheme.titleLarge,
                                 ),
-                              ],
-                            ),
-                          );
+                                content: const Text(
+                                  'You must be connected to Kalpa WiFi and be inside the cafe to order.',
+                                ),
+                                actions: [
+                                  PremiumCtaButton(
+                                    text: 'OK',
+                                    trailingIcon: Icons.check,
+                                    onPressed: () => Navigator.pop(ctx),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }
                           return;
                         }
 
+                        // Reuse a single order id across retries so a failed
+                        // submit that is retried does not create duplicates
+                        // (paired with a future server-side unique guard).
+                        _pendingOrderId ??= const Uuid().v4();
                         final newOrder = AppOrder(
-                          id: const Uuid().v4(),
+                          id: _pendingOrderId!,
                           tableId: tableId,
                           items: cartItems,
                           totalAmount: grandTotal,
@@ -374,14 +388,30 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                           paymentStatus: 'unpaid',
                         );
 
-                        await ref
-                            .read(orderProvider.notifier)
-                            .addOrder(newOrder);
-                        ref.read(cartProvider.notifier).clearCart();
-
-                        if (context.mounted) {
-                          setState(() => isCheckingOut = false);
-                          context.go('/order_status/${newOrder.id}');
+                        try {
+                          await ref
+                              .read(orderProvider.notifier)
+                              .addOrder(newOrder);
+                          ref.read(cartProvider.notifier).clearCart();
+                          _pendingOrderId = null;
+                          if (context.mounted) {
+                            context.go('/order_status/${newOrder.id}');
+                          }
+                        } catch (e) {
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text(
+                                  'Could not place order. Please check your '
+                                  'connection and try again.',
+                                ),
+                              ),
+                            );
+                          }
+                        } finally {
+                          if (context.mounted) {
+                            setState(() => isCheckingOut = false);
+                          }
                         }
                       },
                 child: Container(

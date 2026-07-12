@@ -51,11 +51,14 @@ class InventoryNotifier extends Notifier<List<InventoryItem>> {
       state.where((e) => e.category == category).toList();
 
   Future<void> addItem(InventoryItem item) async {
+    // Optimistically add, then roll back if the insert fails — otherwise a
+    // failed insert would leave a phantom item that never persisted.
+    state = [...state, item];
     try {
       await _repo.insert(item);
     } catch (e) {
-      state = [...state, item];
-      debugPrint('Added item locally: $e');
+      state = state.where((x) => x.id != item.id).toList();
+      debugPrint('Failed to add inventory item, rolled back: $e');
     }
   }
 
@@ -93,7 +96,10 @@ class InventoryNotifier extends Notifier<List<InventoryItem>> {
     state = list;
 
     try {
-      await _repo.setStock(id, newStock);
+      // Apply the change as an atomic delta in Postgres so concurrent
+      // adjustments don't clobber each other (read-modify-write on cached
+      // state loses updates). The realtime stream reconciles the true value.
+      await _repo.adjustStock(id, delta);
     } catch (e) {
       debugPrint('Error adjusting stock: $e');
     }

@@ -39,6 +39,12 @@ migrate_working_dir/
 
 # Environment variables - NEVER commit
 .env
+# Bundled client env holds the QR signing secret; keep it out of version
+# control and use assets/app.env.example as the template.
+assets/app.env
+
+# Node dependencies (were previously committed by mistake)
+node_modules/
 
 # Symbolication related
 app.*.symbols

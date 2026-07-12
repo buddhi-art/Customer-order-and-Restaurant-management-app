@@ -65,12 +65,11 @@ class MenuNotifier extends Notifier<List<MenuItem>> {
   void _listenToMenu() {
     _menuSubscription = _repo.stream().listen(
       (List<Map<String, dynamic>> data) {
-        if (data.isNotEmpty || state == mockMenu) {
-          final List<MenuItem> loadedMenu = data
-              .map<MenuItem>(MenuRepository.parseMenuItem)
-              .toList();
-          state = loadedMenu;
-        }
+        // Show mockMenu only until the first real snapshot arrives. After that,
+        // always reflect the true table state — including a later clear to
+        // empty. (The old reference-equality guard permanently ignored empty
+        // updates once mockMenu had been replaced.)
+        state = data.map<MenuItem>(MenuRepository.parseMenuItem).toList();
       },
       onError: (error) {
         debugPrint('Error listening to menu: $error');

@@ -17,8 +17,10 @@ class NotificationNotifier extends Notifier<List<AppNotification>> {
   @override
   List<AppNotification> build() {
     _repo = ref.read(notificationRepositoryProvider);
+    // The realtime stream emits the current rows on subscribe, so a separate
+    // fetchNotifications() here would race the stream and could overwrite a
+    // newer snapshot with a staler one. Rely on the stream's initial emission.
     _initRealtime();
-    fetchNotifications();
     ref.onDispose(() => _notificationSubscription?.cancel());
     return <AppNotification>[];
   }

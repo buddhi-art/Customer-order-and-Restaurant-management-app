@@ -7,6 +7,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../providers/menu_provider.dart';
 import '../../providers/cart_provider.dart';
 import '../../providers/notification_provider.dart';
+import '../../providers/table_provider.dart';
 import '../../models/menu_item.dart';
 import '../../models/notification.dart';
 import '../../theme/m3_theme.dart';
@@ -45,6 +46,8 @@ final uniqueCategoriesProvider = Provider<List<String>>((ref) {
 });
 
 /// Filtered menu items based on selected category and search query.
+/// Matches against name AND description so a search for "caramel" or "syrup"
+/// returns items with those ingredients/flavours. (Bug 4.7)
 final filteredMenuProvider = Provider<List<MenuItem>>((ref) {
   final menuItems = ref.watch(menuProvider);
   final selectedCategory = ref.watch(selectedCategoryProvider);
@@ -55,9 +58,10 @@ final filteredMenuProvider = Provider<List<MenuItem>>((ref) {
     final matchesCategory =
         selectedCategory == 'All' ||
         item.category.toLowerCase() == selectedCategory.toLowerCase();
-    final matchesSearch = item.name.toLowerCase().contains(
-      searchQuery.toLowerCase(),
-    );
+    final query = searchQuery.toLowerCase();
+    final matchesSearch =
+        item.name.toLowerCase().contains(query) ||
+        item.description.toLowerCase().contains(query);
     return matchesCategory && matchesSearch;
   }).toList();
 });
@@ -73,6 +77,9 @@ class HomeScreen extends ConsumerWidget {
     // Issue 16: real user name from auth session
     final user = Supabase.instance.client.auth.currentUser;
     final name = user?.userMetadata?['full_name'] as String? ?? 'Coffee Lover';
+
+    // Bug 4.2: show which table the customer is at
+    final tableId = ref.watch(tableProvider);
 
     // Issue 17: time-based greeting
     final greeting = _timeGreeting();
@@ -108,6 +115,41 @@ class HomeScreen extends ConsumerWidget {
                                   letterSpacing: -0.5,
                                 ),
                           ),
+                          if (tableId != null)
+                            Padding(
+                              padding: const EdgeInsets.only(top: 6),
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 12,
+                                  vertical: 4,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: CafeColors.primary.withValues(
+                                    alpha: 0.12,
+                                  ),
+                                  borderRadius: BorderRadius.circular(100),
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    const Icon(
+                                      Icons.table_restaurant_rounded,
+                                      size: 14,
+                                      color: CafeColors.primary,
+                                    ),
+                                    const SizedBox(width: 6),
+                                    Text(
+                                      tableId.toUpperCase(),
+                                      style: const TextStyle(
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w700,
+                                        color: CafeColors.primary,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
                         ],
                       ),
                       M3PressScale(
@@ -158,62 +200,64 @@ class HomeScreen extends ConsumerWidget {
               child: FadeInWidget(
                 duration: const Duration(milliseconds: 600),
                 delay: const Duration(milliseconds: 100),
-                child: DoubleBezelContainer(
-                  outerRadius: 28,
-                  padding: 6,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 8,
-                    ),
-                    child: Row(
-                      children: [
-                        const Icon(
-                          Icons.search_rounded,
-                          color: CafeColors.onSurfaceVariant,
-                          size: 20,
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: TextField(
-                            onChanged: (value) => ref
-                                .read(searchQueryProvider.notifier)
-                                .update(value),
-                            decoration: InputDecoration(
-                              border: InputBorder.none,
-                              enabledBorder: InputBorder.none,
-                              focusedBorder: InputBorder.none,
-                              filled: false,
-                              contentPadding: EdgeInsets.zero,
-                              hintText: 'Search the menu...',
-                              hintStyle: Theme.of(context).textTheme.bodyMedium
-                                  ?.copyWith(
-                                    color: CafeColors.onSurfaceVariant
-                                        .withValues(alpha: 0.7),
-                                    fontWeight: FontWeight.w500,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 14,
+                    vertical: 4,
+                  ),
+                  decoration: BoxDecoration(
+                    color: CafeColors.surfaceContainerLow,
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: CafeColors.outline),
+                  ),
+                  child: Row(
+                    children: [
+                      const Icon(
+                        Icons.search_rounded,
+                        color: CafeColors.onSurfaceVariant,
+                        size: 20,
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: TextField(
+                          onChanged: (value) => ref
+                              .read(searchQueryProvider.notifier)
+                              .update(value),
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            enabledBorder: InputBorder.none,
+                            focusedBorder: InputBorder.none,
+                            filled: false,
+                            contentPadding: EdgeInsets.zero,
+                            hintText: 'Search the menu...',
+                            hintStyle: Theme.of(context).textTheme.bodyMedium
+                                ?.copyWith(
+                                  color: CafeColors.onSurfaceVariant.withValues(
+                                    alpha: 0.6,
                                   ),
-                            ),
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                              color: CafeColors.onSurface,
-                            ),
+                                  fontWeight: FontWeight.w500,
+                                ),
+                          ),
+                          style: const TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600,
+                            color: CafeColors.onSurface,
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
               ),
             ),
           ),
 
-          const SliverToBoxAdapter(child: SizedBox(height: 32)),
+          const SliverToBoxAdapter(child: SizedBox(height: 20)),
 
           // Categories (Issue 23: watch provider instead of recomputing)
           SliverToBoxAdapter(
             child: Padding(
-              padding: EdgeInsets.only(left: isDesktop ? 48 : 24, bottom: 40),
+              padding: EdgeInsets.only(left: isDesktop ? 48 : 24, bottom: 28),
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 clipBehavior: Clip.none,
@@ -244,10 +288,10 @@ class HomeScreen extends ConsumerWidget {
                             child: AnimatedContainer(
                               duration: const Duration(milliseconds: 300),
                               curve: const Cubic(0.32, 0.72, 0, 1),
-                              margin: const EdgeInsets.only(right: 12.0),
+                              margin: const EdgeInsets.only(right: 8.0),
                               padding: const EdgeInsets.symmetric(
-                                horizontal: 24,
-                                vertical: 12,
+                                horizontal: 16,
+                                vertical: 8,
                               ),
                               decoration: BoxDecoration(
                                 color: isSelected
@@ -270,7 +314,7 @@ class HomeScreen extends ConsumerWidget {
                                   fontWeight: isSelected
                                       ? FontWeight.w700
                                       : FontWeight.w600,
-                                  fontSize: 14,
+                                  fontSize: 13,
                                 ),
                               ),
                             ),
@@ -299,9 +343,9 @@ class HomeScreen extends ConsumerWidget {
                         tablet: 2,
                         desktop: 3,
                       ),
-                      childAspectRatio: 0.75,
-                      crossAxisSpacing: 32,
-                      mainAxisSpacing: 32,
+                      childAspectRatio: 0.72,
+                      crossAxisSpacing: 20,
+                      mainAxisSpacing: 20,
                     ),
                     delegate: SliverChildBuilderDelegate((context, index) {
                       final items = ref.watch(filteredMenuProvider);

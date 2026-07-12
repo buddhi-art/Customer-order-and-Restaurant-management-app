@@ -5,7 +5,7 @@ import '../../theme/m3_theme.dart';
 import '../../providers/order_provider.dart';
 import '../../models/order.dart';
 import '../../ui/core/widgets/double_bezel_container.dart';
-import '../../utils/security_layer.dart';
+import '../../utils/qr_service.dart';
 import 'admin_shell.dart';
 
 class TableManagementScreen extends ConsumerStatefulWidget {
@@ -265,7 +265,8 @@ class _TableCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 12),
 
-                  // QR Code
+                  // QR Code — the token is minted server-side (admin-only RPC);
+                  // the HMAC secret never reaches the client.
                   Container(
                     padding: const EdgeInsets.all(4),
                     decoration: BoxDecoration(
@@ -273,12 +274,43 @@ class _TableCard extends StatelessWidget {
                       borderRadius: BorderRadius.circular(8),
                       border: Border.all(color: colorScheme.outlineVariant),
                     ),
-                    child: QrImageView(
-                      data: SecurityLayer.generateQrToken('table_$tableNumber'),
-                      version: QrVersions.auto,
-                      size: 80,
-                      backgroundColor: Colors.white,
-                      errorCorrectionLevel: QrErrorCorrectLevel.Q,
+                    child: Consumer(
+                      builder: (context, ref, _) {
+                        final tokenAsync = ref.watch(
+                          tableQrTokenProvider('table_$tableNumber'),
+                        );
+                        return tokenAsync.when(
+                          data: (token) => QrImageView(
+                            data: token,
+                            version: QrVersions.auto,
+                            size: 80,
+                            backgroundColor: Colors.white,
+                            errorCorrectionLevel: QrErrorCorrectLevel.Q,
+                          ),
+                          loading: () => const SizedBox(
+                            width: 80,
+                            height: 80,
+                            child: Center(
+                              child: SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(strokeWidth: 2),
+                              ),
+                            ),
+                          ),
+                          error: (_, stack) => const SizedBox(
+                            width: 80,
+                            height: 80,
+                            child: Center(
+                              child: Icon(
+                                Icons.qr_code_2_rounded,
+                                size: 32,
+                                color: Colors.black26,
+                              ),
+                            ),
+                          ),
+                        );
+                      },
                     ),
                   ),
                   const SizedBox(height: 8),

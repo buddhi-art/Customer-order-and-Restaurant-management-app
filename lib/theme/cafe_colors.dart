@@ -68,6 +68,16 @@ class CafeColors {
   static const Color cardBrown = Color(0xFF5C3318);
   static const Color cardBrownDark = Color(0xFF3D2010);
 
+  // ── Shape Tokens (Reference Integration) ──
+  /// Tighter card radius matching reference design — cleaner, less ornate
+  static const double cardRadiusCompact = 20.0;
+
+  /// Grid card radius for the new streamlined layout
+  static const double gridCardRadius = 24.0;
+
+  /// Inner content radius (image well, etc.)
+  static const double innerRadius = 14.0;
+
   // ── Glass / Frost Effect ──
   static Color glassWhite = Colors.white.withValues(alpha: 0.18);
   static Color glassWhiteLight = Colors.white.withValues(alpha: 0.10);

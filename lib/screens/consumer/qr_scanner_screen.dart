@@ -4,11 +4,11 @@ import 'package:go_router/go_router.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../theme/app_colors.dart';
+import '../../theme/cafe_colors.dart';
 import '../../providers/table_provider.dart';
 import '../../providers/cart_provider.dart';
 import '../../router.dart';
-import '../../utils/security_layer.dart';
+import '../../utils/qr_service.dart';
 
 class QRScannerScreen extends ConsumerStatefulWidget {
   const QRScannerScreen({super.key});
@@ -33,17 +33,34 @@ class _QRScannerScreenState extends ConsumerState<QRScannerScreen> {
               final List<Barcode> barcodes = capture.barcodes;
               if (barcodes.isNotEmpty && !_isScanned) {
                 final String? code = barcodes.first.rawValue;
-                if (code != null && SecurityLayer.verifyQrToken(code)) {
-                  HapticFeedback.heavyImpact();
-                  setState(() => _isScanned = true);
-                  final tableId = SecurityLayer.extractTableId(code)!;
+                if (code == null) return;
 
-                  // Clear stale cart when scanning a new table
-                  ref.read(cartProvider.notifier).clearCart();
+                // Verify the token SERVER-SIDE (the HMAC secret is not on the
+                // client). redeem_table_qr returns the trusted table id, or
+                // null for an invalid/forged/expired token.
+                setState(() => _isScanned = true);
+                String? tableId;
+                try {
+                  tableId = await QrService.redeemToken(code);
+                } catch (e) {
+                  tableId = null;
+                }
 
-                  // Save to global provider
-                  ref.read(tableProvider.notifier).setTable(tableId);
+                if (tableId == null) {
+                  // Not a valid Kalpa table token — allow rescanning.
+                  if (mounted) setState(() => _isScanned = false);
+                  return;
+                }
 
+                HapticFeedback.heavyImpact();
+
+                // Clear stale cart when scanning a new table
+                ref.read(cartProvider.notifier).clearCart();
+
+                // Save to global provider
+                ref.read(tableProvider.notifier).setTable(tableId);
+
+                try {
                   // Persist table id so the router guard passes.
                   // SharedPreferences is web-safe (unlike secure storage).
                   final prefs = await SharedPreferences.getInstance();
@@ -54,6 +71,19 @@ class _QRScannerScreenState extends ConsumerState<QRScannerScreen> {
                     SnackBar(content: Text('Welcome to $tableId!')),
                   );
                   context.go('/home');
+                } catch (e) {
+                  // Reset the guard so the user can rescan, and surface the
+                  // failure instead of silently locking up the scanner.
+                  if (mounted) setState(() => _isScanned = false);
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text(
+                          'Could not start your session. Please try again.',
+                        ),
+                      ),
+                    );
+                  }
                 }
               }
             },
@@ -169,16 +199,16 @@ class _PulsingRadarState extends State<_PulsingRadar>
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
             border: Border.all(
-              color: AppColors.primaryAction.withValues(alpha: 0.5),
+              color: CafeColors.primary.withValues(alpha: 0.5),
               width: 2,
             ),
             gradient: RadialGradient(
               colors: [
-                AppColors.primaryAction.withValues(alpha: 0.0),
-                AppColors.primaryAction.withValues(
+                CafeColors.primary.withValues(alpha: 0.0),
+                CafeColors.primary.withValues(
                   alpha: 0.2 * (1.0 - _controller.value),
                 ),
-                AppColors.primaryAction.withValues(alpha: 0.0),
+                CafeColors.primary.withValues(alpha: 0.0),
               ],
               stops: [0.0, _controller.value, _controller.value + 0.1],
             ),
@@ -193,10 +223,10 @@ class _PulsingRadarState extends State<_PulsingRadar>
                 child: Container(
                   height: 2,
                   decoration: BoxDecoration(
-                    color: AppColors.primaryAction,
+                    color: CafeColors.primary,
                     boxShadow: [
                       BoxShadow(
-                        color: AppColors.primaryAction.withValues(alpha: 0.8),
+                        color: CafeColors.primary.withValues(alpha: 0.8),
                         blurRadius: 10,
                         spreadRadius: 2,
                       ),

@@ -5,8 +5,6 @@ import '../models/menu_item.dart';
 import '../theme/m3_theme.dart';
 import '../animations/m3_animations.dart';
 import 'responsive_widget.dart';
-import '../ui/core/widgets/double_bezel_container.dart';
-import '../ui/core/widgets/premium_cta_button.dart';
 
 class CoffeeCard extends StatelessWidget {
   final MenuItem item;
@@ -26,93 +24,167 @@ class CoffeeCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDesktop = ResponsiveUtils.isDesktop(context);
 
-    // Apply staggered fade in for all cards in lists
     return StaggeredFadeIn(
       index: index,
-      slideOffset: const Offset(0, 0.1),
+      slideOffset: const Offset(0, 0.08),
       child: isDesktop ? _buildGridCard(context) : _buildListCard(context),
     );
   }
 
+  // ── Grid Card (Reference‑inspired layout) ──────────────────────────────
+  // Image fills the top portion, then name, rating, price + add button below.
+  // No description — the image and name do the talking.
   Widget _buildGridCard(BuildContext context) {
     return M3PressScale(
       onTap: () {
         HapticFeedback.lightImpact();
         onTap();
       },
-      scaleTo: 0.98,
-      child: DoubleBezelContainer(
-        outerRadius: 32,
-        padding: 6,
+      scaleTo: 0.97,
+      child: Container(
+        decoration: BoxDecoration(
+          color: CafeColors.surface,
+          borderRadius: BorderRadius.circular(CafeColors.gridCardRadius),
+          boxShadow: [
+            BoxShadow(
+              color: CafeColors.shadowLight,
+              blurRadius: 6,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        clipBehavior: Clip.antiAlias,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            // ── Image ──────────────────────────────────────────────────
             Expanded(
               flex: 3,
               child: Builder(
                 builder: (context) {
                   final url = item.imageUrl.replaceAll('.jpeg', '.png');
                   return url.startsWith('assets/')
-                      ? Image.asset(url, fit: BoxFit.cover, errorBuilder: (_, _, _) => const Icon(Icons.coffee, color: CafeColors.onSurface))
+                      ? Image.asset(
+                          url,
+                          fit: BoxFit.cover,
+                          errorBuilder: (_, _, _) => const Icon(
+                            Icons.coffee,
+                            size: 48,
+                            color: CafeColors.onSurface,
+                          ),
+                        )
                       : CachedNetworkImage(
                           imageUrl: url,
                           fit: BoxFit.cover,
-                          errorWidget: (_, _, _) => const Icon(Icons.coffee, color: CafeColors.onSurface),
-                          placeholder: (_, _) => const Center(child: CircularProgressIndicator(strokeWidth: 2)),
+                          errorWidget: (_, _, _) => const Icon(
+                            Icons.coffee,
+                            size: 48,
+                            color: CafeColors.onSurface,
+                          ),
+                          placeholder: (_, _) => const Center(
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: CafeColors.primary,
+                            ),
+                          ),
                         );
                 },
               ),
             ),
-            Expanded(
-              flex: 2,
-              child: Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      item.name,
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.w800,
-                        letterSpacing: -0.5,
+
+            // ── Info Strip ──────────────────────────────────────────────
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 14, 16, 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Name row with inline rating
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          item.name,
+                          style: Theme.of(context).textTheme.titleMedium
+                              ?.copyWith(
+                                fontWeight: FontWeight.w700,
+                                letterSpacing: -0.3,
+                              ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    const SizedBox(height: 6),
-                    Text(
-                      item.description.isNotEmpty ? item.description : 'Balanced & smooth single origin',
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: CafeColors.onSurfaceVariant,
-                        height: 1.4,
-                      ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    const Spacer(),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          '\$${item.price.toStringAsFixed(2)}',
-                          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                            fontWeight: FontWeight.w800,
-                            color: CafeColors.primary,
+                      const SizedBox(width: 8),
+                      // Compact rating pill
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 6,
+                          vertical: 3,
+                        ),
+                        decoration: BoxDecoration(
+                          color: CafeColors.ratingGold.withValues(alpha: 0.12),
+                          borderRadius: BorderRadius.circular(
+                            CafeColors.innerRadius,
                           ),
                         ),
-                        PremiumCtaButton(
-                          text: 'Add',
-                          trailingIcon: Icons.add_rounded,
-                          onPressed: () {
-                            HapticFeedback.lightImpact();
-                            onAdd();
-                          },
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(
+                              Icons.star_rounded,
+                              size: 13,
+                              color: CafeColors.ratingGold,
+                            ),
+                            const SizedBox(width: 3),
+                            Text(
+                              item.rating.toStringAsFixed(1),
+                              style: const TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w700,
+                                color: CafeColors.ratingGold,
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                  ],
-                ),
+                      ),
+                    ],
+                  ),
+
+                  const SizedBox(height: 10),
+
+                  // Price + Add button row
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        '\$${item.price.toStringAsFixed(2)}',
+                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.w800,
+                          color: CafeColors.primary,
+                        ),
+                      ),
+                      M3PressScale(
+                        onTap: () {
+                          HapticFeedback.lightImpact();
+                          onAdd();
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: CafeColors.onSurface,
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(
+                            Icons.add_rounded,
+                            color: CafeColors.surface,
+                            size: 20,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
           ],
@@ -121,18 +193,29 @@ class CoffeeCard extends StatelessWidget {
     );
   }
 
+  // ── List Card (horizontal compact) ─────────────────────────────────────
   Widget _buildListCard(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.only(bottom: 10),
       child: M3PressScale(
         onTap: () {
           HapticFeedback.lightImpact();
           onTap();
         },
         scaleTo: 0.98,
-        child: DoubleBezelContainer(
-          outerRadius: 28,
-          padding: 6,
+        child: Container(
+          decoration: BoxDecoration(
+            color: CafeColors.surface,
+            borderRadius: BorderRadius.circular(CafeColors.cardRadiusCompact),
+            boxShadow: [
+              BoxShadow(
+                color: CafeColors.shadowMedium,
+                blurRadius: 12,
+                offset: const Offset(0, 4),
+              ),
+            ],
+          ),
+          clipBehavior: Clip.antiAlias,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
             child: Row(
@@ -140,11 +223,11 @@ class CoffeeCard extends StatelessWidget {
               children: [
                 // Thumbnail
                 Container(
-                  width: 72,
-                  height: 72,
+                  width: 68,
+                  height: 68,
                   decoration: BoxDecoration(
                     color: CafeColors.surfaceContainerLow,
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(CafeColors.innerRadius),
                     border: Border.all(color: CafeColors.outline),
                   ),
                   clipBehavior: Clip.antiAlias,
@@ -152,18 +235,32 @@ class CoffeeCard extends StatelessWidget {
                     builder: (context) {
                       final url = item.imageUrl.replaceAll('.jpeg', '.png');
                       return url.startsWith('assets/')
-                          ? Image.asset(url, fit: BoxFit.cover, errorBuilder: (_, _, _) => const Icon(Icons.coffee, color: CafeColors.onSurfaceVariant))
+                          ? Image.asset(
+                              url,
+                              fit: BoxFit.cover,
+                              errorBuilder: (_, _, _) => const Icon(
+                                Icons.coffee,
+                                color: CafeColors.onSurfaceVariant,
+                              ),
+                            )
                           : CachedNetworkImage(
                               imageUrl: url,
                               fit: BoxFit.cover,
-                              errorWidget: (_, _, _) => const Icon(Icons.coffee, color: CafeColors.onSurfaceVariant),
-                              placeholder: (_, _) => const Center(child: CircularProgressIndicator(strokeWidth: 2)),
+                              errorWidget: (_, _, _) => const Icon(
+                                Icons.coffee,
+                                color: CafeColors.onSurfaceVariant,
+                              ),
+                              placeholder: (_, _) => const Center(
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
+                              ),
                             );
                     },
                   ),
                 ),
-                const SizedBox(width: 16),
-                
+                const SizedBox(width: 14),
+
                 // Info
                 Expanded(
                   child: Column(
@@ -171,28 +268,38 @@ class CoffeeCard extends StatelessWidget {
                     children: [
                       Text(
                         item.name,
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.w800,
+                        style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                          fontWeight: FontWeight.w700,
                           letterSpacing: -0.2,
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
                       const SizedBox(height: 4),
-                      Text(
-                        item.description.isNotEmpty ? item.description : 'Balanced & smooth single origin',
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: CafeColors.onSurfaceVariant,
-                        ),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
+                      Row(
+                        children: [
+                          const Icon(
+                            Icons.star_rounded,
+                            size: 14,
+                            color: CafeColors.ratingGold,
+                          ),
+                          const SizedBox(width: 3),
+                          Text(
+                            item.rating.toStringAsFixed(1),
+                            style: const TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w700,
+                              color: CafeColors.ratingGold,
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
                 ),
-                
+
                 const SizedBox(width: 12),
-                
+
                 // Price & Add
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
@@ -204,7 +311,7 @@ class CoffeeCard extends StatelessWidget {
                         color: CafeColors.primary,
                       ),
                     ),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: 10),
                     M3PressScale(
                       onTap: () {
                         HapticFeedback.lightImpact();

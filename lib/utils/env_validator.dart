@@ -6,7 +6,8 @@ bool validateEnv(Map<String, String> env) {
   final required = [
     'SUPABASE_URL',
     'SUPABASE_PUBLISHABLE_KEY',
-    'QR_HMAC_SECRET',
+    // QR_HMAC_SECRET is no longer required: QR signing/verification moved
+    // server-side (Supabase Vault + RPCs). The client holds no QR secret.
   ];
 
   final missing = <String>[];

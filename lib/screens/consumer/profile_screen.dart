@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
 import '../../theme/m3_theme.dart';
@@ -20,6 +21,26 @@ class ProfileScreen extends ConsumerStatefulWidget {
 }
 
 class _ProfileScreenState extends ConsumerState<ProfileScreen> {
+  bool _isSigningOut = false;
+
+  Future<void> _signOut() async {
+    setState(() => _isSigningOut = true);
+    try {
+      await Supabase.instance.client.auth.signOut();
+      if (mounted) context.go('/');
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Failed to sign out. Check your connection.'),
+          ),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _isSigningOut = false);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final orders = ref.watch(orderProvider);
@@ -29,6 +50,16 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
         )
         .toList();
     final favorites = ref.watch(favoritesProvider);
+
+    // Bug 4.3: wire real user data from Supabase auth
+    final user = Supabase.instance.client.auth.currentUser;
+    final displayName =
+        user?.userMetadata?['full_name'] as String? ??
+        user?.email?.split('@').first ??
+        'Coffee Lover';
+    final avatarLetter = (displayName.isNotEmpty)
+        ? displayName[0].toUpperCase()
+        : 'C';
 
     return UserShell(
       title: 'Profile',
@@ -45,7 +76,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 padding: const EdgeInsets.all(32),
                 child: Row(
                   children: [
-                    // Avatar
+                    // Avatar — shows real initial
                     Container(
                       width: 80,
                       height: 80,
@@ -55,7 +86,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       ),
                       child: Center(
                         child: Text(
-                          'G',
+                          avatarLetter,
                           style: TextStyle(
                             fontSize: 32,
                             fontWeight: FontWeight.w900,
@@ -70,7 +101,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Coffee Lover',
+                            displayName,
                             style: Theme.of(context).textTheme.headlineSmall
                                 ?.copyWith(
                                   fontWeight: FontWeight.w800,
@@ -99,25 +130,32 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                         ],
                       ),
                     ),
-                    // Edit profile
+                    // Sign Out button (Bug 4.4)
                     M3PressScale(
-                      onTap: () {
-                        HapticFeedback.lightImpact();
-                      },
-                      child: Container(
-                        width: 48,
-                        height: 48,
-                        decoration: BoxDecoration(
-                          color: CafeColors.surfaceContainerLow,
-                          shape: BoxShape.circle,
-                          border: Border.all(color: CafeColors.outline),
-                        ),
-                        child: const Icon(
-                          Icons.edit_rounded,
-                          size: 20,
-                          color: CafeColors.onSurfaceVariant,
-                        ),
-                      ),
+                      onTap: _isSigningOut ? null : _signOut,
+                      child: _isSigningOut
+                          ? const SizedBox(
+                              width: 24,
+                              height: 24,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: CafeColors.error,
+                              ),
+                            )
+                          : Container(
+                              width: 48,
+                              height: 48,
+                              decoration: BoxDecoration(
+                                color: CafeColors.surfaceContainerLow,
+                                shape: BoxShape.circle,
+                                border: Border.all(color: CafeColors.outline),
+                              ),
+                              child: const Icon(
+                                Icons.logout_rounded,
+                                size: 20,
+                                color: CafeColors.error,
+                              ),
+                            ),
                     ),
                   ],
                 ),
@@ -127,29 +165,32 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
             // Stats Row
             Row(
-              children: [
-                _StatCard(
-                  icon: Icons.coffee_rounded,
-                  value: '${completedOrders.length}',
-                  label: 'Orders',
-                  color: CafeColors.primary,
-                ),
-                const SizedBox(width: 16),
-                _StatCard(
-                  icon: Icons.favorite_rounded,
-                  value: '${favorites.length}',
-                  label: 'Favorites',
-                  color: CafeColors.error,
-                ),
-                const SizedBox(width: 16),
-                _StatCard(
-                  icon: Icons.card_giftcard_rounded,
-                  value: points.toString(),
-                  label: 'Points',
-                  color: CafeColors.ratingGold,
-                ),
-              ],
-            ).animate().fade(duration: 600.ms, delay: 100.ms).slideY(begin: 0.1, end: 0),
+                  children: [
+                    _StatCard(
+                      icon: Icons.coffee_rounded,
+                      value: '${completedOrders.length}',
+                      label: 'Orders',
+                      color: CafeColors.primary,
+                    ),
+                    const SizedBox(width: 16),
+                    _StatCard(
+                      icon: Icons.favorite_rounded,
+                      value: '${favorites.length}',
+                      label: 'Favorites',
+                      color: CafeColors.error,
+                    ),
+                    const SizedBox(width: 16),
+                    _StatCard(
+                      icon: Icons.card_giftcard_rounded,
+                      value: points.toString(),
+                      label: 'Points',
+                      color: CafeColors.ratingGold,
+                    ),
+                  ],
+                )
+                .animate()
+                .fade(duration: 600.ms, delay: 100.ms)
+                .slideY(begin: 0.1, end: 0),
             const SizedBox(height: 32),
 
             // Loyalty Card
@@ -161,196 +202,220 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
             // Quick Actions
             Text(
-              'Quick Actions',
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  'Quick Actions',
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
                     fontWeight: FontWeight.w800,
                     letterSpacing: -0.5,
                   ),
-            ).animate().fade(duration: 600.ms, delay: 300.ms).slideX(begin: -0.05, end: 0),
+                )
+                .animate()
+                .fade(duration: 600.ms, delay: 300.ms)
+                .slideX(begin: -0.05, end: 0),
             const SizedBox(height: 24),
             Row(
-              children: [
-                _ActionTile(
-                  icon: Icons.receipt_long_rounded,
-                  label: 'History',
-                  color: CafeColors.primary,
-                  onTap: () {
-                    HapticFeedback.lightImpact();
-                    context.push('/orders');
-                  },
-                ),
-                const SizedBox(width: 16),
-                _ActionTile(
-                  icon: Icons.qr_code_scanner_rounded,
-                  label: 'Scan Table',
-                  color: CafeColors.error,
-                  onTap: () {
-                    HapticFeedback.lightImpact();
-                    context.push('/scan');
-                  },
-                ),
-                const SizedBox(width: 16),
-                _ActionTile(
-                  icon: Icons.support_agent_rounded,
-                  label: 'Support',
-                  color: CafeColors.success,
-                  onTap: () {
-                    HapticFeedback.lightImpact();
-                  },
-                ),
-              ],
-            ).animate().fade(duration: 600.ms, delay: 400.ms).slideY(begin: 0.1, end: 0),
+                  children: [
+                    _ActionTile(
+                      icon: Icons.receipt_long_rounded,
+                      label: 'History',
+                      color: CafeColors.primary,
+                      onTap: () {
+                        HapticFeedback.lightImpact();
+                        context.push('/orders');
+                      },
+                    ),
+                    const SizedBox(width: 16),
+                    _ActionTile(
+                      icon: Icons.qr_code_scanner_rounded,
+                      label: 'Scan Table',
+                      color: CafeColors.error,
+                      onTap: () {
+                        HapticFeedback.lightImpact();
+                        context.push('/scan');
+                      },
+                    ),
+                    const SizedBox(width: 16),
+                    _ActionTile(
+                      icon: Icons.support_agent_rounded,
+                      label: 'Support',
+                      color: CafeColors.success,
+                      onTap: () {
+                        HapticFeedback.lightImpact();
+                      },
+                    ),
+                  ],
+                )
+                .animate()
+                .fade(duration: 600.ms, delay: 400.ms)
+                .slideY(begin: 0.1, end: 0),
             const SizedBox(height: 48),
 
             // Recent Orders Summary
             DoubleBezelContainer(
-              outerRadius: 32,
-              padding: 6,
-              child: Padding(
-                padding: const EdgeInsets.all(32),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  outerRadius: 32,
+                  padding: 6,
+                  child: Padding(
+                    padding: const EdgeInsets.all(32),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          'Recent Orders',
-                          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                                fontWeight: FontWeight.w800,
-                                letterSpacing: -0.5,
-                              ),
-                        ),
-                        M3PressScale(
-                          onTap: () {
-                            HapticFeedback.lightImpact();
-                            context.push('/orders');
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                            decoration: BoxDecoration(
-                              color: CafeColors.surfaceContainerLow,
-                              borderRadius: BorderRadius.circular(100),
-                            ),
-                            child: Row(
-                              children: [
-                                Text(
-                                  'View All',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color: CafeColors.onSurfaceVariant,
-                                    fontWeight: FontWeight.w700,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Recent Orders',
+                              style: Theme.of(context).textTheme.titleLarge
+                                  ?.copyWith(
+                                    fontWeight: FontWeight.w800,
+                                    letterSpacing: -0.5,
                                   ),
-                                ),
-                                const SizedBox(width: 4),
-                                const Icon(
-                                  Icons.chevron_right_rounded,
-                                  size: 16,
-                                  color: CafeColors.onSurfaceVariant,
-                                ),
-                              ],
                             ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 32),
-                    if (completedOrders.isEmpty)
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 32),
-                        child: Center(
-                          child: Column(
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.all(16),
+                            M3PressScale(
+                              onTap: () {
+                                HapticFeedback.lightImpact();
+                                context.push('/orders');
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                  vertical: 8,
+                                ),
                                 decoration: BoxDecoration(
                                   color: CafeColors.surfaceContainerLow,
-                                  shape: BoxShape.circle,
+                                  borderRadius: BorderRadius.circular(100),
                                 ),
-                                child: const Icon(
-                                  Icons.receipt_long_rounded,
-                                  size: 32,
-                                  color: CafeColors.outlineVariant,
-                                ),
-                              ),
-                              const SizedBox(height: 16),
-                              Text(
-                                'No orders yet',
-                                style: TextStyle(
-                                  color: CafeColors.onSurfaceVariant,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      )
-                    else
-                      ...completedOrders
-                          .take(3)
-                          .map(
-                            (order) => Padding(
-                              padding: const EdgeInsets.only(bottom: 24),
-                              child: Row(
-                                children: [
-                                  Container(
-                                    width: 48,
-                                    height: 48,
-                                    decoration: BoxDecoration(
-                                      color: CafeColors.surfaceContainerLow,
-                                      borderRadius: BorderRadius.circular(16),
-                                      border: Border.all(color: CafeColors.outline),
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      'View All',
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        color: CafeColors.onSurfaceVariant,
+                                        fontWeight: FontWeight.w700,
+                                      ),
                                     ),
-                                    child: const Icon(
-                                      Icons.check_circle_rounded,
-                                      size: 20,
-                                      color: CafeColors.success,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 16),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          '${order.items.length} items • ${order.tableId.toUpperCase()}',
-                                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                                fontWeight: FontWeight.w700,
-                                              ),
-                                        ),
-                                        const SizedBox(height: 4),
-                                        Text(
-                                          '\$${order.totalAmount.toStringAsFixed(2)}',
-                                          style: TextStyle(
-                                            fontSize: 14,
-                                            color: CafeColors.onSurfaceVariant,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Container(
-                                    padding: const EdgeInsets.all(8),
-                                    decoration: BoxDecoration(
-                                      color: CafeColors.surface,
-                                      shape: BoxShape.circle,
-                                      border: Border.all(color: CafeColors.outline),
-                                    ),
-                                    child: const Icon(
+                                    const SizedBox(width: 4),
+                                    const Icon(
                                       Icons.chevron_right_rounded,
                                       size: 16,
                                       color: CafeColors.onSurfaceVariant,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 32),
+                        if (completedOrders.isEmpty)
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 32),
+                            child: Center(
+                              child: Column(
+                                children: [
+                                  Container(
+                                    padding: const EdgeInsets.all(16),
+                                    decoration: BoxDecoration(
+                                      color: CafeColors.surfaceContainerLow,
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: const Icon(
+                                      Icons.receipt_long_rounded,
+                                      size: 32,
+                                      color: CafeColors.outlineVariant,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 16),
+                                  Text(
+                                    'No orders yet',
+                                    style: TextStyle(
+                                      color: CafeColors.onSurfaceVariant,
+                                      fontWeight: FontWeight.w600,
                                     ),
                                   ),
                                 ],
                               ),
                             ),
-                          ),
-                  ],
-                ),
-              ),
-            ).animate().fade(duration: 600.ms, delay: 500.ms).slideY(begin: 0.1, end: 0),
+                          )
+                        else
+                          ...completedOrders
+                              .take(3)
+                              .map(
+                                (order) => Padding(
+                                  padding: const EdgeInsets.only(bottom: 24),
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        width: 48,
+                                        height: 48,
+                                        decoration: BoxDecoration(
+                                          color: CafeColors.surfaceContainerLow,
+                                          borderRadius: BorderRadius.circular(
+                                            16,
+                                          ),
+                                          border: Border.all(
+                                            color: CafeColors.outline,
+                                          ),
+                                        ),
+                                        child: const Icon(
+                                          Icons.check_circle_rounded,
+                                          size: 20,
+                                          color: CafeColors.success,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 16),
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              '${order.items.length} items • ${order.tableId.toUpperCase()}',
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .titleMedium
+                                                  ?.copyWith(
+                                                    fontWeight: FontWeight.w700,
+                                                  ),
+                                            ),
+                                            const SizedBox(height: 4),
+                                            Text(
+                                              '\$${order.totalAmount.toStringAsFixed(2)}',
+                                              style: TextStyle(
+                                                fontSize: 14,
+                                                color:
+                                                    CafeColors.onSurfaceVariant,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Container(
+                                        padding: const EdgeInsets.all(8),
+                                        decoration: BoxDecoration(
+                                          color: CafeColors.surface,
+                                          shape: BoxShape.circle,
+                                          border: Border.all(
+                                            color: CafeColors.outline,
+                                          ),
+                                        ),
+                                        child: const Icon(
+                                          Icons.chevron_right_rounded,
+                                          size: 16,
+                                          color: CafeColors.onSurfaceVariant,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                      ],
+                    ),
+                  ),
+                )
+                .animate()
+                .fade(duration: 600.ms, delay: 500.ms)
+                .slideY(begin: 0.1, end: 0),
             const SizedBox(height: 100),
           ],
         ),
@@ -398,9 +463,9 @@ class _StatCard extends StatelessWidget {
               const SizedBox(height: 12),
               Text(
                 value,
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.w800,
-                ),
+                style: Theme.of(
+                  context,
+                ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800),
               ),
               const SizedBox(height: 2),
               Text(
@@ -438,10 +503,7 @@ class _LoyaltyCard extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(24),
           gradient: LinearGradient(
-            colors: [
-              CafeColors.onSurface,
-              const Color(0xFF111111),
-            ],
+            colors: [CafeColors.onSurface, const Color(0xFF111111)],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),

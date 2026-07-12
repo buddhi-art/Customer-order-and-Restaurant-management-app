@@ -563,15 +563,28 @@ class _OrderCard extends ConsumerWidget {
     WidgetRef ref,
     String method,
   ) async {
-    // Update payment method
-    await ref
-        .read(orderProvider.notifier)
-        .updatePaymentMethod(order.id, method);
+    try {
+      // Update payment method
+      await ref
+          .read(orderProvider.notifier)
+          .updatePaymentMethod(order.id, method);
 
-    // Advance to paid
-    await ref
-        .read(orderProvider.notifier)
-        .updateOrderStatus(order.id, OrderStatus.paid);
+      // Advance to paid
+      await ref
+          .read(orderProvider.notifier)
+          .updateOrderStatus(order.id, OrderStatus.paid);
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Could not mark order paid: $e'),
+            backgroundColor: Theme.of(context).colorScheme.error,
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      }
+      return;
+    }
 
     if (context.mounted) {
       // Print receipt after marking paid

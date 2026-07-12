@@ -43,7 +43,8 @@ Future<void> main() async {
   // widget build throws (e.g. a provider fails during build). In debug the red
   // screen is kept so problems stay visible during development.
   if (kReleaseMode) {
-    ErrorWidget.builder = (FlutterErrorDetails details) => const _AppErrorView();
+    ErrorWidget.builder = (FlutterErrorDetails details) =>
+        const _AppErrorView();
   }
 
   // Set high refresh rate on Android only (no-op on web)
@@ -64,6 +65,9 @@ Future<void> main() async {
   await Supabase.initialize(
     url: dotenv.env['SUPABASE_URL']!,
     publishableKey: dotenv.env['SUPABASE_PUBLISHABLE_KEY']!,
+    // persistSession is true by default in supabase_flutter ^2.15.0.
+    // Sessions are stored in FlutterSecureStorage (mobile) / localStorage (web).
+    // The auth flow is PKCE automatically on web.
   );
 
   final session = Supabase.instance.client.auth.currentSession;
@@ -103,7 +107,10 @@ class _AuthStateListenerState extends ConsumerState<_AuthStateListener> {
     _authSub = Supabase.instance.client.auth.onAuthStateChange.listen((event) {
       // On sign-out, invalidate session-scoped providers (Issue 14)
       if (event.event == AuthChangeEvent.signedOut) {
-        ref.invalidate(cartProvider);
+        // clearCart() wipes the persistent SharedPreferences cart so it does
+        // not leak to the next user on this device; invalidate() alone would
+        // only reset in-memory state and the prefs would rehydrate it.
+        ref.read(cartProvider.notifier).clearCart();
         ref.invalidate(orderProvider);
         ref.invalidate(notificationProvider);
       }

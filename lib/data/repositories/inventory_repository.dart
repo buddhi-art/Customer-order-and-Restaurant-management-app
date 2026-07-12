@@ -52,6 +52,18 @@ class InventoryRepository {
         .eq('id', id);
   }
 
+  /// Apply a relative stock change atomically via the `adjust_inventory_stock`
+  /// RPC (see migration 20260710000000). This avoids read-modify-write races
+  /// where concurrent adjustments overwrite each other. Falls back to nothing
+  /// on error; the caller keeps its optimistic state and the realtime stream
+  /// reconciles the authoritative value.
+  Future<void> adjustStock(String id, double delta) async {
+    await _client.rpc(
+      'adjust_inventory_stock',
+      params: {'p_id': id, 'p_delta': delta},
+    );
+  }
+
   static InventoryItem parseItem(Map<String, dynamic> json) {
     return InventoryItem(
       id: json['id'] as String,

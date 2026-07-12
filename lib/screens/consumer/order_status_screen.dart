@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../../providers/order_provider.dart';
 import '../../models/order.dart';
-import '../../theme/app_colors.dart';
+import '../../theme/cafe_colors.dart';
 import '../../widgets/staggered_animations.dart';
 import '../../widgets/responsive_widget.dart';
 import '../../widgets/top_nav_bar.dart';
@@ -21,18 +21,24 @@ class OrderStatusScreen extends ConsumerWidget {
     final isDesktop = ResponsiveUtils.isDesktop(context);
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: CafeColors.surface,
       appBar: isDesktop
           ? null
           : AppBar(
-              backgroundColor: AppColors.background,
+              backgroundColor: CafeColors.surface,
               leading: GestureDetector(
                 onTap: () => context.go('/home'),
-                child: const Icon(Icons.arrow_back_ios_new, size: 20, color: AppColors.textPrimary),
+                child: const Icon(
+                  Icons.arrow_back_ios_new,
+                  size: 20,
+                  color: CafeColors.onSurface,
+                ),
               ),
               title: Text(
                 'Order Status',
-                style: Theme.of(context).textTheme.displaySmall?.copyWith(color: AppColors.textPrimary),
+                style: Theme.of(
+                  context,
+                ).textTheme.displaySmall?.copyWith(color: CafeColors.onSurface),
               ),
               centerTitle: true,
             ),
@@ -45,14 +51,17 @@ class OrderStatusScreen extends ConsumerWidget {
                   child: SingleChildScrollView(
                     child: Center(
                       child: ConstrainedBox(
-                        constraints: const BoxConstraints(maxWidth: 800), // Minimalist centered layout for web
+                        constraints: const BoxConstraints(maxWidth: 800),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             if (isDesktop) const SizedBox(height: 48),
                             if (isDesktop)
                               Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 24.0,
+                                  vertical: 16,
+                                ),
                                 child: Align(
                                   alignment: Alignment.centerLeft,
                                   child: GestureDetector(
@@ -60,33 +69,50 @@ class OrderStatusScreen extends ConsumerWidget {
                                     child: Row(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
-                                        const Icon(Icons.arrow_back_ios_new, size: 16, color: AppColors.textPrimary),
+                                        const Icon(
+                                          Icons.arrow_back_ios_new,
+                                          size: 16,
+                                          color: CafeColors.onSurface,
+                                        ),
                                         const SizedBox(width: 8),
-                                        Text('Back to Menu', style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold)),
+                                        Text(
+                                          'Back to Menu',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyMedium
+                                              ?.copyWith(
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                        ),
                                       ],
                                     ),
                                   ),
                                 ),
                               ),
-                            
-                            // ─── Hero Image ───
+
+                            // Hero Image
                             FadeInWidget(
                               duration: const Duration(milliseconds: 600),
                               child: Container(
                                 height: isDesktop ? 350 : 250,
-                                margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                                margin: const EdgeInsets.symmetric(
+                                  horizontal: 24,
+                                  vertical: 16,
+                                ),
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(24),
-                                  color: AppColors.primaryLight,
+                                  color: CafeColors.primaryContainer,
                                   image: const DecorationImage(
-                                    image: CachedNetworkImageProvider('https://images.unsplash.com/photo-1541167760496-1628856ab772?auto=format&fit=crop&q=80&w=800'),
+                                    image: CachedNetworkImageProvider(
+                                      'https://images.unsplash.com/photo-1541167760496-1628856ab772?auto=format&fit=crop&q=80&w=800',
+                                    ),
                                     fit: BoxFit.cover,
                                   ),
                                 ),
                               ),
                             ),
-                            
-                            // ─── Table Header ───
+
+                            // Table Header
                             FadeInWidget(
                               duration: const Duration(milliseconds: 600),
                               delay: const Duration(milliseconds: 100),
@@ -96,16 +122,22 @@ class OrderStatusScreen extends ConsumerWidget {
                                   children: [
                                     Text(
                                       'Table ${order.tableId.replaceAll('table_', '').toUpperCase()}',
-                                      style: Theme.of(context).textTheme.displayMedium?.copyWith(fontSize: 32),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .displayMedium
+                                          ?.copyWith(fontSize: 32),
                                     ),
                                     const SizedBox(height: 8),
                                     Text(
                                       _getStatusMessage(order.status),
-                                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                        color: AppColors.textSecondary,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 18,
-                                      ),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyLarge
+                                          ?.copyWith(
+                                            color: CafeColors.onSurfaceVariant,
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 18,
+                                          ),
                                     ),
                                   ],
                                 ),
@@ -113,20 +145,27 @@ class OrderStatusScreen extends ConsumerWidget {
                             ),
                             const SizedBox(height: 48),
 
-                            // ─── Elegant Progress Tracker ───
+                            // Progress Tracker
                             FadeInWidget(
                               duration: const Duration(milliseconds: 600),
                               delay: const Duration(milliseconds: 200),
                               child: Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 48),
-                                child: _buildProgressTracker(context, _getStepIndex(order.status)),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 48,
+                                ),
+                                child: _buildProgressTracker(
+                                  context,
+                                  _getStepIndex(order.status),
+                                ),
                               ),
                             ),
                             const SizedBox(height: 64),
 
-                            // ─── Order Summary ───
+                            // Order Summary
                             Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 48),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 48,
+                              ),
                               child: FadeInWidget(
                                 duration: const Duration(milliseconds: 600),
                                 delay: const Duration(milliseconds: 300),
@@ -134,42 +173,83 @@ class OrderStatusScreen extends ConsumerWidget {
                                 child: Container(
                                   padding: const EdgeInsets.all(32),
                                   decoration: BoxDecoration(
-                                    color: AppColors.background,
+                                    color: CafeColors.surface,
                                     borderRadius: BorderRadius.circular(16),
-                                    border: Border.all(color: AppColors.shadowDark.withValues(alpha: 0.1)),
+                                    border: Border.all(
+                                      color: CafeColors.outline,
+                                    ),
                                   ),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
-                                      Text('Order Summary', style: Theme.of(context).textTheme.displaySmall),
+                                      Text(
+                                        'Order Summary',
+                                        style: Theme.of(
+                                          context,
+                                        ).textTheme.displaySmall,
+                                      ),
                                       const SizedBox(height: 24),
                                       ...order.items.map((cartItem) {
                                         return Padding(
-                                          padding: const EdgeInsets.only(bottom: 16.0),
+                                          padding: const EdgeInsets.only(
+                                            bottom: 16.0,
+                                          ),
                                           child: Row(
                                             children: [
-                                              Text('${cartItem.quantity}x', style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold)),
+                                              Text(
+                                                '${cartItem.quantity}x',
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyLarge
+                                                    ?.copyWith(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                              ),
                                               const SizedBox(width: 16),
                                               Expanded(
                                                 child: Text(
                                                   cartItem.item.name,
-                                                  style: Theme.of(context).textTheme.bodyLarge,
+                                                  style: Theme.of(
+                                                    context,
+                                                  ).textTheme.bodyLarge,
                                                 ),
                                               ),
                                               Text(
                                                 '\$${cartItem.totalPrice.toStringAsFixed(2)}',
-                                                style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold),
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyLarge
+                                                    ?.copyWith(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
                                               ),
                                             ],
                                           ),
                                         );
                                       }),
-                                      const Divider(height: 48, color: AppColors.shadowLight),
+                                      const Divider(
+                                        height: 48,
+                                        color: CafeColors.outline,
+                                      ),
                                       Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Text('Total Paid', style: Theme.of(context).textTheme.displaySmall),
-                                          Text('\$${order.totalAmount.toStringAsFixed(2)}', style: Theme.of(context).textTheme.displaySmall),
+                                          Text(
+                                            'Total Paid',
+                                            style: Theme.of(
+                                              context,
+                                            ).textTheme.displaySmall,
+                                          ),
+                                          Text(
+                                            '\$${order.totalAmount.toStringAsFixed(2)}',
+                                            style: Theme.of(
+                                              context,
+                                            ).textTheme.displaySmall,
+                                          ),
                                         ],
                                       ),
                                     ],
@@ -219,7 +299,7 @@ class OrderStatusScreen extends ConsumerWidget {
 
   Widget _buildProgressTracker(BuildContext context, int currentStep) {
     final steps = ['Placed', 'Preparing', 'Ready'];
-    
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: List.generate(steps.length * 2 - 1, (index) {
@@ -231,7 +311,7 @@ class OrderStatusScreen extends ConsumerWidget {
             child: Container(
               height: 2,
               margin: const EdgeInsets.symmetric(horizontal: 16),
-              color: isCompleted ? AppColors.textPrimary : AppColors.shadowDark.withValues(alpha: 0.2),
+              color: isCompleted ? CafeColors.onSurface : CafeColors.outline,
             ),
           );
         } else {
@@ -239,7 +319,7 @@ class OrderStatusScreen extends ConsumerWidget {
           int stepIndex = index ~/ 2;
           bool isCompleted = currentStep >= stepIndex;
           bool isActive = currentStep == stepIndex;
-          
+
           return Column(
             children: [
               Container(
@@ -247,21 +327,29 @@ class OrderStatusScreen extends ConsumerWidget {
                 height: 32,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: isCompleted ? AppColors.textPrimary : Colors.white,
+                  color: isCompleted ? CafeColors.onSurface : Colors.white,
                   border: Border.all(
-                    color: isCompleted ? AppColors.textPrimary : AppColors.shadowDark.withValues(alpha: 0.2),
+                    color: isCompleted
+                        ? CafeColors.onSurface
+                        : CafeColors.outline,
                     width: 2,
                   ),
                 ),
                 child: isCompleted
-                    ? const Icon(Icons.check, size: 18, color: Colors.white)
+                    ? const Icon(
+                        Icons.check,
+                        size: 18,
+                        color: CafeColors.surface,
+                      )
                     : null,
               ),
               const SizedBox(height: 12),
               Text(
                 steps[stepIndex],
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: isCompleted ? AppColors.textPrimary : AppColors.textSecondary,
+                  color: isCompleted
+                      ? CafeColors.onSurface
+                      : CafeColors.onSurfaceVariant,
                   fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
                 ),
               ),
