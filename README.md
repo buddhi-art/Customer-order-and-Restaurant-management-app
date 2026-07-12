@@ -305,7 +305,7 @@ All rights reserved. Kalpa Coffee © 2026.
 
 ---
 
-
+Haven't tested it properly on every platform, only on chrome and it works fine on it.
 <p align="center">
   <img src="assets/logo.png" width="32" alt="Kalpa">
   <br>
