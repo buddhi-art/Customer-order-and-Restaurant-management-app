@@ -50,7 +50,7 @@ BEGIN
   FOR item IN SELECT * FROM jsonb_array_elements(NEW.items)
   LOOP
     item_id := item->>'item_id';
-    qty := COALESCE((item->>'quantity')::NUMERIC, 1);
+    qty := GREATEST(1, COALESCE((item->>'quantity')::NUMERIC, 1));
 
     -- Size multiplier must mirror CartItem._sizeMultipliers on the client.
     size_mult := CASE item->>'size'
@@ -59,14 +59,13 @@ BEGIN
       ELSE 1.0            -- Medium / unknown
     END;
 
-    -- Prefer the current DB price; fall back to the embedded price if the menu
-    -- item no longer exists.
+    -- Prefer the current DB price; reject the order if the menu item is invalid.
     SELECT price INTO unit_price
     FROM public.menu_items
     WHERE menu_items.item_id = item_id;
 
     IF unit_price IS NULL THEN
-      unit_price := COALESCE((item->>'price')::NUMERIC, 0);
+      RAISE EXCEPTION 'Invalid menu item: %', item_id;
     END IF;
 
     subtotal := subtotal + (unit_price * qty * size_mult);

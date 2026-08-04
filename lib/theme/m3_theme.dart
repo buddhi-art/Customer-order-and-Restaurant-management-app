@@ -5,9 +5,9 @@ import 'cafe_colors.dart';
 
 export 'cafe_colors.dart';
 
-/// ─── Kalpa Café Premium Material 3 Theme ────────────────────────────────────
-/// Logo-derived: Warm Cream White surface + Copper Bronze accent.
-/// Uses Outfit for modern geometric headlines and Inter for neutral, highly legible body.
+/// ─── Kalpa Café Minimalist Editorial Theme ───────────────────────────────────
+/// Utilitarian minimalism: high contrast, strict macro-whitespace, bento grids,
+/// and flat component architecture.
 class M3Theme {
   M3Theme._();
 
@@ -40,9 +40,26 @@ class M3Theme {
       inversePrimary: CafeColors.inversePrimary,
     );
 
-    // ── Typography (Soft Structuralism) ──
-    final headingFont = GoogleFonts.outfit;
-    final bodyFont = GoogleFonts.plusJakartaSans;
+    // ── Typography (Editorial) ──
+    final headingFont = GoogleFonts.newsreader;
+    
+    TextStyle bodyFont({
+      double? fontSize,
+      FontWeight? fontWeight,
+      double? letterSpacing,
+      double? height,
+      Color? color,
+    }) {
+      return TextStyle(
+        fontFamily: 'SF Pro Display',
+        fontFamilyFallback: const ['Geist Sans', 'Helvetica Neue', 'sans-serif'],
+        fontSize: fontSize,
+        fontWeight: fontWeight,
+        letterSpacing: letterSpacing,
+        height: height,
+        color: color,
+      );
+    }
 
     return ThemeData(
       useMaterial3: true,
@@ -61,42 +78,42 @@ class M3Theme {
       textTheme: TextTheme(
         displayLarge: headingFont(
           fontSize: 64, // Massive
-          fontWeight: FontWeight.w800,
-          letterSpacing: -2.0,
+          fontWeight: FontWeight.w600,
+          letterSpacing: -1.5,
           height: 1.05,
           color: CafeColors.onSurface,
         ),
         displayMedium: headingFont(
           fontSize: 48,
-          fontWeight: FontWeight.w800,
-          letterSpacing: -1.5,
+          fontWeight: FontWeight.w600,
+          letterSpacing: -1.0,
           height: 1.1,
           color: CafeColors.onSurface,
         ),
         displaySmall: headingFont(
           fontSize: 40,
-          fontWeight: FontWeight.w700,
-          letterSpacing: -1.0,
+          fontWeight: FontWeight.w500,
+          letterSpacing: -0.5,
           height: 1.15,
           color: CafeColors.onSurface,
         ),
         headlineLarge: headingFont(
           fontSize: 32,
-          fontWeight: FontWeight.w700,
-          letterSpacing: -1.0,
+          fontWeight: FontWeight.w500,
+          letterSpacing: -0.5,
           height: 1.2,
           color: CafeColors.onSurface,
         ),
         headlineMedium: headingFont(
           fontSize: 28,
-          fontWeight: FontWeight.w700,
+          fontWeight: FontWeight.w500,
           letterSpacing: -0.5,
           height: 1.2,
           color: CafeColors.onSurface,
         ),
         headlineSmall: headingFont(
           fontSize: 24,
-          fontWeight: FontWeight.w700,
+          fontWeight: FontWeight.w500,
           letterSpacing: -0.5,
           height: 1.25,
           color: CafeColors.onSurface,
@@ -126,7 +143,7 @@ class M3Theme {
           fontSize: 16,
           fontWeight: FontWeight.w400,
           letterSpacing: 0.1,
-          height: 1.6,
+          height: 1.6, // Generous line height for editorial feel
           color: CafeColors.onSurface,
         ),
         bodyMedium: bodyFont(
@@ -146,21 +163,21 @@ class M3Theme {
         labelLarge: bodyFont(
           fontSize: 14,
           fontWeight: FontWeight.w600,
-          letterSpacing: 1.0,
+          letterSpacing: 0.5, // Less tracking than generic M3
           height: 1.4,
           color: CafeColors.onSurface,
         ),
         labelMedium: bodyFont(
           fontSize: 12,
           fontWeight: FontWeight.w600,
-          letterSpacing: 1.2,
+          letterSpacing: 0.5,
           height: 1.4,
           color: CafeColors.onSurfaceVariant,
         ),
         labelSmall: bodyFont(
           fontSize: 11,
           fontWeight: FontWeight.w600,
-          letterSpacing: 1.2,
+          letterSpacing: 0.5,
           height: 1.4,
           color: CafeColors.onSurfaceVariant,
         ),
@@ -173,18 +190,18 @@ class M3Theme {
         foregroundColor: CafeColors.onSurface,
         titleTextStyle: headingFont(
           fontSize: 24,
-          fontWeight: FontWeight.w700,
+          fontWeight: FontWeight.w600,
           letterSpacing: -0.5,
           color: CafeColors.onSurface,
         ),
         surfaceTintColor: CafeColors.surface,
       ),
 
-      // SHAPE CONSISTENCY LOCK: Exaggerated Squircle 32px
+      // SHAPE CONSISTENCY LOCK: Bento Box 12px
       cardTheme: CardThemeData(
         elevation: 0,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(32),
+          borderRadius: BorderRadius.circular(12),
           side: const BorderSide(color: CafeColors.outlineVariant, width: 1),
         ),
         color: CafeColors.surfaceContainerLow,
@@ -198,7 +215,7 @@ class M3Theme {
         surfaceTintColor: Colors.transparent,
         indicatorColor: CafeColors.surfaceContainerHigh,
         indicatorShape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(100),
+          borderRadius: BorderRadius.circular(8),
         ),
         labelTextStyle: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.selected)) {
@@ -241,50 +258,50 @@ class M3Theme {
         backgroundColor: CafeColors.onSurface,
         foregroundColor: CafeColors.surface,
         elevation: 0,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       ),
 
       chipTheme: ChipThemeData(
         elevation: 0,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
-        labelStyle: bodyFont(fontSize: 14, fontWeight: FontWeight.w500),
-        side: const BorderSide(color: CafeColors.outlineVariant),
-        backgroundColor: CafeColors.surface,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(9999)), // Pill shaped for tags as per protocol
+        labelStyle: bodyFont(fontSize: 12, fontWeight: FontWeight.w500, letterSpacing: 0.5),
+        side: BorderSide.none,
+        backgroundColor: CafeColors.surfaceContainerHigh,
       ),
 
       dialogTheme: DialogThemeData(
         elevation: 0,
         backgroundColor: CafeColors.surface,
         surfaceTintColor: Colors.transparent,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(32)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
 
       bottomSheetTheme: const BottomSheetThemeData(
         backgroundColor: CafeColors.surface,
         surfaceTintColor: Colors.transparent,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
+          borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
         ),
       ),
 
-      // SHAPE CONSISTENCY LOCK: Inputs = 12px soft
+      // SHAPE CONSISTENCY LOCK: Inputs = 6px sharp
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: CafeColors.surfaceContainerLow,
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(6),
           borderSide: const BorderSide(color: CafeColors.outlineVariant),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(6),
           borderSide: const BorderSide(color: CafeColors.outlineVariant),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: CafeColors.primary, width: 2),
+          borderRadius: BorderRadius.circular(6),
+          borderSide: const BorderSide(color: CafeColors.onSurface, width: 1),
         ),
         errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(6),
           borderSide: const BorderSide(color: CafeColors.error),
         ),
         contentPadding: const EdgeInsets.symmetric(
@@ -296,13 +313,13 @@ class M3Theme {
       switchTheme: SwitchThemeData(
         thumbColor: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.selected)) {
-            return CafeColors.primary;
+            return CafeColors.onSurface;
           }
           return CafeColors.onSurfaceVariant;
         }),
         trackColor: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.selected)) {
-            return CafeColors.primaryContainer;
+            return CafeColors.surfaceContainerHigh;
           }
           return CafeColors.outlineVariant;
         }),
@@ -321,19 +338,32 @@ class M3Theme {
           color: CafeColors.inverseOnSurface,
           fontSize: 14,
         ),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         behavior: SnackBarBehavior.floating,
       ),
 
-      // SHAPE CONSISTENCY LOCK: Buttons = Pill 100px
+      // SHAPE CONSISTENCY LOCK: Buttons = 6px slight radius
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           elevation: 0,
+          backgroundColor: CafeColors.primary,
+          foregroundColor: CafeColors.onPrimary,
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(100),
+            borderRadius: BorderRadius.circular(6),
           ),
           textStyle: bodyFont(fontSize: 16, fontWeight: FontWeight.w600),
+        ).copyWith(
+          // Subtle hover state
+          overlayColor: WidgetStateProperty.resolveWith((states) {
+            if (states.contains(WidgetState.hovered)) {
+              return Colors.white.withValues(alpha: 0.05);
+            }
+            if (states.contains(WidgetState.pressed)) {
+              return Colors.white.withValues(alpha: 0.1);
+            }
+            return null;
+          }),
         ),
       ),
 
@@ -342,7 +372,7 @@ class M3Theme {
           elevation: 0,
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(100),
+            borderRadius: BorderRadius.circular(6),
           ),
           textStyle: bodyFont(fontSize: 16, fontWeight: FontWeight.w600),
         ),
@@ -352,7 +382,7 @@ class M3Theme {
         style: OutlinedButton.styleFrom(
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(100),
+            borderRadius: BorderRadius.circular(6),
           ),
           side: const BorderSide(color: CafeColors.outlineVariant),
           textStyle: bodyFont(fontSize: 16, fontWeight: FontWeight.w600),
@@ -362,7 +392,7 @@ class M3Theme {
       segmentedButtonTheme: SegmentedButtonThemeData(
         style: ButtonStyle(
           shape: WidgetStatePropertyAll(
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
           ),
           textStyle: WidgetStatePropertyAll(
             bodyFont(fontSize: 13, fontWeight: FontWeight.w600),

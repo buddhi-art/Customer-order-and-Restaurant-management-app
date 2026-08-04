@@ -10,55 +10,29 @@ class DoubleBezelContainer extends StatelessWidget {
   const DoubleBezelContainer({
     super.key,
     required this.child,
-    this.outerRadius = 32.0,
-    this.padding = 6.0,
+    this.outerRadius = 12.0, // Default to crisp radius
+    this.padding = 0.0,      // Strip outer gap by default
     this.innerColor,
-    this.showInnerHighlight = true,
+    this.showInnerHighlight = false,
   });
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final isDark = colorScheme.brightness == Brightness.dark;
     
-    final innerRadius = outerRadius - padding;
-
+    // In minimalist UI, we strip the double bezel and return a crisp flat container.
     return Container(
-      padding: EdgeInsets.all(padding),
+      clipBehavior: Clip.antiAlias,
+      padding: padding > 0 ? EdgeInsets.all(padding) : null,
       decoration: BoxDecoration(
-        color: isDark 
-            ? Colors.white.withValues(alpha: 0.05) 
-            : Colors.black.withValues(alpha: 0.03),
-        borderRadius: BorderRadius.circular(outerRadius),
+        color: innerColor ?? colorScheme.surface,
+        borderRadius: BorderRadius.circular(12), // Strict 12px for bento box
         border: Border.all(
-          color: isDark 
-              ? Colors.white.withValues(alpha: 0.1) 
-              : Colors.black.withValues(alpha: 0.05),
+          color: colorScheme.outline,
           width: 1,
         ),
       ),
-      child: Container(
-        clipBehavior: Clip.antiAlias,
-        decoration: BoxDecoration(
-          color: innerColor ?? colorScheme.surface,
-          borderRadius: BorderRadius.circular(innerRadius),
-          boxShadow: showInnerHighlight ? [
-            // Inner top highlight simulation using a slight drop shadow pointing down 
-            // from the inside, or just a subtle border.
-            BoxShadow(
-              color: Colors.white.withValues(alpha: isDark ? 0.1 : 0.6),
-              offset: const Offset(0, 1),
-              blurRadius: 1,
-              spreadRadius: -1,
-            ),
-          ] : null,
-          border: Border.all(
-            color: colorScheme.outlineVariant.withValues(alpha: 0.3),
-            width: 0.5,
-          ),
-        ),
-        child: child,
-      ),
+      child: child,
     );
   }
 }

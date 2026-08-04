@@ -1,90 +1,91 @@
 import 'package:flutter/material.dart';
 
-/// ─── Kalpa Café Premium Material 3 Color System ─────────────────────────────
-/// Derived directly from the official Kalpa logo:
-///   - Background: Warm cream white (#F5F0E8) — the hero color
-///   - Brand mark: Copper/bronze (#9A6B3A) — primary accent
-///   - Deep espresso (#2A1A0E) — text
+/// ─── Kalpa Café Premium Minimalist Color System ─────────────────────────────
+/// Derived from minimalist-ui directives:
+///   - Background: Pure white (#FFFFFF)
+///   - Primary Surface: Warm off-white (#F9F9F8)
+///   - Borders: Ultra-light gray (#EAEAEA)
+///   - Accents: Desaturated washed-out pastels
 class CafeColors {
   CafeColors._();
 
-  // ── Primary: Warm Copper Bronze (from logo mark) ──
-  static const Color primary = Color(0xFF9A6B3A);
+  // ── Primary: Off-Black (Primary Actions) ──
+  static const Color primary = Color(0xFF111111);
   static const Color onPrimary = Color(0xFFFFFFFF);
-  static const Color primaryContainer = Color(0xFFBF8A54);
-  static const Color onPrimaryContainer = Color(0xFF2A1A0E);
+  static const Color primaryContainer = Color(0xFF333333);
+  static const Color onPrimaryContainer = Color(0xFFFFFFFF);
 
-  // ── Secondary: Deep Espresso (text & structure) ──
-  static const Color secondary = Color(0xFF2A1A0E);
+  // ── Secondary: Charcoal/Gray ──
+  static const Color secondary = Color(0xFF787774);
   static const Color onSecondary = Color(0xFFFFFFFF);
-  static const Color secondaryContainer = Color(0xFFD4CBC0);
-  static const Color onSecondaryContainer = Color(0xFF2A1A0E);
+  static const Color secondaryContainer = Color(0xFFEAEAEA);
+  static const Color onSecondaryContainer = Color(0xFF111111);
 
-  // ── Tertiary: Leaf/sage green (from logo leaf detail) ──
-  static const Color tertiary = Color(0xFF7D8F79);
+  // ── Tertiary: Muted ──
+  static const Color tertiary = Color(0xFF999999);
   static const Color onTertiary = Color(0xFFFFFFFF);
-  static const Color tertiaryContainer = Color(0xFFD6E4D2);
-  static const Color onTertiaryContainer = Color(0xFF1E2B1C);
+  static const Color tertiaryContainer = Color(0xFFF7F6F3);
+  static const Color onTertiaryContainer = Color(0xFF111111);
 
   // ── Error ──
-  static const Color error = Color(0xFFBA1A1A);
+  static const Color error = Color(0xFF9F2F2D); // Text of pale red
   static const Color onError = Color(0xFFFFFFFF);
-  static const Color errorContainer = Color(0xFFFFDAD6);
-  static const Color onErrorContainer = Color(0xFF410002);
+  static const Color errorContainer = Color(0xFFFDEBEC); // Pale red
+  static const Color onErrorContainer = Color(0xFF9F2F2D);
 
-  // ── Surfaces: Warm Cream (Soft Structuralism) ──
-  static const Color surface = Color(0xFFFCFAF0);
-  static const Color onSurface = Color(0xFF1F1B16);
-  static const Color surfaceVariant = Color(0xFFF3EFE1);
-  static const Color onSurfaceVariant = Color(0xFF5A5248);
+  // ── Surfaces: Pure White & Bone ──
+  static const Color surface = Color(0xFFFFFFFF);
+  static const Color onSurface = Color(0xFF111111);
+  static const Color surfaceVariant = Color(0xFFFBFBFA);
+  static const Color onSurfaceVariant = Color(0xFF787774);
 
-  static const Color outline = Color(0xFFE8E2D2);
-  static const Color outlineVariant = Color(0xFFF2ECE0);
+  static const Color outline = Color(0xFFEAEAEA);
+  static const Color outlineVariant = Color(0xFFEAEAEA);
 
-  static const Color surfaceContainerLow = Color(0xFFFDFCF6);
-  static const Color surfaceContainer = Color(0xFFF7F4E8);
-  static const Color surfaceContainerHigh = Color(0xFFEBE6D8);
+  static const Color surfaceContainerLow = Color(0xFFFFFFFF);
+  static const Color surfaceContainer = Color(0xFFF9F9F8);
+  static const Color surfaceContainerHigh = Color(0xFFF7F6F3);
 
-  static const Color inverseSurface = Color(0xFF0A0A0A);
+  static const Color inverseSurface = Color(0xFF111111);
   static const Color inverseOnSurface = Color(0xFFFFFFFF);
-  static const Color inversePrimary = Color(0xFFEFEFEF);
+  static const Color inversePrimary = Color(0xFFEAEAEA);
 
-  // ── Semantic ──
-  static const Color success = Color(0xFF2E8555);
+  // ── Semantic Pastels (Minimalist) ──
+  static const Color success = Color(0xFF346538);
   static const Color onSuccess = Color(0xFFFFFFFF);
-  static const Color successContainer = Color(0xFFD9F2E6);
-  static const Color warning = Color(0xFFD97706);
+  static const Color successContainer = Color(0xFFEDF3EC); // Pale green
+
+  static const Color warning = Color(0xFF956400);
   static const Color onWarning = Color(0xFFFFFFFF);
-  static const Color warningContainer = Color(0xFFFEF3C7);
+  static const Color warningContainer = Color(0xFFFBF3DB); // Pale yellow
+
+  // Additional Pastel: Pale Blue
+  static const Color info = Color(0xFF1F6C9F);
+  static const Color infoContainer = Color(0xFFE1F3FE);
 
   // ── Brand Tokens ──
-  static const Color ratingGold = Color(0xFFEAB308);
-  static const Color creamWhite = Color(0xFFFCFAF0);
-  static const Color copperBronze = Color(0xFF9A6B3A);
-  static const Color espressoDark = Color(0xFF1F1B16);
-  static const Color caramelLight = Color(0xFFF7F4E8);
+  static const Color ratingGold = Color(0xFF956400); // Muted gold
+  static const Color creamWhite = Color(0xFFFBFBFA);
+  static const Color copperBronze = Color(0xFF787774); // Now muted gray
+  static const Color espressoDark = Color(0xFF111111);
+  static const Color caramelLight = Color(0xFFF9F9F8);
 
-  // ── Coffee Card Default (warm brown gradient base) ──
-  static const Color cardBrown = Color(0xFF5C3318);
-  static const Color cardBrownDark = Color(0xFF3D2010);
+  // ── Coffee Card Default (flattened) ──
+  static const Color cardBrown = Color(0xFFF7F6F3);
+  static const Color cardBrownDark = Color(0xFFEAEAEA);
 
-  // ── Shape Tokens (Reference Integration) ──
-  /// Tighter card radius matching reference design — cleaner, less ornate
-  static const double cardRadiusCompact = 20.0;
-
-  /// Grid card radius for the new streamlined layout
-  static const double gridCardRadius = 24.0;
-
-  /// Inner content radius (image well, etc.)
-  static const double innerRadius = 14.0;
+  // ── Shape Tokens (Minimalist UI constraint: crisp, small radius) ──
+  static const double cardRadiusCompact = 8.0;
+  static const double gridCardRadius = 12.0;
+  static const double innerRadius = 4.0;
 
   // ── Glass / Frost Effect ──
-  static Color glassWhite = Colors.white.withValues(alpha: 0.18);
-  static Color glassWhiteLight = Colors.white.withValues(alpha: 0.10);
+  static Color glassWhite = Colors.white.withValues(alpha: 0.8);
+  static Color glassWhiteLight = Colors.white.withValues(alpha: 0.6);
 
-  // ── Shadows (warm-tinted) ──
-  static Color shadowLight = const Color(0xFF2A1A0E).withValues(alpha: 0.04);
-  static Color shadowMedium = const Color(0xFF2A1A0E).withValues(alpha: 0.08);
-  static Color shadowDark = const Color(0xFF2A1A0E).withValues(alpha: 0.12);
-  static Color shadowDeep = const Color(0xFF2A1A0E).withValues(alpha: 0.20);
+  // ── Shadows (Almost non-existent) ──
+  static Color shadowLight = const Color(0xFF000000).withValues(alpha: 0.02);
+  static Color shadowMedium = const Color(0xFF000000).withValues(alpha: 0.04);
+  static Color shadowDark = const Color(0xFF000000).withValues(alpha: 0.06);
+  static Color shadowDeep = const Color(0xFF000000).withValues(alpha: 0.08);
 }

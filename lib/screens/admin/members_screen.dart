@@ -30,7 +30,8 @@ class _MembersScreenState extends ConsumerState<MembersScreen> {
       final response = await Supabase.instance.client
           .from('profiles')
           .select()
-          .order('loyalty_points', ascending: false);
+          .order('loyalty_points', ascending: false)
+          .limit(50);
       if (mounted) {
         setState(() {
           _members = List<Map<String, dynamic>>.from(response);
@@ -86,7 +87,7 @@ class _MembersScreenState extends ConsumerState<MembersScreen> {
               children: [
                 Expanded(
                   child: _StatBox(
-                    label: 'Total Members',
+                    label: 'Top 50 Members',
                     value: '${_members.length}',
                     icon: Icons.people_rounded,
                     color: CafeColors.primary,
@@ -95,7 +96,7 @@ class _MembersScreenState extends ConsumerState<MembersScreen> {
                 const SizedBox(width: 24),
                 Expanded(
                   child: _StatBox(
-                    label: 'Total Points',
+                    label: 'Top 50 Points',
                     value: '$totalPoints',
                     icon: Icons.card_giftcard_rounded,
                     color: CafeColors.ratingGold,
@@ -104,7 +105,7 @@ class _MembersScreenState extends ConsumerState<MembersScreen> {
                 const SizedBox(width: 24),
                 Expanded(
                   child: _StatBox(
-                    label: 'Avg. Points',
+                    label: 'Top 50 Avg',
                     value: _members.isNotEmpty
                         ? '${(totalPoints / _members.length).round()}'
                         : '0',

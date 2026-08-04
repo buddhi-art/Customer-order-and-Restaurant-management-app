@@ -222,7 +222,6 @@ URL in it (those are protected server-side by Row-Level Security):
 # assets/app.env — bundled, client-safe only
 SUPABASE_URL=https://your-project.supabase.co
 SUPABASE_PUBLISHABLE_KEY=your-publishable-key
-QR_HMAC_SECRET=your-secret-for-qr-token-signing
 ```
 
 Server-side secrets (`SUPABASE_SECRET_KEY`, `DATABASE_URL`) belong in a
