@@ -75,6 +75,7 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() => _isLoading = true);
     try {
       await Supabase.instance.client.auth.signInWithOtp(phone: '+977$phone');
+      if (!mounted) return;
       setState(() => _otpSent = true);
       _startTimer();
     } catch (e) {

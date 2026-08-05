@@ -17,9 +17,12 @@ class OrderRepository {
   ///
   /// Pass a today's-midnight ISO-8601 string to limit the stream to today.
   Stream<List<Map<String, dynamic>>> stream({String? since}) {
-    var query = _client.from('orders').stream(primaryKey: ['id']);
-    // The supabase stream API does not accept `.gte`/`.order` for filtering;
-    // we filter client-side in the provider. Kept here for documentation.
+    var query = _client.from('orders')
+        .stream(primaryKey: ['id'])
+        .order('created_at', ascending: false)
+        .limit(500);
+    // The supabase stream API does not accept `.gte` for filtering;
+    // we filter client-side in the provider. Limiting to 500 ensures we don't fetch history unbounded.
     return query;
   }
 

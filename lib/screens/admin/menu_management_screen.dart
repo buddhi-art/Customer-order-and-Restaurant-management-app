@@ -55,14 +55,14 @@ class MenuManagementScreen extends ConsumerWidget {
     );
   }
 
-  void _showAddItemDialog(BuildContext context, WidgetRef ref) {
+  void _showAddItemDialog(BuildContext context, WidgetRef ref) async {
     final nameController = TextEditingController();
     final priceController = TextEditingController();
     final descController = TextEditingController();
     final urlController = TextEditingController();
     final categoryController = TextEditingController(text: 'Coffee');
 
-    showModalBottomSheet(
+    await showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       builder: (ctx) => Padding(
@@ -177,6 +177,12 @@ class MenuManagementScreen extends ConsumerWidget {
         ),
       ),
     );
+
+    nameController.dispose();
+    priceController.dispose();
+    descController.dispose();
+    urlController.dispose();
+    categoryController.dispose();
   }
 }
 

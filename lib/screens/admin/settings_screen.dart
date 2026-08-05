@@ -441,9 +441,9 @@ class _AdminSettingsScreenState extends ConsumerState<AdminSettingsScreen> {
     );
   }
 
-  void _editString(String title, String current, ValueChanged<String> onSave) {
+  void _editString(String title, String current, ValueChanged<String> onSave) async {
     final controller = TextEditingController(text: current);
-    showDialog(
+    await showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
         title: Text(title),
@@ -467,11 +467,12 @@ class _AdminSettingsScreenState extends ConsumerState<AdminSettingsScreen> {
         ],
       ),
     );
+    controller.dispose();
   }
 
-  void _editNumber(String title, double current, ValueChanged<double> onSave) {
+  void _editNumber(String title, double current, ValueChanged<double> onSave) async {
     final controller = TextEditingController(text: current.toStringAsFixed(1));
-    showDialog(
+    await showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
         title: Text(title),
@@ -497,6 +498,7 @@ class _AdminSettingsScreenState extends ConsumerState<AdminSettingsScreen> {
         ],
       ),
     );
+    controller.dispose();
   }
 
   void _editClosedDays() {

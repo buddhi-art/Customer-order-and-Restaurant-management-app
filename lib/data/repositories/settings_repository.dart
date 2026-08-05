@@ -44,8 +44,8 @@ class SettingsRepository {
       enableGeofence: res['enable_geofence'] as bool? ?? false,
       wifiSSID: res['wifi_ssid'] as String? ?? '',
       wifiBSSID: res['wifi_bssid'] as String? ?? '',
-      cafeLatitude: (res['cafe_latitude'] as num?)?.toDouble() ?? 26.648111,
-      cafeLongitude: (res['cafe_longitude'] as num?)?.toDouble() ?? 87.978717,
+      cafeLatitude: (res['cafe_latitude'] as num?)?.toDouble() ?? 0.0,
+      cafeLongitude: (res['cafe_longitude'] as num?)?.toDouble() ?? 0.0,
       geofenceRadiusMeters:
           (res['geofence_radius_meters'] as num?)?.toDouble() ?? 25,
       openingTime: res['opening_time'] as String?,

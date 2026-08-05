@@ -56,10 +56,22 @@ Future<void> main() async {
   await dotenv.load(fileName: "assets/app.env");
 
   if (!validateEnv(dotenv.env)) {
-    throw StateError(
-      'Missing required environment variables. '
-      'Ensure SUPABASE_URL and SUPABASE_PUBLISHABLE_KEY are set in .env',
+    runApp(
+      const MaterialApp(
+        home: Scaffold(
+          body: Center(
+            child: Padding(
+              padding: EdgeInsets.all(24.0),
+              child: Text(
+                'Configuration Error: Missing required environment variables.\nPlease verify assets/app.env contains SUPABASE_URL and SUPABASE_PUBLISHABLE_KEY.',
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
+        ),
+      ),
     );
+    return;
   }
 
   await Supabase.initialize(

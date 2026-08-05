@@ -37,6 +37,7 @@ class OrderNotifier extends Notifier<List<AppOrder>> {
 
     _scheduleMidnightRefresh(now);
 
+    _orderSubscription?.cancel();
     _orderSubscription = _repo.stream().listen(
       (List<Map<String, dynamic>> data) {
         final todays = data.where((row) {

@@ -40,7 +40,7 @@ class _ExpensesScreenState extends ConsumerState<ExpensesScreen> {
     return filtered;
   }
 
-  void _showAddEditSheet({Expense? existing}) {
+  void _showAddEditSheet({Expense? existing}) async {
     final isEditing = existing != null;
     final titleCtrl = TextEditingController(text: existing?.title ?? '');
     final descCtrl = TextEditingController(text: existing?.description ?? '');
@@ -52,7 +52,7 @@ class _ExpensesScreenState extends ConsumerState<ExpensesScreen> {
     ExpenseCategory selectedCat = existing?.category ?? ExpenseCategory.other;
     DateTime selectedDate = existing?.date ?? DateTime.now();
 
-    showModalBottomSheet(
+    await showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       useSafeArea: true,
@@ -213,6 +213,11 @@ class _ExpensesScreenState extends ConsumerState<ExpensesScreen> {
         );
       },
     );
+
+    titleCtrl.dispose();
+    descCtrl.dispose();
+    amountCtrl.dispose();
+    paidToCtrl.dispose();
   }
 
   void _confirmDelete(Expense expense) {

@@ -34,7 +34,7 @@ class _StaffScreenState extends ConsumerState<StaffScreen> {
     return filtered;
   }
 
-  void _showAddEditSheet({StaffMember? existing}) {
+  void _showAddEditSheet({StaffMember? existing}) async {
     final isEditing = existing != null;
     final nameCtrl = TextEditingController(text: existing?.name ?? '');
     final phoneCtrl = TextEditingController(text: existing?.phone ?? '');
@@ -46,7 +46,7 @@ class _StaffScreenState extends ConsumerState<StaffScreen> {
     StaffRole selectedRole = existing?.role ?? StaffRole.barista;
     ShiftType selectedShift = existing?.currentShift ?? ShiftType.morning;
 
-    showModalBottomSheet(
+    await showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       useSafeArea: true,
@@ -194,6 +194,11 @@ class _StaffScreenState extends ConsumerState<StaffScreen> {
         );
       },
     );
+
+    nameCtrl.dispose();
+    phoneCtrl.dispose();
+    emailCtrl.dispose();
+    wageCtrl.dispose();
   }
 
   void _confirmDelete(StaffMember member) {

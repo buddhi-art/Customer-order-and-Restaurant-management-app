@@ -71,14 +71,14 @@ class NotificationsManagementScreen extends ConsumerWidget {
     BuildContext context,
     WidgetRef ref, {
     AppNotification? existing,
-  }) {
+  }) async {
     final titleController = TextEditingController(text: existing?.title ?? '');
     final messageController = TextEditingController(
       text: existing?.message ?? '',
     );
     final isEditing = existing != null;
 
-    showDialog(
+    await showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
         title: Text(isEditing ? 'Edit Broadcast' : 'New Broadcast'),
@@ -137,6 +137,8 @@ class NotificationsManagementScreen extends ConsumerWidget {
         ],
       ),
     );
+    titleController.dispose();
+    messageController.dispose();
   }
 
   void _confirmDelete(

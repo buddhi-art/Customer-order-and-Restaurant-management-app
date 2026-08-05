@@ -11,8 +11,7 @@ void printReceipt({
   String? paymentMethod,
   String? orderId,
 }) {
-  // Mobile printing not yet implemented
-  print('Print receipt for table $tableId (not implemented on mobile)');
+  // Receipt printing is only available on desktop web interfaces.
   toastification.show(
     title: const Text('Printing Not Supported'),
     description: const Text('Receipt printing is only available on desktop.'),

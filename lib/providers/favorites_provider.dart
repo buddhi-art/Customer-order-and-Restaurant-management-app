@@ -13,14 +13,19 @@ class FavoritesNotifier extends Notifier<Set<String>> {
   // ── Persistence ──
 
   static const _prefsKey = 'favorite_ids';
+  SharedPreferences? _prefs;
+
+  Future<SharedPreferences> _getPrefs() async {
+    return _prefs ??= await SharedPreferences.getInstance();
+  }
 
   Future<void> _saveToPrefs() async {
-    final prefs = await SharedPreferences.getInstance();
+    final prefs = await _getPrefs();
     await prefs.setString(_prefsKey, jsonEncode(state.toList()));
   }
 
   Future<void> _loadFromPrefs() async {
-    final prefs = await SharedPreferences.getInstance();
+    final prefs = await _getPrefs();
     final raw = prefs.getString(_prefsKey);
     if (raw == null || raw.isEmpty) return;
 

@@ -287,9 +287,9 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen> {
     );
   }
 
-  void _showStockAdjustDialog(InventoryItem item) {
+  void _showStockAdjustDialog(InventoryItem item) async {
     final controller = TextEditingController();
-    showDialog(
+    await showDialog(
       context: context,
       builder: (ctx) {
         return AlertDialog(
@@ -337,6 +337,7 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen> {
         );
       },
     );
+    controller.dispose();
   }
 
   void _confirmDelete(InventoryItem item) {
@@ -385,8 +386,7 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen> {
       ),
       body: RefreshIndicator(
         onRefresh: () async {
-          await Future.delayed(const Duration(milliseconds: 300));
-          setState(() {});
+          ref.invalidate(inventoryProvider);
         },
         child: CustomScrollView(
           slivers: [

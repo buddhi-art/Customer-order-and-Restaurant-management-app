@@ -8,6 +8,7 @@ import '../../theme/cafe_colors.dart';
 import '../../animations/m3_animations.dart';
 import '../../ui/core/widgets/double_bezel_container.dart';
 import '../../ui/core/widgets/premium_cta_button.dart';
+import '../../widgets/responsive_widget.dart';
 
 class AdminLoginScreen extends StatefulWidget {
   const AdminLoginScreen({super.key});
@@ -90,6 +91,7 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
       );
 
       if (response.user == null) {
+        if (!mounted) return;
         setState(() {
           _errorMessage = 'Sign-in succeeded but no user returned.';
           _isLoading = false;
@@ -117,6 +119,7 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
       if (!isAdmin) {
         await Supabase.instance.client.auth.signOut();
         _registerFailedAttempt();
+        if (!mounted) return;
         setState(() {
           _isLoading = false;
           _errorMessage =
@@ -148,7 +151,7 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (!kIsWeb) {
+    if (!kIsWeb || !ResponsiveUtils.isDesktop(context)) {
       return Scaffold(
         backgroundColor: CafeColors.surface,
         body: Center(

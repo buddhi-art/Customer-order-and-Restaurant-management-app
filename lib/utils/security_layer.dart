@@ -59,8 +59,8 @@ class SecurityLayer {
     }
 
     final Position position = await Geolocator.getCurrentPosition();
-    // Reject mocked/faked positions (reliable on Android; no-op on iOS).
-    if (position.isMocked) {
+    // Reject mocked/faked positions (supported on Android).
+    if (defaultTargetPlatform == TargetPlatform.android && position.isMocked) {
       assert(() {
         debugPrint("Security Check: Mocked location detected – denying.");
         return true;

@@ -194,12 +194,12 @@ class _FeedbackManagementScreenState
     );
   }
 
-  void _showAddFeedback(BuildContext context) {
+  void _showAddFeedback(BuildContext context) async {
     final nameCtrl = TextEditingController();
     final commentCtrl = TextEditingController();
     double rating = 5;
 
-    showDialog(
+    await showDialog(
       context: context,
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, setDialogState) => AlertDialog(
@@ -263,6 +263,8 @@ class _FeedbackManagementScreenState
         ),
       ),
     );
+    nameCtrl.dispose();
+    commentCtrl.dispose();
   }
 }
 
