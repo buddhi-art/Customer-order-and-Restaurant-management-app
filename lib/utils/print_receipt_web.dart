@@ -2,6 +2,7 @@
 
 import 'dart:js_interop';
 import 'package:web/web.dart' as web;
+import 'package:flutter/foundation.dart';
 
 /// Escape a string for safe interpolation into HTML text/attribute context.
 /// Prevents XSS when order/menu data (item names, sizes, etc.) is rendered into
@@ -16,15 +17,25 @@ String _esc(Object? value) {
       .replaceAll("'", '&#39;');
 }
 
-void printReceipt({
-  required String cafeName,
-  required String tableId,
-  required List<Map<String, dynamic>> items,
-  required double total,
-  String? paymentMethod,
-  String? orderId,
-}) {
-  final itemsHtml = items
+class _PrintData {
+  final String cafeName;
+  final String tableId;
+  final List<Map<String, dynamic>> items;
+  final double total;
+  final String? paymentMethod;
+  final String? orderId;
+  _PrintData(
+    this.cafeName,
+    this.tableId,
+    this.items,
+    this.total,
+    this.paymentMethod,
+    this.orderId,
+  );
+}
+
+String _generateHtml(_PrintData data) {
+  final itemsHtml = data.items
       .map((item) {
         final name = _esc(item['name']);
         final qty = (item['quantity'] as num?)?.toInt() ?? 1;
@@ -43,15 +54,18 @@ void printReceipt({
       })
       .join('\n');
 
-  final safeCafeName = _esc(cafeName);
-  final safeTableNumber = _esc(tableId.replaceAll('table_', '').toUpperCase());
-  final safeOrderId = orderId != null ? _esc(orderId.substring(0, 8)) : '---';
-  final safePaymentMethod = paymentMethod != null
-      ? _esc(paymentMethod.toUpperCase())
+  final safeCafeName = _esc(data.cafeName);
+  final safeTableNumber = _esc(
+    data.tableId.replaceAll('table_', '').toUpperCase(),
+  );
+  final safeOrderId = data.orderId != null
+      ? _esc(data.orderId!.substring(0, 8))
+      : '---';
+  final safePaymentMethod = data.paymentMethod != null
+      ? _esc(data.paymentMethod!.toUpperCase())
       : null;
 
-  final receiptHtml =
-      '''
+  return '''
 <!DOCTYPE html>
 <html>
 <head>
@@ -150,7 +164,7 @@ void printReceipt({
     </table>
     <div class="total">
       <span>TOTAL</span>
-      <span>\$${total.toStringAsFixed(2)}</span>
+      <span>\$${data.total.toStringAsFixed(2)}</span>
     </div>
     ${safePaymentMethod != null ? '<div class="payment">Paid via $safePaymentMethod</div>' : ''}
     <div class="footer">
@@ -164,6 +178,20 @@ void printReceipt({
 </body>
 </html>
 ''';
+}
+
+Future<void> printReceipt({
+  required String cafeName,
+  required String tableId,
+  required List<Map<String, dynamic>> items,
+  required double total,
+  String? paymentMethod,
+  String? orderId,
+}) async {
+  final receiptHtml = await compute(
+    _generateHtml,
+    _PrintData(cafeName, tableId, items, total, paymentMethod, orderId),
+  );
 
   final receiptDoc = web.window.open('', '_blank', 'width=500,height=700');
   if (receiptDoc != null) {
@@ -171,5 +199,7 @@ void printReceipt({
     doc.open();
     doc.write(receiptHtml.toJS);
     doc.close();
+  } else {
+    throw Exception('Popup blocked. Please allow popups for this site to print receipts.');
   }
 }

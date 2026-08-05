@@ -119,35 +119,46 @@ class _MembersScreenState extends ConsumerState<MembersScreen> {
 
           // Search
           Padding(
-            padding: const EdgeInsets.fromLTRB(48, 0, 48, 24),
-            child: DoubleBezelContainer(
-              outerRadius: 28,
-              padding: 6,
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-                child: TextField(
-                  onChanged: (v) => setState(() => _searchQuery = v),
-                  decoration: InputDecoration(
-                    hintText: 'Search by name or phone...',
-                    hintStyle: TextStyle(
-                      color: CafeColors.onSurfaceVariant.withValues(alpha: 0.7),
-                      fontWeight: FontWeight.w500,
+                padding: const EdgeInsets.fromLTRB(48, 0, 48, 24),
+                child: DoubleBezelContainer(
+                  outerRadius: 28,
+                  padding: 6,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 4,
                     ),
-                    prefixIcon: const Icon(Icons.search_rounded, color: CafeColors.onSurfaceVariant),
-                    filled: false,
-                    border: InputBorder.none,
-                    enabledBorder: InputBorder.none,
-                    focusedBorder: InputBorder.none,
-                  ),
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    color: CafeColors.onSurface,
+                    child: TextField(
+                      onChanged: (v) => setState(() => _searchQuery = v),
+                      decoration: InputDecoration(
+                        hintText: 'Search by name or phone...',
+                        hintStyle: TextStyle(
+                          color: CafeColors.onSurfaceVariant.withValues(
+                            alpha: 0.7,
+                          ),
+                          fontWeight: FontWeight.w500,
+                        ),
+                        prefixIcon: const Icon(
+                          Icons.search_rounded,
+                          color: CafeColors.onSurfaceVariant,
+                        ),
+                        filled: false,
+                        border: InputBorder.none,
+                        enabledBorder: InputBorder.none,
+                        focusedBorder: InputBorder.none,
+                      ),
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: CafeColors.onSurface,
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            ),
-          ).animate().fade(duration: 600.ms, delay: 100.ms).slideY(begin: 0.1, end: 0),
+              )
+              .animate()
+              .fade(duration: 600.ms, delay: 100.ms)
+              .slideY(begin: 0.1, end: 0),
 
           // Results count
           Padding(
@@ -167,7 +178,10 @@ class _MembersScreenState extends ConsumerState<MembersScreen> {
                   const SizedBox(
                     width: 20,
                     height: 20,
-                    child: CircularProgressIndicator(strokeWidth: 2.5, color: CafeColors.primary),
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2.5,
+                      color: CafeColors.primary,
+                    ),
                   ),
               ],
             ),
@@ -177,7 +191,9 @@ class _MembersScreenState extends ConsumerState<MembersScreen> {
           // Members list
           Expanded(
             child: _isLoading && _members.isEmpty
-                ? const Center(child: CircularProgressIndicator(color: CafeColors.primary))
+                ? const Center(
+                    child: CircularProgressIndicator(color: CafeColors.primary),
+                  )
                 : filtered.isEmpty
                 ? Center(
                     child: Column(
@@ -229,13 +245,14 @@ class _MembersScreenState extends ConsumerState<MembersScreen> {
                     itemBuilder: (context, index) {
                       final member = filtered[index];
                       return _MemberCard(
-                        rank: _members.indexOf(member) + 1,
-                        name: member['full_name'] as String? ?? 'Guest',
-                        phone: member['phone'] as String? ?? 'N/A',
-                        points: member['loyalty_points'] as int? ?? 0,
-                        totalOrders: member['total_orders'] as int? ?? 0,
-                        isTop3: index < 3,
-                      ).animate(delay: (50 * index).ms)
+                            rank: _members.indexOf(member) + 1,
+                            name: member['full_name'] as String? ?? 'Guest',
+                            phone: member['phone'] as String? ?? 'N/A',
+                            points: member['loyalty_points'] as int? ?? 0,
+                            totalOrders: member['total_orders'] as int? ?? 0,
+                            isTop3: index < 3,
+                          )
+                          .animate(delay: (50 * index).ms)
                           .fade(duration: 600.ms)
                           .slideY(begin: 0.1, end: 0);
                     },
@@ -370,7 +387,9 @@ class _MemberCard extends StatelessWidget {
                 height: 56,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: isTop3 ? CafeColors.onSurface : CafeColors.surfaceContainerLow,
+                  color: isTop3
+                      ? CafeColors.onSurface
+                      : CafeColors.surfaceContainerLow,
                 ),
                 child: Center(
                   child: Text(
@@ -415,7 +434,10 @@ class _MemberCard extends StatelessWidget {
 
               // Orders count
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 10,
+                ),
                 decoration: BoxDecoration(
                   color: CafeColors.surfaceContainerLow,
                   borderRadius: BorderRadius.circular(16),
@@ -445,11 +467,16 @@ class _MemberCard extends StatelessWidget {
 
               // Points with trophy
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 12,
+                ),
                 decoration: BoxDecoration(
                   color: CafeColors.ratingGold.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: CafeColors.ratingGold.withValues(alpha: 0.2)),
+                  border: Border.all(
+                    color: CafeColors.ratingGold.withValues(alpha: 0.2),
+                  ),
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,

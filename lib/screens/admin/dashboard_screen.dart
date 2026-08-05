@@ -544,7 +544,9 @@ class _DashboardCard extends StatelessWidget {
         ),
       ),
     );
-    return onTap != null ? M3PressScale(onTap: onTap!, child: content) : content;
+    return onTap != null
+        ? M3PressScale(onTap: onTap!, child: content)
+        : content;
   }
 }
 
@@ -603,7 +605,9 @@ class _KpiStatRow extends StatelessWidget {
         ),
       ),
     );
-    return onTap != null ? M3PressScale(onTap: onTap!, child: content) : content;
+    return onTap != null
+        ? M3PressScale(onTap: onTap!, child: content)
+        : content;
   }
 }
 
@@ -675,7 +679,9 @@ class _KpiFeaturedNumber extends StatelessWidget {
         ),
       ),
     );
-    return onTap != null ? M3PressScale(onTap: onTap!, child: content) : content;
+    return onTap != null
+        ? M3PressScale(onTap: onTap!, child: content)
+        : content;
   }
 }
 
@@ -708,12 +714,11 @@ class _KpiRevenueCard extends StatelessWidget {
                   const SizedBox(height: 8),
                   Text(
                     '\$${revenue.toStringAsFixed(0)}',
-                    style: Theme.of(context).textTheme.headlineSmall
-                        ?.copyWith(
-                          fontWeight: FontWeight.w900,
-                          color: CafeColors.onSurface,
-                          letterSpacing: -1,
-                        ),
+                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                      fontWeight: FontWeight.w900,
+                      color: CafeColors.onSurface,
+                      letterSpacing: -1,
+                    ),
                   ),
                   const SizedBox(height: 12),
                   // Accent bar — fills proportionally (capped at 4 segments)
@@ -733,8 +738,7 @@ class _KpiRevenueCard extends StatelessWidget {
                               : CafeColors.outline;
                           return Container(
                             width:
-                                (barConstraints.maxWidth -
-                                    (segments - 1) * 4) /
+                                (barConstraints.maxWidth - (segments - 1) * 4) /
                                 segments,
                             height: 4,
                             decoration: BoxDecoration(
@@ -756,7 +760,9 @@ class _KpiRevenueCard extends StatelessWidget {
         ),
       ),
     );
-    return onTap != null ? M3PressScale(onTap: onTap!, child: content) : content;
+    return onTap != null
+        ? M3PressScale(onTap: onTap!, child: content)
+        : content;
   }
 }
 

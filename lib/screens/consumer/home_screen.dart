@@ -92,9 +92,8 @@ class HomeScreen extends ConsumerWidget {
                         children: [
                           Text(
                             '$greeting $name',
-                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: CafeColors.onSurfaceVariant,
-                            ),
+                            style: Theme.of(context).textTheme.bodyMedium
+                                ?.copyWith(color: CafeColors.onSurfaceVariant),
                           ),
                           if (tableId != null)
                             Padding(
@@ -111,7 +110,8 @@ class HomeScreen extends ConsumerWidget {
                         ],
                       ),
                       M3PressScale(
-                        onTap: () => _showNotificationsSheet(context, notifications),
+                        onTap: () =>
+                            _showNotificationsSheet(context, notifications),
                         child: Stack(
                           clipBehavior: Clip.none,
                           children: [
@@ -131,7 +131,9 @@ class HomeScreen extends ConsumerWidget {
                                     shape: BoxShape.circle,
                                   ),
                                   child: Text(
-                                    notifications.length > 99 ? '99+' : '${notifications.length}',
+                                    notifications.length > 99
+                                        ? '99+'
+                                        : '${notifications.length}',
                                     style: const TextStyle(
                                       color: CafeColors.onError,
                                       fontSize: 8,
@@ -169,12 +171,13 @@ class HomeScreen extends ConsumerWidget {
                     children: [
                       Text(
                         'Morning ritual.',
-                        style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                          fontFamily: 'Newsreader',
-                          fontWeight: FontWeight.w400,
-                          color: CafeColors.surface,
-                          letterSpacing: -0.5,
-                        ),
+                        style: Theme.of(context).textTheme.headlineMedium
+                            ?.copyWith(
+                              fontFamily: 'Newsreader',
+                              fontWeight: FontWeight.w400,
+                              color: CafeColors.surface,
+                              letterSpacing: -0.5,
+                            ),
                       ),
                       const SizedBox(height: 8),
                       Text(
@@ -188,11 +191,16 @@ class HomeScreen extends ConsumerWidget {
                       M3PressScale(
                         onTap: () {},
                         child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 8,
+                          ),
                           decoration: BoxDecoration(
                             color: CafeColors.surface.withValues(alpha: 0.15),
                             borderRadius: BorderRadius.circular(6),
-                            border: Border.all(color: CafeColors.surface.withValues(alpha: 0.2)),
+                            border: Border.all(
+                              color: CafeColors.surface.withValues(alpha: 0.2),
+                            ),
                           ),
                           child: const Text(
                             'Order Now',
@@ -221,46 +229,68 @@ class HomeScreen extends ConsumerWidget {
                 scrollDirection: Axis.horizontal,
                 clipBehavior: Clip.none,
                 child: Row(
-                  children: ref.watch(uniqueCategoriesProvider).asMap().entries.map((entry) {
-                    final index = entry.key;
-                    final category = entry.value;
-                    final selectedCategory = ref.watch(selectedCategoryProvider);
-                    final isSelected = selectedCategory == category;
+                  children: ref
+                      .watch(uniqueCategoriesProvider)
+                      .asMap()
+                      .entries
+                      .map((entry) {
+                        final index = entry.key;
+                        final category = entry.value;
+                        final selectedCategory = ref.watch(
+                          selectedCategoryProvider,
+                        );
+                        final isSelected = selectedCategory == category;
 
-                    return StaggeredFadeIn(
-                      index: index,
-                      delay: const Duration(milliseconds: 50),
-                      slideOffset: const Offset(0.1, 0),
-                      child: M3PressScale(
-                        onTap: () {
-                          HapticFeedback.lightImpact();
-                          ref.read(selectedCategoryProvider.notifier).select(category);
-                        },
-                        child: AnimatedContainer(
-                          duration: const Duration(milliseconds: 300),
-                          curve: const Cubic(0.32, 0.72, 0, 1),
-                          margin: const EdgeInsets.only(right: 8.0),
-                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                          decoration: BoxDecoration(
-                            color: isSelected ? CafeColors.onSurface : Colors.transparent,
-                            borderRadius: BorderRadius.circular(6),
-                            border: Border.all(
-                              color: isSelected ? CafeColors.onSurface : CafeColors.outline.withValues(alpha: 0.5),
-                              width: 1,
+                        return StaggeredFadeIn(
+                          index: index,
+                          delay: const Duration(milliseconds: 50),
+                          slideOffset: const Offset(0.1, 0),
+                          child: M3PressScale(
+                            onTap: () {
+                              HapticFeedback.lightImpact();
+                              ref
+                                  .read(selectedCategoryProvider.notifier)
+                                  .select(category);
+                            },
+                            child: AnimatedContainer(
+                              duration: const Duration(milliseconds: 300),
+                              curve: const Cubic(0.32, 0.72, 0, 1),
+                              margin: const EdgeInsets.only(right: 8.0),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 8,
+                              ),
+                              decoration: BoxDecoration(
+                                color: isSelected
+                                    ? CafeColors.onSurface
+                                    : Colors.transparent,
+                                borderRadius: BorderRadius.circular(6),
+                                border: Border.all(
+                                  color: isSelected
+                                      ? CafeColors.onSurface
+                                      : CafeColors.outline.withValues(
+                                          alpha: 0.5,
+                                        ),
+                                  width: 1,
+                                ),
+                              ),
+                              child: Text(
+                                category,
+                                style: TextStyle(
+                                  color: isSelected
+                                      ? CafeColors.surface
+                                      : CafeColors.onSurfaceVariant,
+                                  fontWeight: isSelected
+                                      ? FontWeight.w600
+                                      : FontWeight.w500,
+                                  fontSize: 13,
+                                ),
+                              ),
                             ),
                           ),
-                          child: Text(
-                            category,
-                            style: TextStyle(
-                              color: isSelected ? CafeColors.surface : CafeColors.onSurfaceVariant,
-                              fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
-                              fontSize: 13,
-                            ),
-                          ),
-                        ),
-                      ),
-                    );
-                  }).toList(),
+                        );
+                      })
+                      .toList(),
                 ),
               ),
             ),
@@ -295,7 +325,9 @@ class HomeScreen extends ConsumerWidget {
                         onTap: () => context.push('/product/${item.id}'),
                         onAdd: () {
                           HapticFeedback.lightImpact();
-                          ref.read(cartProvider.notifier).addItem(item, 1, 'Medium');
+                          ref
+                              .read(cartProvider.notifier)
+                              .addItem(item, 1, 'Medium');
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text('${item.name} added to cart'),
@@ -308,12 +340,13 @@ class HomeScreen extends ConsumerWidget {
                     }, childCount: ref.watch(filteredMenuProvider).length),
                   )
                 : SliverGrid(
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      childAspectRatio: 0.7,
-                      crossAxisSpacing: 16,
-                      mainAxisSpacing: 16,
-                    ),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          childAspectRatio: 0.7,
+                          crossAxisSpacing: 16,
+                          mainAxisSpacing: 16,
+                        ),
                     delegate: SliverChildBuilderDelegate((context, index) {
                       final items = ref.watch(filteredMenuProvider);
                       final item = items[index];
@@ -323,7 +356,9 @@ class HomeScreen extends ConsumerWidget {
                         onTap: () => context.push('/product/${item.id}'),
                         onAdd: () {
                           HapticFeedback.lightImpact();
-                          ref.read(cartProvider.notifier).addItem(item, 1, 'Medium');
+                          ref
+                              .read(cartProvider.notifier)
+                              .addItem(item, 1, 'Medium');
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text('${item.name} added to cart'),
@@ -348,7 +383,10 @@ class HomeScreen extends ConsumerWidget {
     return 'Good evening,';
   }
 
-  void _showNotificationsSheet(BuildContext context, List<AppNotification> notifications) {
+  void _showNotificationsSheet(
+    BuildContext context,
+    List<AppNotification> notifications,
+  ) {
     showModalBottomSheet(
       context: context,
       backgroundColor: CafeColors.surface,
@@ -383,7 +421,10 @@ class HomeScreen extends ConsumerWidget {
                 ),
               ),
             ),
-            Divider(height: 1, color: CafeColors.outline.withValues(alpha: 0.5)),
+            Divider(
+              height: 1,
+              color: CafeColors.outline.withValues(alpha: 0.5),
+            ),
             Expanded(
               child: notifications.isEmpty
                   ? Center(
@@ -397,19 +438,26 @@ class HomeScreen extends ConsumerWidget {
                   : ListView.separated(
                       padding: const EdgeInsets.all(24),
                       itemCount: notifications.length,
-                      separatorBuilder: (context, index) => const SizedBox(height: 16),
+                      separatorBuilder: (context, index) =>
+                          const SizedBox(height: 16),
                       itemBuilder: (context, index) {
                         final notification = notifications[index];
                         return Container(
                           padding: const EdgeInsets.all(16),
                           decoration: BoxDecoration(
-                            border: Border.all(color: CafeColors.outline.withValues(alpha: 0.5)),
+                            border: Border.all(
+                              color: CafeColors.outline.withValues(alpha: 0.5),
+                            ),
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Icon(Icons.info_outline, color: CafeColors.onSurface, size: 20),
+                              const Icon(
+                                Icons.info_outline,
+                                color: CafeColors.onSurface,
+                                size: 20,
+                              ),
                               const SizedBox(width: 12),
                               Expanded(
                                 child: Column(
@@ -417,7 +465,9 @@ class HomeScreen extends ConsumerWidget {
                                   children: [
                                     Text(
                                       notification.title,
-                                      style: const TextStyle(fontWeight: FontWeight.w600),
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                      ),
                                     ),
                                     const SizedBox(height: 4),
                                     Text(

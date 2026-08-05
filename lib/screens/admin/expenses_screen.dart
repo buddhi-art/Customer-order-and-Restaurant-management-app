@@ -344,35 +344,37 @@ class _ExpensesScreenState extends ConsumerState<ExpensesScreen> {
           SliverToBoxAdapter(
             child: SizedBox(
               height: 40,
-              child: ListView(
+              child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 padding: const EdgeInsets.symmetric(horizontal: 24),
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(right: 8),
-                    child: FilterChip(
-                      label: const Text('All'),
-                      selected: _selectedCategory == null,
-                      onSelected: (_) =>
-                          setState(() => _selectedCategory = null),
-                      selectedColor: CafeColors.primaryContainer,
-                      checkmarkColor: CafeColors.onPrimaryContainer,
-                    ),
-                  ),
-                  ...ExpenseCategory.values.map(
-                    (c) => Padding(
+                itemCount: ExpenseCategory.values.length + 1,
+                itemBuilder: (context, index) {
+                  if (index == 0) {
+                    return Padding(
                       padding: const EdgeInsets.only(right: 8),
                       child: FilterChip(
-                        label: Text(c.label),
-                        selected: _selectedCategory == c,
-                        onSelected: (sel) =>
-                            setState(() => _selectedCategory = sel ? c : null),
+                        label: const Text('All'),
+                        selected: _selectedCategory == null,
+                        onSelected: (_) =>
+                            setState(() => _selectedCategory = null),
                         selectedColor: CafeColors.primaryContainer,
                         checkmarkColor: CafeColors.onPrimaryContainer,
                       ),
+                    );
+                  }
+                  final c = ExpenseCategory.values[index - 1];
+                  return Padding(
+                    padding: const EdgeInsets.only(right: 8),
+                    child: FilterChip(
+                      label: Text(c.label),
+                      selected: _selectedCategory == c,
+                      onSelected: (sel) =>
+                          setState(() => _selectedCategory = sel ? c : null),
+                      selectedColor: CafeColors.primaryContainer,
+                      checkmarkColor: CafeColors.onPrimaryContainer,
                     ),
-                  ),
-                ],
+                  );
+                },
               ),
             ),
           ),

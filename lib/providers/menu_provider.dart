@@ -10,45 +10,6 @@ final menuRepositoryProvider = Provider<MenuRepository>(
   (ref) => MenuRepository(),
 );
 
-// Mock data to start with, per our plan
-final mockMenu = [
-  MenuItem(
-    id: '1',
-    name: 'Cappuccino',
-    price: 25.40,
-    imageUrl:
-        'https://images.unsplash.com/photo-1572442388796-11668a67e53d?auto=format&fit=crop&q=80&w=300&h=300', // Mock coffee cup
-    description:
-        'A deep espresso base, the perfect proportions of hot milk and steamed milk foam.',
-    category: 'Cappuccino',
-    rating: 4.8,
-    volumeMl: 160,
-  ),
-  MenuItem(
-    id: '2',
-    name: 'Latte',
-    price: 22.00,
-    imageUrl:
-        'https://images.unsplash.com/photo-1534040385115-33dcb3acba5b?auto=format&fit=crop&q=80&w=300&h=300',
-    description:
-        'Rich, full-bodied espresso in steamed milk, lightly topped with foam.',
-    category: 'Latte',
-    rating: 4.6,
-    volumeMl: 200,
-  ),
-  MenuItem(
-    id: '3',
-    name: 'Espresso',
-    price: 18.50,
-    imageUrl:
-        'https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?auto=format&fit=crop&q=80&w=300&h=300',
-    description:
-        'A concentrated form of coffee, served in small, strong shots.',
-    category: 'Espresso',
-    rating: 4.9,
-    volumeMl: 30,
-  ),
-];
 
 class MenuNotifier extends Notifier<List<MenuItem>> {
   StreamSubscription<List<Map<String, dynamic>>>? _menuSubscription;
@@ -59,16 +20,12 @@ class MenuNotifier extends Notifier<List<MenuItem>> {
     _repo = ref.read(menuRepositoryProvider);
     _listenToMenu();
     ref.onDispose(() => _menuSubscription?.cancel());
-    return mockMenu;
+    return const [];
   }
 
   void _listenToMenu() {
     _menuSubscription = _repo.stream().listen(
       (List<Map<String, dynamic>> data) {
-        // Show mockMenu only until the first real snapshot arrives. After that,
-        // always reflect the true table state — including a later clear to
-        // empty. (The old reference-equality guard permanently ignored empty
-        // updates once mockMenu had been replaced.)
         state = data.map<MenuItem>(MenuRepository.parseMenuItem).toList();
       },
       onError: (error) {

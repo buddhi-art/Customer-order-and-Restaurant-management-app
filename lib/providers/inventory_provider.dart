@@ -104,7 +104,6 @@ class InventoryNotifier extends Notifier<List<InventoryItem>> {
       debugPrint('Error adjusting stock: $e');
     }
   }
-
 }
 
 final inventoryProvider =

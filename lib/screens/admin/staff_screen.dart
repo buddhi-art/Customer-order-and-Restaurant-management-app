@@ -308,22 +308,24 @@ class _StaffScreenState extends ConsumerState<StaffScreen> {
                 const SizedBox(height: 16),
                 SizedBox(
                   height: 40,
-                  child: ListView(
+                  child: ListView.builder(
                     scrollDirection: Axis.horizontal,
-                    children: [
-                      _RoleChip(
-                        label: 'All',
-                        selected: _selectedRole == null,
-                        onTap: () => setState(() => _selectedRole = null),
-                      ),
-                      ...StaffRole.values.map(
-                        (r) => _RoleChip(
-                          label: r.shortLabel,
-                          selected: _selectedRole == r,
-                          onTap: () => setState(() => _selectedRole = r),
-                        ),
-                      ),
-                    ],
+                    itemCount: StaffRole.values.length + 1,
+                    itemBuilder: (context, index) {
+                      if (index == 0) {
+                        return _RoleChip(
+                          label: 'All',
+                          selected: _selectedRole == null,
+                          onTap: () => setState(() => _selectedRole = null),
+                        );
+                      }
+                      final r = StaffRole.values[index - 1];
+                      return _RoleChip(
+                        label: r.shortLabel,
+                        selected: _selectedRole == r,
+                        onTap: () => setState(() => _selectedRole = r),
+                      );
+                    },
                   ),
                 ),
               ],

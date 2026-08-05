@@ -441,7 +441,11 @@ class _AdminSettingsScreenState extends ConsumerState<AdminSettingsScreen> {
     );
   }
 
-  void _editString(String title, String current, ValueChanged<String> onSave) async {
+  void _editString(
+    String title,
+    String current,
+    ValueChanged<String> onSave,
+  ) async {
     final controller = TextEditingController(text: current);
     await showDialog(
       context: context,
@@ -470,7 +474,11 @@ class _AdminSettingsScreenState extends ConsumerState<AdminSettingsScreen> {
     controller.dispose();
   }
 
-  void _editNumber(String title, double current, ValueChanged<double> onSave) async {
+  void _editNumber(
+    String title,
+    double current,
+    ValueChanged<double> onSave,
+  ) async {
     final controller = TextEditingController(text: current.toStringAsFixed(1));
     await showDialog(
       context: context,

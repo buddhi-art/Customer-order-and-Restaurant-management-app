@@ -42,7 +42,7 @@ class M3Theme {
 
     // ── Typography (Editorial) ──
     final headingFont = GoogleFonts.newsreader;
-    
+
     TextStyle bodyFont({
       double? fontSize,
       FontWeight? fontWeight,
@@ -52,7 +52,11 @@ class M3Theme {
     }) {
       return TextStyle(
         fontFamily: 'SF Pro Display',
-        fontFamilyFallback: const ['Geist Sans', 'Helvetica Neue', 'sans-serif'],
+        fontFamilyFallback: const [
+          'Geist Sans',
+          'Helvetica Neue',
+          'sans-serif',
+        ],
         fontSize: fontSize,
         fontWeight: fontWeight,
         letterSpacing: letterSpacing,
@@ -263,8 +267,14 @@ class M3Theme {
 
       chipTheme: ChipThemeData(
         elevation: 0,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(9999)), // Pill shaped for tags as per protocol
-        labelStyle: bodyFont(fontSize: 12, fontWeight: FontWeight.w500, letterSpacing: 0.5),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(9999),
+        ), // Pill shaped for tags as per protocol
+        labelStyle: bodyFont(
+          fontSize: 12,
+          fontWeight: FontWeight.w500,
+          letterSpacing: 0.5,
+        ),
         side: BorderSide.none,
         backgroundColor: CafeColors.surfaceContainerHigh,
       ),
@@ -344,36 +354,35 @@ class M3Theme {
 
       // SHAPE CONSISTENCY LOCK: Buttons = 6px slight radius
       elevatedButtonTheme: ElevatedButtonThemeData(
-        style: ElevatedButton.styleFrom(
-          elevation: 0,
-          backgroundColor: CafeColors.primary,
-          foregroundColor: CafeColors.onPrimary,
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(6),
-          ),
-          textStyle: bodyFont(fontSize: 16, fontWeight: FontWeight.w600),
-        ).copyWith(
-          // Subtle hover state
-          overlayColor: WidgetStateProperty.resolveWith((states) {
-            if (states.contains(WidgetState.hovered)) {
-              return Colors.white.withValues(alpha: 0.05);
-            }
-            if (states.contains(WidgetState.pressed)) {
-              return Colors.white.withValues(alpha: 0.1);
-            }
-            return null;
-          }),
-        ),
+        style:
+            ElevatedButton.styleFrom(
+              elevation: 0,
+              backgroundColor: CafeColors.primary,
+              foregroundColor: CafeColors.onPrimary,
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(6),
+              ),
+              textStyle: bodyFont(fontSize: 16, fontWeight: FontWeight.w600),
+            ).copyWith(
+              // Subtle hover state
+              overlayColor: WidgetStateProperty.resolveWith((states) {
+                if (states.contains(WidgetState.hovered)) {
+                  return Colors.white.withValues(alpha: 0.05);
+                }
+                if (states.contains(WidgetState.pressed)) {
+                  return Colors.white.withValues(alpha: 0.1);
+                }
+                return null;
+              }),
+            ),
       ),
 
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
           elevation: 0,
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(6),
-          ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
           textStyle: bodyFont(fontSize: 16, fontWeight: FontWeight.w600),
         ),
       ),
@@ -381,9 +390,7 @@ class M3Theme {
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(6),
-          ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
           side: const BorderSide(color: CafeColors.outlineVariant),
           textStyle: bodyFont(fontSize: 16, fontWeight: FontWeight.w600),
         ),

@@ -31,7 +31,8 @@ class MenuRepository {
     final res = await _client
         .from('menu_items')
         .select()
-        .inFilter('item_id', ids);
+        .inFilter('item_id', ids)
+        .limit(500);
     return (res as List<dynamic>)
         .map((j) => _parseMenuItem(j as Map<String, dynamic>))
         .toList();

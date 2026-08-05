@@ -148,18 +148,22 @@ class _LoginScreenState extends State<LoginScreen> {
             button: true,
             label: 'Back',
             child: M3PressScale(
-            onTap: () => context.go('/'),
-            child: Container(
-              width: 44,
-              height: 44,
-              decoration: BoxDecoration(
-                color: CafeColors.surfaceContainerLow,
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: CafeColors.outline),
+              onTap: () => context.go('/'),
+              child: Container(
+                width: 44,
+                height: 44,
+                decoration: BoxDecoration(
+                  color: CafeColors.surfaceContainerLow,
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: CafeColors.outline),
+                ),
+                child: const Icon(
+                  Icons.arrow_back_ios_new,
+                  size: 16,
+                  color: CafeColors.onSurface,
+                ),
               ),
-              child: const Icon(Icons.arrow_back_ios_new, size: 16, color: CafeColors.onSurface),
             ),
-          ),
           ),
         ),
       ),
@@ -170,140 +174,68 @@ class _LoginScreenState extends State<LoginScreen> {
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 480),
               child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Logo Header
-              FadeInWidget(
-                duration: const Duration(milliseconds: 700),
-                slideOffset: const Offset(0, 0.1),
-                child: Center(
-                  child: Container(
-                    padding: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      color: CafeColors.surfaceContainerLow,
-                      borderRadius: BorderRadius.circular(32),
-                      border: Border.all(color: CafeColors.outline),
-                    ),
-                    child: Image.asset(
-                      'assets/logo.png',
-                      height: 80,
-                      width: 80,
-                      semanticLabel: 'Kalpa Coffee logo',
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 56),
-
-              // Title block
-              FadeInWidget(
-                duration: const Duration(milliseconds: 700),
-                delay: const Duration(milliseconds: 100),
-                slideOffset: const Offset(0, 0.1),
-                child: Text(
-                  _otpSent ? 'Enter code' : 'Welcome',
-                  style: Theme.of(context).textTheme.displaySmall?.copyWith(
-                    fontWeight: FontWeight.w800,
-                    letterSpacing: -1.0,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 12),
-              FadeInWidget(
-                duration: const Duration(milliseconds: 700),
-                delay: const Duration(milliseconds: 150),
-                slideOffset: const Offset(0, 0.1),
-                child: Text(
-                  _otpSent
-                      ? 'We have sent an SMS with a code to +977 ${_phoneController.text}'
-                      : 'Please confirm your country code and enter your phone number to continue.',
-                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    color: CafeColors.onSurfaceVariant,
-                    height: 1.5,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 48),
-
-              // Inputs (Double-Bezel styling)
-              if (!_otpSent)
-                FadeInWidget(
-                  duration: const Duration(milliseconds: 700),
-                  delay: const Duration(milliseconds: 250),
-                  slideOffset: const Offset(0, 0.1),
-                  child: Container(
-                    padding: const EdgeInsets.all(6),
-                    decoration: BoxDecoration(
-                      color: CafeColors.surfaceContainerLow,
-                      borderRadius: BorderRadius.circular(24),
-                      border: Border.all(color: CafeColors.outline),
-                    ),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: CafeColors.surface,
-                        borderRadius: BorderRadius.circular(18),
-                        boxShadow: [
-                          BoxShadow(
-                            color: CafeColors.onSurface.withValues(alpha: 0.03),
-                            blurRadius: 4,
-                            offset: const Offset(0, 2),
-                          ),
-                        ],
-                      ),
-                      child: Row(
-                        children: [
-                          const Text(
-                            '+977',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600,
-                              color: CafeColors.onSurface,
-                            ),
-                          ),
-                          const SizedBox(width: 16),
-                          Container(
-                            width: 1,
-                            height: 24,
-                            color: CafeColors.outline,
-                          ),
-                          const SizedBox(width: 16),
-                          Expanded(
-                            child: TextField(
-                              controller: _phoneController,
-                              keyboardType: TextInputType.phone,
-                              decoration: const InputDecoration(
-                                border: InputBorder.none,
-                                enabledBorder: InputBorder.none,
-                                focusedBorder: InputBorder.none,
-                                errorBorder: InputBorder.none,
-                                disabledBorder: InputBorder.none,
-                                contentPadding: EdgeInsets.zero,
-                                fillColor: Colors.transparent,
-                                filled: false,
-                                hintText: 'Phone number',
-                              ),
-                              style: const TextStyle(
-                                fontSize: 18,
-                                letterSpacing: 1.2,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ),
-                        ],
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Logo Header
+                  FadeInWidget(
+                    duration: const Duration(milliseconds: 700),
+                    slideOffset: const Offset(0, 0.1),
+                    child: Center(
+                      child: Container(
+                        padding: const EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          color: CafeColors.surfaceContainerLow,
+                          borderRadius: BorderRadius.circular(32),
+                          border: Border.all(color: CafeColors.outline),
+                        ),
+                        child: Image.asset(
+                          'assets/logo.png',
+                          height: 80,
+                          width: 80,
+                          semanticLabel: 'Kalpa Coffee logo',
+                        ),
                       ),
                     ),
                   ),
-                )
-              else
-                FadeInWidget(
-                  duration: const Duration(milliseconds: 700),
-                  delay: const Duration(milliseconds: 250),
-                  slideOffset: const Offset(0, 0.1),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
+                  const SizedBox(height: 56),
+
+                  // Title block
+                  FadeInWidget(
+                    duration: const Duration(milliseconds: 700),
+                    delay: const Duration(milliseconds: 100),
+                    slideOffset: const Offset(0, 0.1),
+                    child: Text(
+                      _otpSent ? 'Enter code' : 'Welcome',
+                      style: Theme.of(context).textTheme.displaySmall?.copyWith(
+                        fontWeight: FontWeight.w800,
+                        letterSpacing: -1.0,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  FadeInWidget(
+                    duration: const Duration(milliseconds: 700),
+                    delay: const Duration(milliseconds: 150),
+                    slideOffset: const Offset(0, 0.1),
+                    child: Text(
+                      _otpSent
+                          ? 'We have sent an SMS with a code to +977 ${_phoneController.text}'
+                          : 'Please confirm your country code and enter your phone number to continue.',
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        color: CafeColors.onSurfaceVariant,
+                        height: 1.5,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 48),
+
+                  // Inputs (Double-Bezel styling)
+                  if (!_otpSent)
+                    FadeInWidget(
+                      duration: const Duration(milliseconds: 700),
+                      delay: const Duration(milliseconds: 250),
+                      slideOffset: const Offset(0, 0.1),
+                      child: Container(
                         padding: const EdgeInsets.all(6),
                         decoration: BoxDecoration(
                           color: CafeColors.surfaceContainerLow,
@@ -311,153 +243,237 @@ class _LoginScreenState extends State<LoginScreen> {
                           border: Border.all(color: CafeColors.outline),
                         ),
                         child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 4,
+                          ),
                           decoration: BoxDecoration(
                             color: CafeColors.surface,
                             borderRadius: BorderRadius.circular(18),
                             boxShadow: [
                               BoxShadow(
-                                color: CafeColors.onSurface.withValues(alpha: 0.03),
+                                color: CafeColors.onSurface.withValues(
+                                  alpha: 0.03,
+                                ),
                                 blurRadius: 4,
                                 offset: const Offset(0, 2),
                               ),
                             ],
                           ),
-                          child: TextField(
-                            controller: _otpController,
-                            keyboardType: TextInputType.number,
-                            maxLength: 6,
-                            textAlign: TextAlign.center,
-                            decoration: const InputDecoration(
-                              border: InputBorder.none,
-                              enabledBorder: InputBorder.none,
-                              focusedBorder: InputBorder.none,
-                              errorBorder: InputBorder.none,
-                              disabledBorder: InputBorder.none,
-                              contentPadding: EdgeInsets.zero,
-                              fillColor: Colors.transparent,
-                              filled: false,
-                              hintText: '- - - - - -',
-                              counterText: '',
-                            ),
-                            style: const TextStyle(
-                              fontSize: 28,
-                              letterSpacing: 12,
-                              fontWeight: FontWeight.w700,
-                            ),
+                          child: Row(
+                            children: [
+                              const Text(
+                                '+977',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w600,
+                                  color: CafeColors.onSurface,
+                                ),
+                              ),
+                              const SizedBox(width: 16),
+                              Container(
+                                width: 1,
+                                height: 24,
+                                color: CafeColors.outline,
+                              ),
+                              const SizedBox(width: 16),
+                              Expanded(
+                                child: TextField(
+                                  controller: _phoneController,
+                                  keyboardType: TextInputType.phone,
+                                  decoration: const InputDecoration(
+                                    border: InputBorder.none,
+                                    enabledBorder: InputBorder.none,
+                                    focusedBorder: InputBorder.none,
+                                    errorBorder: InputBorder.none,
+                                    disabledBorder: InputBorder.none,
+                                    contentPadding: EdgeInsets.zero,
+                                    fillColor: Colors.transparent,
+                                    filled: false,
+                                    hintText: 'Phone number',
+                                  ),
+                                  style: const TextStyle(
+                                    fontSize: 18,
+                                    letterSpacing: 1.2,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
-                      const SizedBox(height: 24),
-                      Row(
+                    )
+                  else
+                    FadeInWidget(
+                      duration: const Duration(milliseconds: 700),
+                      delay: const Duration(milliseconds: 250),
+                      slideOffset: const Offset(0, 0.1),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Container(
-                            width: 8,
-                            height: 8,
+                            padding: const EdgeInsets.all(6),
                             decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: _countdown > 0
-                                  ? CafeColors.primary
-                                  : CafeColors.error,
+                              color: CafeColors.surfaceContainerLow,
+                              borderRadius: BorderRadius.circular(24),
+                              border: Border.all(color: CafeColors.outline),
                             ),
-                          ),
-                          const SizedBox(width: 12),
-                          Text(
-                            'Time remaining: $_formattedTime',
-                            style: TextStyle(
-                              color: _countdown > 0
-                                  ? CafeColors.onSurfaceVariant
-                                  : CafeColors.error,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 14,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              const SizedBox(height: 56),
-
-              // Nested CTA Button
-              FadeInWidget(
-                duration: const Duration(milliseconds: 700),
-                delay: const Duration(milliseconds: 350),
-                slideOffset: const Offset(0, 0.1),
-                child: Semantics(
-                  button: true,
-                  enabled: !_isLoading,
-                  label: _otpSent ? 'Verify' : 'Continue',
-                  child: M3PressScale(
-                  onTap: _isLoading
-                      ? null
-                      : (_otpSent ? _verifyOtp : _sendOtp),
-                  child: Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: CafeColors.onSurface,
-                      borderRadius: BorderRadius.circular(100),
-                      boxShadow: [
-                        BoxShadow(
-                          color: CafeColors.onSurface.withValues(alpha: 0.15),
-                          blurRadius: 24,
-                          offset: const Offset(0, 12),
-                        ),
-                      ],
-                    ),
-                    child: Row(
-                      children: [
-                        const SizedBox(width: 24),
-                        Expanded(
-                          child: Text(
-                            _otpSent ? 'Verify' : 'Continue',
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w700,
-                              color: CafeColors.surface,
-                            ),
-                          ),
-                        ),
-                        if (_isLoading)
-                          Container(
-                            width: 48,
-                            height: 48,
-                            decoration: const BoxDecoration(
-                              color: Colors.white10,
-                              shape: BoxShape.circle,
-                            ),
-                            child: const Center(
-                              child: SizedBox(
-                                height: 20,
-                                width: 20,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2.5,
-                                  color: CafeColors.surface,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 4,
+                              ),
+                              decoration: BoxDecoration(
+                                color: CafeColors.surface,
+                                borderRadius: BorderRadius.circular(18),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: CafeColors.onSurface.withValues(
+                                      alpha: 0.03,
+                                    ),
+                                    blurRadius: 4,
+                                    offset: const Offset(0, 2),
+                                  ),
+                                ],
+                              ),
+                              child: TextField(
+                                controller: _otpController,
+                                keyboardType: TextInputType.number,
+                                maxLength: 6,
+                                textAlign: TextAlign.center,
+                                decoration: const InputDecoration(
+                                  border: InputBorder.none,
+                                  enabledBorder: InputBorder.none,
+                                  focusedBorder: InputBorder.none,
+                                  errorBorder: InputBorder.none,
+                                  disabledBorder: InputBorder.none,
+                                  contentPadding: EdgeInsets.zero,
+                                  fillColor: Colors.transparent,
+                                  filled: false,
+                                  hintText: '- - - - - -',
+                                  counterText: '',
+                                ),
+                                style: const TextStyle(
+                                  fontSize: 28,
+                                  letterSpacing: 12,
+                                  fontWeight: FontWeight.w700,
                                 ),
                               ),
                             ),
-                          )
-                        else
-                          Container(
-                            width: 48,
-                            height: 48,
-                            decoration: const BoxDecoration(
-                              color: Colors.white10,
-                              shape: BoxShape.circle,
-                            ),
-                            child: const Icon(
-                              Icons.arrow_forward,
-                              color: CafeColors.surface,
-                              size: 20,
-                            ),
                           ),
-                      ],
+                          const SizedBox(height: 24),
+                          Row(
+                            children: [
+                              Container(
+                                width: 8,
+                                height: 8,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: _countdown > 0
+                                      ? CafeColors.primary
+                                      : CafeColors.error,
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+                              Text(
+                                'Time remaining: $_formattedTime',
+                                style: TextStyle(
+                                  color: _countdown > 0
+                                      ? CafeColors.onSurfaceVariant
+                                      : CafeColors.error,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  const SizedBox(height: 56),
+
+                  // Nested CTA Button
+                  FadeInWidget(
+                    duration: const Duration(milliseconds: 700),
+                    delay: const Duration(milliseconds: 350),
+                    slideOffset: const Offset(0, 0.1),
+                    child: Semantics(
+                      button: true,
+                      enabled: !_isLoading,
+                      label: _otpSent ? 'Verify' : 'Continue',
+                      child: M3PressScale(
+                        onTap: _isLoading
+                            ? null
+                            : (_otpSent ? _verifyOtp : _sendOtp),
+                        child: Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: CafeColors.onSurface,
+                            borderRadius: BorderRadius.circular(100),
+                            boxShadow: [
+                              BoxShadow(
+                                color: CafeColors.onSurface.withValues(
+                                  alpha: 0.15,
+                                ),
+                                blurRadius: 24,
+                                offset: const Offset(0, 12),
+                              ),
+                            ],
+                          ),
+                          child: Row(
+                            children: [
+                              const SizedBox(width: 24),
+                              Expanded(
+                                child: Text(
+                                  _otpSent ? 'Verify' : 'Continue',
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w700,
+                                    color: CafeColors.surface,
+                                  ),
+                                ),
+                              ),
+                              if (_isLoading)
+                                Container(
+                                  width: 48,
+                                  height: 48,
+                                  decoration: const BoxDecoration(
+                                    color: Colors.white10,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: const Center(
+                                    child: SizedBox(
+                                      height: 20,
+                                      width: 20,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2.5,
+                                        color: CafeColors.surface,
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              else
+                                Container(
+                                  width: 48,
+                                  height: 48,
+                                  decoration: const BoxDecoration(
+                                    color: Colors.white10,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: const Icon(
+                                    Icons.arrow_forward,
+                                    color: CafeColors.surface,
+                                    size: 20,
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ),
+                      ),
                     ),
                   ),
-                ),
-                ),
-              ),
-            ],
+                ],
               ),
             ),
           ),

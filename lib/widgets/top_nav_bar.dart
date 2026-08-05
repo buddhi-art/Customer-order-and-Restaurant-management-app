@@ -24,42 +24,50 @@ class TopNavBarWidget extends ConsumerWidget {
           height: 80,
           padding: const EdgeInsets.symmetric(horizontal: 48),
           decoration: BoxDecoration(
-            color: AppColors.background.withValues(alpha: 0.75), // Translucent cream white
-            border: Border(bottom: BorderSide(color: AppColors.shadowDark.withValues(alpha: 0.1))),
-          ),
-      child: Row(
-        children: [
-          Image.asset(
-            'assets/logo.png',
-            height: 48,
-            fit: BoxFit.contain,
-          ),
-          const SizedBox(width: 48),
-          _navLink(context, 'Shop', true),
-          const SizedBox(width: 32),
-          _navLink(context, 'Our Story', false),
-          const SizedBox(width: 32),
-          _navLink(context, 'Wholesale', false),
-          const SizedBox(width: 32),
-          _navLink(context, 'Blog', false),
-          const Spacer(),
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.search, color: AppColors.textPrimary),
-          ),
-          const SizedBox(width: 16),
-          InkWell(
-            onTap: () => context.push('/cart'),
-            child: Row(
-              children: [
-                const Icon(Icons.shopping_cart_outlined, color: AppColors.textPrimary),
-                const SizedBox(width: 8),
-                Text('(${cartItems.length})', style: const TextStyle(fontWeight: FontWeight.bold)),
-              ],
+            color: AppColors.background.withValues(
+              alpha: 0.75,
+            ), // Translucent cream white
+            border: Border(
+              bottom: BorderSide(
+                color: AppColors.shadowDark.withValues(alpha: 0.1),
+              ),
             ),
           ),
-        ],
-      ),
+          child: Row(
+            children: [
+              Image.asset('assets/logo.png', height: 48, fit: BoxFit.contain),
+              const SizedBox(width: 48),
+              _navLink(context, 'Shop', true),
+              const SizedBox(width: 32),
+              _navLink(context, 'Our Story', false),
+              const SizedBox(width: 32),
+              _navLink(context, 'Wholesale', false),
+              const SizedBox(width: 32),
+              _navLink(context, 'Blog', false),
+              const Spacer(),
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(Icons.search, color: AppColors.textPrimary),
+              ),
+              const SizedBox(width: 16),
+              InkWell(
+                onTap: () => context.push('/cart'),
+                child: Row(
+                  children: [
+                    const Icon(
+                      Icons.shopping_cart_outlined,
+                      color: AppColors.textPrimary,
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      '(${cartItems.length})',
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -83,7 +91,7 @@ class TopNavBarWidget extends ConsumerWidget {
             height: 2,
             width: 24,
             color: AppColors.textPrimary,
-          )
+          ),
       ],
     );
   }

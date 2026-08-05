@@ -174,7 +174,9 @@ class _NavItem extends StatelessWidget {
                 Icon(
                   icon,
                   size: 24,
-                  color: isSelected ? CafeColors.onSurface : CafeColors.onSurfaceVariant,
+                  color: isSelected
+                      ? CafeColors.onSurface
+                      : CafeColors.onSurfaceVariant,
                 ),
                 if (badgeCount != null && badgeCount! > 0)
                   Positioned(
@@ -205,7 +207,9 @@ class _NavItem extends StatelessWidget {
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
-                color: isSelected ? CafeColors.onSurface : CafeColors.onSurfaceVariant,
+                color: isSelected
+                    ? CafeColors.onSurface
+                    : CafeColors.onSurfaceVariant,
               ),
             ),
           ],

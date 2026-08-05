@@ -13,14 +13,24 @@ class SecurityLayer {
     // Both Geofencing AND WiFi scanning (on iOS/Android) require location permissions.
     // If we don't request permissions first, NetworkInfo().getWifiName() will return null or "<unknown ssid>".
     final hasPermission = await _ensureLocationPermission();
-    
-    // We check location if we have permission. If it passes, we return true.
-    if (hasPermission) {
-      final bool isLocationValid = await _verifyLocation(settings);
-      if (isLocationValid) return true;
+
+    // STRICT REQUIREMENT: Fail immediately if location permission is denied.
+    // This prevents bypassing geofencing by spoofing WiFi SSIDs while location is denied.
+    if (!hasPermission) {
+      assert(() {
+        debugPrint(
+          "Security Check: Location permission denied. Cannot verify checkout.",
+        );
+        return true;
+      }());
+      return false;
     }
 
-    // We check network. If it passes, we return true.
+    // We check location. If it passes, we return true.
+    final bool isLocationValid = await _verifyLocation(settings);
+    if (isLocationValid) return true;
+
+    // We check network as a fallback only if location permission was granted.
     final bool isNetworkValid = await _verifyNetwork(settings);
     if (isNetworkValid) return true;
 
@@ -52,7 +62,9 @@ class SecurityLayer {
     // Fail closed when no cafe coordinates are configured.
     if (creds.cafeLatitude == 0 || creds.cafeLongitude == 0) {
       assert(() {
-        debugPrint("Security Check: No cafe coordinates configured – denying by default.");
+        debugPrint(
+          "Security Check: No cafe coordinates configured – denying by default.",
+        );
         return true;
       }());
       return false;
@@ -75,7 +87,9 @@ class SecurityLayer {
     );
 
     assert(() {
-      debugPrint("Security Check: User is $distanceInMeters meters away from cafe.");
+      debugPrint(
+        "Security Check: User is $distanceInMeters meters away from cafe.",
+      );
       return true;
     }());
     return distanceInMeters <= creds.geofenceRadiusMeters;
@@ -85,7 +99,9 @@ class SecurityLayer {
     // If no WiFi credentials are configured, deny by default.
     if (creds.wifiSSID.isEmpty && creds.wifiBSSID.isEmpty) {
       assert(() {
-        debugPrint("Security Check: No WiFi credentials configured – denying by default.");
+        debugPrint(
+          "Security Check: No WiFi credentials configured – denying by default.",
+        );
         return true;
       }());
       return false;
@@ -101,13 +117,19 @@ class SecurityLayer {
       final cleanWifiBSSID = wifiBSSID?.toLowerCase() ?? '';
 
       assert(() {
-        debugPrint("Security Check: Current WiFi SSID: '$cleanWifiName' BSSID: '$cleanWifiBSSID'");
-        debugPrint("Security Check: Required WiFi SSID: '${creds.wifiSSID}' BSSID: '${creds.wifiBSSID}'");
+        debugPrint(
+          "Security Check: Current WiFi SSID: '$cleanWifiName' BSSID: '$cleanWifiBSSID'",
+        );
+        debugPrint(
+          "Security Check: Required WiFi SSID: '${creds.wifiSSID}' BSSID: '${creds.wifiBSSID}'",
+        );
         return true;
       }());
 
       if (cleanWifiName == '<unknown ssid>') {
-        debugPrint("Security Check: WiFi name is unknown. This usually means location permission is missing or location is turned off.");
+        debugPrint(
+          "Security Check: WiFi name is unknown. This usually means location permission is missing or location is turned off.",
+        );
       }
 
       if (creds.wifiBSSID.isNotEmpty) {

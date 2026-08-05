@@ -104,7 +104,10 @@ class _M3PressScaleState extends State<M3PressScale>
       reverseCurve: premiumFluidCurve,
     );
 
-    _scaleAnimation = Tween<double>(begin: 1.0, end: widget.scaleTo).animate(curved);
+    _scaleAnimation = Tween<double>(
+      begin: 1.0,
+      end: widget.scaleTo,
+    ).animate(curved);
     _blurAnimation = Tween<double>(begin: 0.0, end: 2.0).animate(curved);
   }
 

@@ -17,7 +17,8 @@ class OrderRepository {
   ///
   /// Pass a today's-midnight ISO-8601 string to limit the stream to today.
   Stream<List<Map<String, dynamic>>> stream({String? since}) {
-    var query = _client.from('orders')
+    var query = _client
+        .from('orders')
         .stream(primaryKey: ['id'])
         .order('created_at', ascending: false)
         .limit(500);
@@ -45,16 +46,19 @@ class OrderRepository {
       order.tableId.replaceAll(RegExp(r'[^0-9]'), ''),
     );
 
-    await _client.from('orders').insert({
-      'id': order.id,
-      'table_id': parsedTableId,
-      'user_id': _client.auth.currentUser?.id,
-      'status': order.status.name,
-      'total_amount': order.totalAmount,
-      'items': itemsJson,
-      'payment_method': order.paymentMethod,
-      'payment_status': order.paymentStatus,
-    });
+    await _client
+        .from('orders')
+        .insert({
+          'id': order.id,
+          'table_id': parsedTableId,
+          'user_id': _client.auth.currentUser?.id,
+          'status': order.status.name,
+          'total_amount': order.totalAmount,
+          'items': itemsJson,
+          'payment_method': order.paymentMethod,
+          'payment_status': order.paymentStatus,
+        })
+        .timeout(const Duration(seconds: 15));
   }
 
   /// Update the status (and payment_status when transitioning to `paid`)
@@ -70,8 +74,9 @@ class OrderRepository {
         .from('orders')
         .update(updateMap)
         .eq('id', orderId)
-        .select();
-    if (res.isEmpty) {
+        .select()
+        .maybeSingle();
+    if (res == null) {
       throw Exception('Database update failed (Check Supabase RLS policies!)');
     }
   }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:uuid/uuid.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import '../../theme/m3_theme.dart';
 import '../../providers/menu_provider.dart';
 import '../../models/menu_item.dart';
@@ -203,12 +204,12 @@ class _MenuItemCard extends ConsumerWidget {
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(12),
-                child: Image.network(
-                  item.imageUrl,
+                child: CachedNetworkImage(
+                  imageUrl: item.imageUrl,
                   width: 72,
                   height: 72,
                   fit: BoxFit.cover,
-                  errorBuilder: (_, _, _) => Container(
+                  errorWidget: (_, _, _) => Container(
                     width: 72,
                     height: 72,
                     decoration: BoxDecoration(

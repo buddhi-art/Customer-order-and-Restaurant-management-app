@@ -16,7 +16,8 @@ class NotificationRepository {
     final response = await _client
         .from('notifications')
         .select()
-        .order('created_at', ascending: false);
+        .order('created_at', ascending: false)
+        .limit(100);
     return (response as List<dynamic>)
         .map((data) => AppNotification.fromJson(data as Map<String, dynamic>))
         .toList();

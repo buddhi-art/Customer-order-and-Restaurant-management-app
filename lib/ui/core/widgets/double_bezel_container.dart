@@ -11,7 +11,7 @@ class DoubleBezelContainer extends StatelessWidget {
     super.key,
     required this.child,
     this.outerRadius = 12.0, // Default to crisp radius
-    this.padding = 0.0,      // Strip outer gap by default
+    this.padding = 0.0, // Strip outer gap by default
     this.innerColor,
     this.showInnerHighlight = false,
   });
@@ -19,7 +19,7 @@ class DoubleBezelContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    
+
     // In minimalist UI, we strip the double bezel and return a crisp flat container.
     return Container(
       clipBehavior: Clip.antiAlias,
@@ -27,10 +27,7 @@ class DoubleBezelContainer extends StatelessWidget {
       decoration: BoxDecoration(
         color: innerColor ?? colorScheme.surface,
         borderRadius: BorderRadius.circular(12), // Strict 12px for bento box
-        border: Border.all(
-          color: colorScheme.outline,
-          width: 1,
-        ),
+        border: Border.all(color: colorScheme.outline, width: 1),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.03),

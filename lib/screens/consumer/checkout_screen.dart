@@ -59,7 +59,9 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
             decoration: BoxDecoration(
               color: CafeColors.surface,
               shape: BoxShape.circle,
-              border: Border.all(color: CafeColors.outline.withValues(alpha: 0.5)),
+              border: Border.all(
+                color: CafeColors.outline.withValues(alpha: 0.5),
+              ),
             ),
             child: const Icon(
               Icons.shopping_cart_outlined,
@@ -112,7 +114,9 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
             key: ValueKey('${cartItem.item.id}_${cartItem.size}'),
             direction: DismissDirection.endToStart,
             onDismissed: (direction) {
-              ref.read(cartProvider.notifier).removeItem(cartItem.item, cartItem.size);
+              ref
+                  .read(cartProvider.notifier)
+                  .removeItem(cartItem.item, cartItem.size);
             },
             background: Container(
               alignment: Alignment.centerRight,
@@ -121,13 +125,18 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                 color: CafeColors.error,
                 borderRadius: BorderRadius.circular(6),
               ),
-              child: const Icon(Icons.delete_outline_rounded, color: CafeColors.onError),
+              child: const Icon(
+                Icons.delete_outline_rounded,
+                color: CafeColors.onError,
+              ),
             ),
             child: Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
                 color: CafeColors.surface,
-                border: Border.all(color: CafeColors.outline.withValues(alpha: 0.5)),
+                border: Border.all(
+                  color: CafeColors.outline.withValues(alpha: 0.5),
+                ),
                 borderRadius: BorderRadius.circular(6),
               ),
               child: Row(
@@ -153,7 +162,10 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                       children: [
                         Text(
                           cartItem.item.name,
-                          style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 15,
+                          ),
                         ),
                         const SizedBox(height: 4),
                         Text(
@@ -171,7 +183,9 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                       M3PressScale(
                         onTap: () {
                           HapticFeedback.lightImpact();
-                          ref.read(cartProvider.notifier).updateQuantity(
+                          ref
+                              .read(cartProvider.notifier)
+                              .updateQuantity(
                                 cartItem.item,
                                 cartItem.size,
                                 cartItem.quantity - 1,
@@ -179,7 +193,11 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                         },
                         child: Container(
                           padding: const EdgeInsets.all(8),
-                          child: Icon(Icons.remove, size: 16, color: CafeColors.onSurfaceVariant),
+                          child: Icon(
+                            Icons.remove,
+                            size: 16,
+                            color: CafeColors.onSurfaceVariant,
+                          ),
                         ),
                       ),
                       Text(
@@ -192,7 +210,9 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                       M3PressScale(
                         onTap: () {
                           HapticFeedback.lightImpact();
-                          ref.read(cartProvider.notifier).updateQuantity(
+                          ref
+                              .read(cartProvider.notifier)
+                              .updateQuantity(
                                 cartItem.item,
                                 cartItem.size,
                                 cartItem.quantity + 1,
@@ -200,7 +220,11 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                         },
                         child: Container(
                           padding: const EdgeInsets.all(8),
-                          child: Icon(Icons.add, size: 16, color: CafeColors.onSurfaceVariant),
+                          child: Icon(
+                            Icons.add,
+                            size: 16,
+                            color: CafeColors.onSurfaceVariant,
+                          ),
                         ),
                       ),
                     ],
@@ -231,16 +255,28 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('Subtotal', style: TextStyle(color: CafeColors.onSurfaceVariant)),
-                  Text('\$${totalAmount.toStringAsFixed(2)}', style: const TextStyle(fontWeight: FontWeight.w600)),
+                  Text(
+                    'Subtotal',
+                    style: TextStyle(color: CafeColors.onSurfaceVariant),
+                  ),
+                  Text(
+                    '\$${totalAmount.toStringAsFixed(2)}',
+                    style: const TextStyle(fontWeight: FontWeight.w600),
+                  ),
                 ],
               ),
               const SizedBox(height: 8),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('Tax (${(taxRate * 100).toStringAsFixed(1)}%)', style: TextStyle(color: CafeColors.onSurfaceVariant)),
-                  Text('\$${tax.toStringAsFixed(2)}', style: const TextStyle(fontWeight: FontWeight.w600)),
+                  Text(
+                    'Tax (${(taxRate * 100).toStringAsFixed(1)}%)',
+                    style: TextStyle(color: CafeColors.onSurfaceVariant),
+                  ),
+                  Text(
+                    '\$${tax.toStringAsFixed(2)}',
+                    style: const TextStyle(fontWeight: FontWeight.w600),
+                  ),
                 ],
               ),
               const SizedBox(height: 16),
@@ -250,13 +286,22 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('TOTAL', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, letterSpacing: 1.0, color: CafeColors.onSurfaceVariant)),
+                        Text(
+                          'TOTAL',
+                          style: TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w700,
+                            letterSpacing: 1.0,
+                            color: CafeColors.onSurfaceVariant,
+                          ),
+                        ),
                         Text(
                           '\$${grandTotal.toStringAsFixed(2)}',
-                          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                            fontFamily: 'Newsreader',
-                            fontWeight: FontWeight.w500,
-                          ),
+                          style: Theme.of(context).textTheme.headlineMedium
+                              ?.copyWith(
+                                fontFamily: 'Newsreader',
+                                fontWeight: FontWeight.w500,
+                              ),
                         ),
                       ],
                     ),
@@ -274,7 +319,11 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                               if (tableId == null) {
                                 setState(() => isCheckingOut = false);
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(content: Text('Please scan a table QR code first!')),
+                                  const SnackBar(
+                                    content: Text(
+                                      'Please scan a table QR code first!',
+                                    ),
+                                  ),
                                 );
                                 context.push('/scan');
                                 return;
@@ -284,28 +333,47 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                               if (settings == null) {
                                 setState(() => isCheckingOut = false);
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(content: Text('Unable to load cafe settings.')),
+                                  const SnackBar(
+                                    content: Text(
+                                      'Unable to load cafe settings.',
+                                    ),
+                                  ),
                                 );
                                 return;
                               }
 
-                              final isSecure = await SecurityLayer.verifyCheckoutSecurity(settings);
+                              final isSecure =
+                                  await SecurityLayer.verifyCheckoutSecurity(
+                                    settings,
+                                  );
                               if (!isSecure) {
                                 if (context.mounted) {
                                   setState(() => isCheckingOut = false);
-                                  final wifiName = await NetworkInfo().getWifiName();
-                                  final currentWifi = wifiName?.replaceAll('"', '') ?? 'Unknown';
+                                  final wifiName = await NetworkInfo()
+                                      .getWifiName();
+                                  final currentWifi =
+                                      wifiName?.replaceAll('"', '') ??
+                                      'Unknown';
                                   if (!context.mounted) return;
                                   showDialog(
                                     context: context,
                                     builder: (ctx) => AlertDialog(
                                       backgroundColor: CafeColors.surface,
-                                      title: const Text('Security Check Failed'),
-                                      content: Text('You must be connected to ${settings.wifiSSID} or be inside ${settings.cafeName} to order.\n\n(Detected WiFi: $currentWifi)'),
+                                      title: const Text(
+                                        'Security Check Failed',
+                                      ),
+                                      content: Text(
+                                        'You must be connected to ${settings.wifiSSID} or be inside ${settings.cafeName} to order.\n\n(Detected WiFi: $currentWifi)',
+                                      ),
                                       actions: [
                                         TextButton(
                                           onPressed: () => Navigator.pop(ctx),
-                                          child: const Text('OK', style: TextStyle(color: CafeColors.onSurface)),
+                                          child: const Text(
+                                            'OK',
+                                            style: TextStyle(
+                                              color: CafeColors.onSurface,
+                                            ),
+                                          ),
                                         ),
                                       ],
                                     ),
@@ -327,7 +395,9 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                               );
 
                               try {
-                                await ref.read(orderProvider.notifier).addOrder(newOrder);
+                                await ref
+                                    .read(orderProvider.notifier)
+                                    .addOrder(newOrder);
                                 ref.read(cartProvider.notifier).clearCart();
                                 _pendingOrderId = null;
                                 if (context.mounted) {
@@ -336,7 +406,11 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                               } catch (e) {
                                 if (context.mounted) {
                                   ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(content: Text('Could not place order. Please check your connection and try again.')),
+                                    const SnackBar(
+                                      content: Text(
+                                        'Could not place order. Please check your connection and try again.',
+                                      ),
+                                    ),
                                   );
                                 }
                               } finally {
@@ -356,7 +430,10 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                               ? const SizedBox(
                                   height: 20,
                                   width: 20,
-                                  child: CircularProgressIndicator(color: CafeColors.surface, strokeWidth: 2),
+                                  child: CircularProgressIndicator(
+                                    color: CafeColors.surface,
+                                    strokeWidth: 2,
+                                  ),
                                 )
                               : const Text(
                                   'CHECKOUT',

@@ -136,7 +136,7 @@ class _StatusChip extends StatelessWidget {
               width: 8,
               height: 8,
               decoration: BoxDecoration(
-                color: color, 
+                color: color,
                 shape: BoxShape.circle,
                 boxShadow: [
                   BoxShadow(
@@ -518,9 +518,7 @@ class _OrderCard extends ConsumerWidget {
       context: context,
       builder: (ctx) => AlertDialog(
         title: const Text('Confirm Payment'),
-        content: const Text(
-          'Mark this order as paid in cash at the counter?',
-        ),
+        content: const Text('Mark this order as paid in cash at the counter?'),
         actions: [
           PremiumCtaButton(
             text: 'Cancel',
@@ -585,24 +583,35 @@ class _OrderCard extends ConsumerWidget {
     }
   }
 
-  void _printBill(BuildContext context) {
-    printReceipt(
-      cafeName: 'Kalpa Coffee',
-      tableId: order.tableId,
-      items: order.items
-          .map(
-            (item) => {
-              'name': item.item.name,
-              'quantity': item.quantity,
-              'price': item.item.price,
-              'size': item.size,
-            },
-          )
-          .toList(),
-      total: order.totalAmount,
-      paymentMethod: order.paymentMethod,
-      orderId: order.id,
-    );
+  Future<void> _printBill(BuildContext context) async {
+    try {
+      await printReceipt(
+        cafeName: 'Kalpa Coffee',
+        tableId: order.tableId,
+        items: order.items
+            .map(
+              (item) => {
+                'name': item.item.name,
+                'quantity': item.quantity,
+                'price': item.item.price,
+                'size': item.size,
+              },
+            )
+            .toList(),
+        total: order.totalAmount,
+        paymentMethod: order.paymentMethod,
+        orderId: order.id,
+      );
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(e.toString().replaceAll('Exception: ', '')),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      }
+    }
   }
 
   void _showOrderDetail(BuildContext context, AppOrder order) {

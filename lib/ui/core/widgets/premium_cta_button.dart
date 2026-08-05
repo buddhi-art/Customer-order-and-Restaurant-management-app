@@ -47,7 +47,10 @@ class _PremiumCtaButtonState extends State<PremiumCtaButton>
       parent: _controller,
       curve: const Cubic(0.32, 0.72, 0, 1),
     );
-    _scaleAnimation = Tween<double>(begin: 1.0, end: 0.98).animate(curvedAnimation);
+    _scaleAnimation = Tween<double>(
+      begin: 1.0,
+      end: 0.98,
+    ).animate(curvedAnimation);
     _iconSlideAnimation = Tween<Offset>(
       begin: Offset.zero,
       end: const Offset(0.1, -0.05), // slightly up and right
@@ -75,7 +78,8 @@ class _PremiumCtaButtonState extends State<PremiumCtaButton>
   @override
   void didUpdateWidget(PremiumCtaButton oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.isDisabled != oldWidget.isDisabled || widget.isLoading != oldWidget.isLoading) {
+    if (widget.isDisabled != oldWidget.isDisabled ||
+        widget.isLoading != oldWidget.isLoading) {
       _updateState();
     }
   }
@@ -85,8 +89,9 @@ class _PremiumCtaButtonState extends State<PremiumCtaButton>
     final colorScheme = Theme.of(context).colorScheme;
     final bg = widget.backgroundColor ?? colorScheme.onSurface;
     final fg = widget.foregroundColor ?? colorScheme.surface;
-    
-    final bool isInteractive = !widget.isDisabled && !widget.isLoading && widget.onPressed != null;
+
+    final bool isInteractive =
+        !widget.isDisabled && !widget.isLoading && widget.onPressed != null;
 
     return MouseRegion(
       onEnter: (_) {
@@ -122,13 +127,20 @@ class _PremiumCtaButtonState extends State<PremiumCtaButton>
           child: ScaleTransition(
             scale: _scaleAnimation,
             child: Container(
-              padding: const EdgeInsets.only(left: 24, right: 6, top: 6, bottom: 6),
+              padding: const EdgeInsets.only(
+                left: 24,
+                right: 6,
+                top: 6,
+                bottom: 6,
+              ),
               decoration: BoxDecoration(
                 color: bg,
                 borderRadius: BorderRadius.circular(100),
               ),
               child: Row(
-                mainAxisSize: widget.isFullWidth ? MainAxisSize.max : MainAxisSize.min,
+                mainAxisSize: widget.isFullWidth
+                    ? MainAxisSize.max
+                    : MainAxisSize.min,
                 children: [
                   if (widget.isFullWidth)
                     Expanded(
@@ -182,11 +194,7 @@ class _PremiumCtaButtonState extends State<PremiumCtaButton>
                           shape: BoxShape.circle,
                         ),
                         child: Center(
-                          child: Icon(
-                            widget.trailingIcon,
-                            size: 20,
-                            color: fg,
-                          ),
+                          child: Icon(widget.trailingIcon, size: 20, color: fg),
                         ),
                       ),
                     ),

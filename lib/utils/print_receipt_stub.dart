@@ -3,14 +3,14 @@
 import 'package:flutter/material.dart';
 import 'package:toastification/toastification.dart';
 
-void printReceipt({
+Future<void> printReceipt({
   required String cafeName,
   required String tableId,
   required List<Map<String, dynamic>> items,
   required double total,
   String? paymentMethod,
   String? orderId,
-}) {
+}) async {
   // Receipt printing is only available on desktop web interfaces.
   toastification.show(
     title: const Text('Printing Not Supported'),

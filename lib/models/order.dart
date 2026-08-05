@@ -1,12 +1,6 @@
 import 'cart_item.dart';
 
-enum OrderStatus {
-  pending,
-  prep,
-  ready,
-  served,
-  paid
-}
+enum OrderStatus { pending, prep, ready, served, paid }
 
 class AppOrder {
   final String id;

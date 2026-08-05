@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:uuid/uuid.dart';
 import '../../theme/m3_theme.dart';
 import '../../ui/core/widgets/double_bezel_container.dart';
+import '../../providers/feedback_provider.dart';
+import '../../models/feedback.dart';
 import 'admin_shell.dart';
 
 class FeedbackManagementScreen extends ConsumerStatefulWidget {
@@ -17,68 +20,29 @@ class _FeedbackManagementScreenState
     extends ConsumerState<FeedbackManagementScreen> {
   String _filter = 'all';
 
-  final _mockReviews = List.generate(
-    8,
-    (i) => _ReviewData(
-      id: 'rev-$i',
-      name: [
-        'Aarav Sharma',
-        'Priya Patel',
-        'Ravi Kumar',
-        'Sita Thapa',
-        'Deepak Gurung',
-        'Anita Rai',
-        'Binod Poudel',
-        'Kavita Joshi',
-      ][i],
-      rating: [5, 4, 5, 3, 5, 4, 4, 5][i],
-      comment: [
-        'Best cappuccino in town! The latte art was beautiful and the service was impeccable.',
-        'Great atmosphere but the espresso was a bit too strong for my taste.',
-        'Absolutely love this place! The cold brew is amazing and the staff is super friendly.',
-        'Good coffee but the waiting time was a bit long during peak hours.',
-        'The mocha here is heavenly. My go-to spot for meetings with friends.',
-        'Affogato is to die for! Perfect combination of ice cream and espresso.',
-        'Nice ambience and decent coffee. The pastry selection could be better though.',
-        'Best café in the city hands down. The flat white is perfection every single time.',
-      ][i],
-      date: DateTime.now().subtract(
-        Duration(hours: [2, 5, 12, 18, 24, 36, 48, 72][i]),
-      ),
-      itemName: [
-        'Cappuccino',
-        'Espresso',
-        'Cold Brew',
-        'Latte',
-        'Mocha',
-        'Affogato',
-        'Americano',
-        'Flat White',
-      ][i],
-    ),
-  );
-
   @override
   Widget build(BuildContext context) {
+    final reviews = ref.watch(feedbackProvider);
+    
     final filtered = _filter == 'positive'
-        ? _mockReviews.where((r) => r.rating >= 4).toList()
+        ? reviews.where((r) => r.rating >= 4).toList()
         : _filter == 'negative'
-        ? _mockReviews.where((r) => r.rating <= 2).toList()
-        : _mockReviews;
+        ? reviews.where((r) => r.rating <= 2).toList()
+        : reviews;
 
-    final avgRating = _mockReviews.isEmpty
+    final avgRating = reviews.isEmpty
         ? 0.0
-        : _mockReviews.fold<double>(0, (s, r) => s + r.rating) /
-              _mockReviews.length;
+        : reviews.fold<double>(0, (s, r) => s + r.rating) /
+              reviews.length;
 
-    final positiveCount = _mockReviews.where((r) => r.rating >= 4).length;
-    final negativeCount = _mockReviews.where((r) => r.rating <= 2).length;
+    final positiveCount = reviews.where((r) => r.rating >= 4).length;
+    final negativeCount = reviews.where((r) => r.rating <= 2).length;
 
     return AdminShell(
       title: 'Feedback',
       selectedIndex: 10,
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => _showAddFeedback(context),
+        onPressed: () => _showAddFeedback(context, ref),
         icon: const Icon(Icons.rate_review_rounded),
         label: const Text('Add Review'),
         backgroundColor: CafeColors.onSurface,
@@ -115,7 +79,7 @@ class _FeedbackManagementScreenState
                 const SizedBox(width: 16),
                 _StatItem(
                   icon: Icons.reviews_rounded,
-                  value: '${_mockReviews.length}',
+                  value: '${reviews.length}',
                   label: 'Total',
                   color: CafeColors.primary,
                 ),
@@ -194,7 +158,7 @@ class _FeedbackManagementScreenState
     );
   }
 
-  void _showAddFeedback(BuildContext context) async {
+  void _showAddFeedback(BuildContext context, WidgetRef ref) async {
     final nameCtrl = TextEditingController();
     final commentCtrl = TextEditingController();
     double rating = 5;
@@ -248,14 +212,37 @@ class _FeedbackManagementScreenState
               child: const Text('Cancel'),
             ),
             FilledButton(
-              onPressed: () {
-                Navigator.pop(ctx);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: const Text('Feedback added successfully'),
-                    behavior: SnackBarBehavior.floating,
-                  ),
-                );
+              onPressed: () async {
+                final repo = ref.read(feedbackRepositoryProvider);
+                try {
+                  await repo.insert(
+                    FeedbackItem(
+                      id: const Uuid().v4(),
+                      customerName: nameCtrl.text.isEmpty ? 'Anonymous' : nameCtrl.text,
+                      rating: rating,
+                      comment: commentCtrl.text,
+                      createdAt: DateTime.now(),
+                    ),
+                  );
+                  if (context.mounted) {
+                    Navigator.pop(ctx);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Feedback added successfully'),
+                        behavior: SnackBarBehavior.floating,
+                      ),
+                    );
+                  }
+                } catch (e) {
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Error: $e'),
+                        behavior: SnackBarBehavior.floating,
+                      ),
+                    );
+                  }
+                }
               },
               child: const Text('Add'),
             ),
@@ -358,34 +345,14 @@ class _FilterChipSmall extends StatelessWidget {
   }
 }
 
-class _ReviewData {
-  final String id;
-  final String name;
-  final int rating;
-  final String comment;
-  final DateTime date;
-  final String itemName;
-
-  const _ReviewData({
-    required this.id,
-    required this.name,
-    required this.rating,
-    required this.comment,
-    required this.date,
-    required this.itemName,
-  });
-}
-
 class _ReviewCard extends StatelessWidget {
-  final _ReviewData review;
+  final FeedbackItem review;
   final int index;
 
   const _ReviewCard({required this.review, required this.index});
 
   @override
   Widget build(BuildContext context) {
-    final _ = Theme.of(context).colorScheme;
-
     return Padding(
       padding: const EdgeInsets.only(bottom: 24),
       child: DoubleBezelContainer(
@@ -406,7 +373,7 @@ class _ReviewCard extends StatelessWidget {
                 ),
                 child: Center(
                   child: Text(
-                    review.name[0],
+                    review.customerName.isNotEmpty ? review.customerName[0].toUpperCase() : '?',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.w800,
@@ -426,29 +393,30 @@ class _ReviewCard extends StatelessWidget {
                       children: [
                         Expanded(
                           child: Text(
-                            review.name,
+                            review.customerName,
                             style: Theme.of(context).textTheme.titleMedium
                                 ?.copyWith(fontWeight: FontWeight.w700),
                           ),
                         ),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 10,
-                            vertical: 4,
-                          ),
-                          decoration: BoxDecoration(
-                            color: CafeColors.surfaceContainerHigh,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Text(
-                            review.itemName,
-                            style: const TextStyle(
-                              fontSize: 12,
-                              color: CafeColors.onSurface,
-                              fontWeight: FontWeight.w700,
+                        if (review.itemName != null && review.itemName!.isNotEmpty)
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 10,
+                              vertical: 4,
+                            ),
+                            decoration: BoxDecoration(
+                              color: CafeColors.surfaceContainerHigh,
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Text(
+                              review.itemName!,
+                              style: const TextStyle(
+                                fontSize: 12,
+                                color: CafeColors.onSurface,
+                                fontWeight: FontWeight.w700,
+                              ),
                             ),
                           ),
-                        ),
                       ],
                     ),
                     const SizedBox(height: 8),
@@ -484,7 +452,7 @@ class _ReviewCard extends StatelessWidget {
                         ),
                         const SizedBox(width: 6),
                         Text(
-                          _formatDate(review.date),
+                          _formatDate(review.createdAt),
                           style: Theme.of(context).textTheme.bodySmall
                               ?.copyWith(
                                 color: CafeColors.onSurfaceVariant,

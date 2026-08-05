@@ -96,7 +96,10 @@ class AdminShell extends StatelessWidget {
                   ),
                   const SizedBox(height: 12),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
                     decoration: BoxDecoration(
                       color: CafeColors.onSurface,
                       borderRadius: BorderRadius.circular(8),
@@ -136,9 +139,14 @@ class AdminShell extends StatelessWidget {
                       child: AnimatedContainer(
                         duration: const Duration(milliseconds: 150),
                         curve: m3FadeCurve,
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 14,
+                        ),
                         decoration: BoxDecoration(
-                          color: isSelected ? CafeColors.surfaceContainerHigh : Colors.transparent,
+                          color: isSelected
+                              ? CafeColors.surfaceContainerHigh
+                              : Colors.transparent,
                           borderRadius: BorderRadius.circular(16),
                         ),
                         child: Row(
@@ -146,15 +154,21 @@ class AdminShell extends StatelessWidget {
                             Icon(
                               _icons[index],
                               size: 20,
-                              color: isSelected ? CafeColors.onSurface : CafeColors.onSurfaceVariant,
+                              color: isSelected
+                                  ? CafeColors.onSurface
+                                  : CafeColors.onSurfaceVariant,
                             ),
                             const SizedBox(width: 16),
                             Text(
                               _labels[index],
                               style: TextStyle(
                                 fontSize: 14,
-                                fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-                                color: isSelected ? CafeColors.onSurface : CafeColors.onSurfaceVariant,
+                                fontWeight: isSelected
+                                    ? FontWeight.w700
+                                    : FontWeight.w500,
+                                color: isSelected
+                                    ? CafeColors.onSurface
+                                    : CafeColors.onSurfaceVariant,
                                 letterSpacing: -0.2,
                               ),
                             ),
@@ -239,7 +253,11 @@ class AdminShell extends StatelessWidget {
                           ),
                         ],
                       ),
-                      child: const Icon(Icons.logout_rounded, size: 18, color: CafeColors.onSurface),
+                      child: const Icon(
+                        Icons.logout_rounded,
+                        size: 18,
+                        color: CafeColors.onSurface,
+                      ),
                     ),
                   ),
                 ),
@@ -248,33 +266,41 @@ class AdminShell extends StatelessWidget {
           ),
         ],
       ),
-      drawer: isDesktop ? null : Drawer(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        child: ClipRect(
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
-            child: Container(
-              color: CafeColors.surface.withValues(alpha: 0.85),
-              child: drawerContent,
+      drawer: isDesktop
+          ? null
+          : Drawer(
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              child: ClipRect(
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+                  child: Container(
+                    color: CafeColors.surface.withValues(alpha: 0.85),
+                    child: drawerContent,
+                  ),
+                ),
+              ),
             ),
-          ),
-        ),
-      ),
-      body: isDesktop ? Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            width: 280,
-            decoration: BoxDecoration(
-              color: CafeColors.surface,
-              border: Border(right: BorderSide(color: CafeColors.outline.withValues(alpha: 0.5))),
-            ),
-            child: drawerContent,
-          ),
-          Expanded(child: body),
-        ],
-      ) : body,
+      body: isDesktop
+          ? Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  width: 280,
+                  decoration: BoxDecoration(
+                    color: CafeColors.surface,
+                    border: Border(
+                      right: BorderSide(
+                        color: CafeColors.outline.withValues(alpha: 0.5),
+                      ),
+                    ),
+                  ),
+                  child: drawerContent,
+                ),
+                Expanded(child: body),
+              ],
+            )
+          : body,
       floatingActionButton: floatingActionButton,
     );
   }

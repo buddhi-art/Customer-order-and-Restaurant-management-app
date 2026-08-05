@@ -27,7 +27,9 @@ class CoffeeCard extends StatelessWidget {
     return StaggeredFadeIn(
       index: index,
       slideOffset: const Offset(0, 0.08),
-      child: isDesktop ? _buildGridCard(context) : _buildGridCard(context), // Enforce bento grid for mobile too
+      child: isDesktop
+          ? _buildGridCard(context)
+          : _buildGridCard(context), // Enforce bento grid for mobile too
     );
   }
 
@@ -129,7 +131,10 @@ class CoffeeCard extends StatelessWidget {
                           onAdd();
                         },
                         child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 4,
+                          ),
                           decoration: BoxDecoration(
                             color: CafeColors.onSurface,
                             borderRadius: BorderRadius.circular(4),
