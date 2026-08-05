@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:ui';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/cart_provider.dart';
@@ -16,13 +17,16 @@ class TopNavBarWidget extends ConsumerWidget {
 
     final cartItems = ref.watch(cartProvider);
 
-    return Container(
-      height: 80,
-      padding: const EdgeInsets.symmetric(horizontal: 48),
-      decoration: BoxDecoration(
-        color: AppColors.background, // Logo cream white
-        border: Border(bottom: BorderSide(color: AppColors.shadowDark.withValues(alpha: 0.1))),
-      ),
+    return ClipRect(
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+        child: Container(
+          height: 80,
+          padding: const EdgeInsets.symmetric(horizontal: 48),
+          decoration: BoxDecoration(
+            color: AppColors.background.withValues(alpha: 0.75), // Translucent cream white
+            border: Border(bottom: BorderSide(color: AppColors.shadowDark.withValues(alpha: 0.1))),
+          ),
       child: Row(
         children: [
           Image.asset(
@@ -56,6 +60,8 @@ class TopNavBarWidget extends ConsumerWidget {
           ),
         ],
       ),
+        ),
+      ),
     );
   }
 
@@ -66,8 +72,9 @@ class TopNavBarWidget extends ConsumerWidget {
         Text(
           text,
           style: TextStyle(
-            fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
+            fontWeight: isActive ? FontWeight.bold : FontWeight.w500,
             color: isActive ? AppColors.textPrimary : AppColors.textSecondary,
+            letterSpacing: 0.2,
           ),
         ),
         if (isActive)

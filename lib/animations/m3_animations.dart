@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:ui';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../theme/cafe_colors.dart';
 
@@ -8,11 +9,11 @@ import '../theme/cafe_colors.dart';
 /// Equivalent to cubic-bezier(0.32, 0.72, 0.0, 1.0).
 const premiumFluidCurve = Cubic(0.32, 0.72, 0.0, 1.0);
 
-/// Smooth ease-out for fades and subtle transitions.
-const m3FadeCurve = Curves.easeOutCubic;
+/// Strong ease-out for UI interactions (Emil Kowalski)
+const m3FadeCurve = Cubic(0.23, 1.0, 0.32, 1.0);
 
-/// Smooth ease-in-out for morph / page transitions.
-const m3MorphCurve = Curves.easeInOutCubicEmphasized;
+/// Strong ease-in-out for on-screen movement (Emil Kowalski)
+const m3MorphCurve = Cubic(0.77, 0.0, 0.175, 1.0);
 
 // ─── Declarative Animations (flutter_animate) ────────────────────────────────
 
@@ -30,7 +31,7 @@ class M3FadeSlideIn extends StatelessWidget {
     required this.child,
     this.index = 0,
     this.baseDelay = const Duration(milliseconds: 50),
-    this.duration = const Duration(milliseconds: 700),
+    this.duration = const Duration(milliseconds: 600),
     this.slideOffset = const Offset(0, 0.06),
   });
 
@@ -43,6 +44,12 @@ class M3FadeSlideIn extends StatelessWidget {
     return child
         .animate(delay: Duration(milliseconds: cappedDelay))
         .fade(duration: duration, curve: m3FadeCurve)
+        .scale(
+          begin: const Offset(0.95, 0.95),
+          end: const Offset(1, 1),
+          duration: duration,
+          curve: premiumFluidCurve,
+        )
         .slide(
           begin: slideOffset,
           end: Offset.zero,
@@ -61,6 +68,7 @@ class M3PressScale extends StatefulWidget {
   final VoidCallback? onTap;
   final VoidCallback? onLongPress;
   final double scaleTo;
+  final bool blurOnPress;
 
   const M3PressScale({
     super.key,
@@ -68,6 +76,7 @@ class M3PressScale extends StatefulWidget {
     this.onTap,
     this.onLongPress,
     this.scaleTo = 0.97,
+    this.blurOnPress = true,
   });
 
   @override
@@ -78,23 +87,25 @@ class _M3PressScaleState extends State<M3PressScale>
     with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
   late final Animation<double> _scaleAnimation;
+  late final Animation<double> _blurAnimation;
 
   @override
   void initState() {
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 200),
-      reverseDuration: const Duration(milliseconds: 350),
+      duration: const Duration(milliseconds: 120),
+      reverseDuration: const Duration(milliseconds: 250),
     );
 
-    _scaleAnimation = Tween<double>(begin: 1.0, end: widget.scaleTo).animate(
-      CurvedAnimation(
-        parent: _controller,
-        curve: Curves.easeOutCubic,
-        reverseCurve: premiumFluidCurve,
-      ),
+    final curved = CurvedAnimation(
+      parent: _controller,
+      curve: m3FadeCurve,
+      reverseCurve: premiumFluidCurve,
     );
+
+    _scaleAnimation = Tween<double>(begin: 1.0, end: widget.scaleTo).animate(curved);
+    _blurAnimation = Tween<double>(begin: 0.0, end: 2.0).animate(curved);
   }
 
   @override
@@ -125,9 +136,23 @@ class _M3PressScaleState extends State<M3PressScale>
       onTapCancel: _onTapCancel,
       onLongPress: widget.onLongPress,
       child: AnimatedBuilder(
-        animation: _scaleAnimation,
-        builder: (context, child) =>
-            Transform.scale(scale: _scaleAnimation.value, child: child),
+        animation: _controller,
+        builder: (context, child) {
+          final scaledChild = Transform.scale(
+            scale: _scaleAnimation.value,
+            child: child,
+          );
+          if (widget.blurOnPress && _blurAnimation.value > 0) {
+            return ImageFiltered(
+              imageFilter: ImageFilter.blur(
+                sigmaX: _blurAnimation.value,
+                sigmaY: _blurAnimation.value,
+              ),
+              child: scaledChild,
+            );
+          }
+          return scaledChild;
+        },
         child: widget.child,
       ),
     );
@@ -185,7 +210,7 @@ class StaggeredFadeIn extends StatelessWidget {
     required this.child,
     this.index = 0,
     this.delay = const Duration(milliseconds: 60),
-    this.duration = const Duration(milliseconds: 700),
+    this.duration = const Duration(milliseconds: 600),
     this.slideOffset = const Offset(0, 0.06),
   });
 

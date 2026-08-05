@@ -34,7 +34,8 @@ class _PremiumCtaButtonState extends State<PremiumCtaButton>
     // Custom cubic-bezier mimicking physical tension
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 120),
+      reverseDuration: const Duration(milliseconds: 250),
     );
     final curvedAnimation = CurvedAnimation(
       parent: _controller,

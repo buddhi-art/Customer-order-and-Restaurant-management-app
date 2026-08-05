@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:ui';
 import 'package:go_router/go_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../theme/app_colors.dart';
@@ -14,15 +15,21 @@ class AdminSidebar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 250,
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [AppColors.cardGradientStart, AppColors.cardDark],
-        ),
-      ),
+    return ClipRect(
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
+        child: Container(
+          width: 250,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                AppColors.cardGradientStart.withValues(alpha: 0.85), 
+                AppColors.cardDark.withValues(alpha: 0.85)
+              ],
+            ),
+          ),
       padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -66,7 +73,7 @@ class AdminSidebar extends StatelessWidget {
           StaggeredFadeIn(
             index: 5,
             slideOffset: const Offset(-20, 0),
-            child: GestureDetector(
+            child: M3PressScale(
               onTap: () async {
                 try {
                   await Supabase.instance.client.auth.signOut();
@@ -102,18 +109,20 @@ class AdminSidebar extends StatelessWidget {
           ),
         ],
       ),
+        ),
+      ),
     );
   }
 
   Widget _buildNavItem(BuildContext context, String title, IconData icon, String route) {
     final isActive = activeRoute == route;
-    return GestureDetector(
+    return M3PressScale(
       onTap: () {
         if (!isActive) context.go(route);
       },
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeOutCubic,
+        duration: const Duration(milliseconds: 150),
+        curve: m3FadeCurve,
         padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
         margin: const EdgeInsets.only(bottom: 16),
         decoration: BoxDecoration(
