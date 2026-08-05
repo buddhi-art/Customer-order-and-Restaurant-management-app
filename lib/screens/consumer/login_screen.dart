@@ -32,6 +32,10 @@ class _LoginScreenState extends State<LoginScreen> {
     _countdown = 300;
     _timer?.cancel();
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (!mounted) {
+        timer.cancel();
+        return;
+      }
       if (_countdown > 0) {
         setState(() => _countdown--);
       } else {

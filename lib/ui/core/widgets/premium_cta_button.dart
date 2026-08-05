@@ -2,18 +2,24 @@ import 'package:flutter/material.dart';
 
 class PremiumCtaButton extends StatefulWidget {
   final String text;
-  final VoidCallback onPressed;
-  final IconData trailingIcon;
+  final VoidCallback? onPressed;
+  final IconData? trailingIcon;
   final Color? backgroundColor;
   final Color? foregroundColor;
+  final bool isLoading;
+  final bool isDisabled;
+  final bool isFullWidth;
 
   const PremiumCtaButton({
     super.key,
     required this.text,
-    required this.onPressed,
-    this.trailingIcon = Icons.arrow_outward_rounded,
+    this.onPressed,
+    this.trailingIcon,
     this.backgroundColor,
     this.foregroundColor,
+    this.isLoading = false,
+    this.isDisabled = false,
+    this.isFullWidth = false,
   });
 
   @override
@@ -55,6 +61,10 @@ class _PremiumCtaButtonState extends State<PremiumCtaButton>
   }
 
   void _updateState() {
+    if (widget.isDisabled || widget.isLoading) {
+      _controller.reverse();
+      return;
+    }
     if (_isPressed || _isHovered) {
       _controller.forward();
     } else {
@@ -63,73 +73,126 @@ class _PremiumCtaButtonState extends State<PremiumCtaButton>
   }
 
   @override
+  void didUpdateWidget(PremiumCtaButton oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.isDisabled != oldWidget.isDisabled || widget.isLoading != oldWidget.isLoading) {
+      _updateState();
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final bg = widget.backgroundColor ?? colorScheme.onSurface;
     final fg = widget.foregroundColor ?? colorScheme.surface;
+    
+    final bool isInteractive = !widget.isDisabled && !widget.isLoading && widget.onPressed != null;
 
     return MouseRegion(
       onEnter: (_) {
+        if (!isInteractive) return;
         setState(() => _isHovered = true);
         _updateState();
       },
       onExit: (_) {
+        if (!isInteractive) return;
         setState(() => _isHovered = false);
         _updateState();
       },
       child: GestureDetector(
         onTapDown: (_) {
+          if (!isInteractive) return;
           setState(() => _isPressed = true);
           _updateState();
         },
         onTapUp: (_) {
+          if (!isInteractive) return;
           setState(() => _isPressed = false);
           _updateState();
-          widget.onPressed();
+          widget.onPressed?.call();
         },
         onTapCancel: () {
+          if (!isInteractive) return;
           setState(() => _isPressed = false);
           _updateState();
         },
-        child: ScaleTransition(
-          scale: _scaleAnimation,
-          child: Container(
-            padding: const EdgeInsets.only(left: 24, right: 6, top: 6, bottom: 6),
-            decoration: BoxDecoration(
-              color: bg,
-              borderRadius: BorderRadius.circular(100),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  widget.text,
-                  style: TextStyle(
-                    color: fg,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                const SizedBox(width: 16),
-                SlideTransition(
-                  position: _iconSlideAnimation,
-                  child: Container(
-                    width: 40,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      color: fg.withValues(alpha: 0.15),
-                      shape: BoxShape.circle,
-                    ),
-                    child: Center(
-                      child: Icon(
-                        widget.trailingIcon,
-                        size: 20,
+        child: AnimatedOpacity(
+          duration: const Duration(milliseconds: 200),
+          opacity: (widget.isDisabled || widget.isLoading) ? 0.6 : 1.0,
+          child: ScaleTransition(
+            scale: _scaleAnimation,
+            child: Container(
+              padding: const EdgeInsets.only(left: 24, right: 6, top: 6, bottom: 6),
+              decoration: BoxDecoration(
+                color: bg,
+                borderRadius: BorderRadius.circular(100),
+              ),
+              child: Row(
+                mainAxisSize: widget.isFullWidth ? MainAxisSize.max : MainAxisSize.min,
+                children: [
+                  if (widget.isFullWidth)
+                    Expanded(
+                      child: Text(
+                        widget.text,
+                        style: TextStyle(
+                          color: fg,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    )
+                  else
+                    Text(
+                      widget.text,
+                      style: TextStyle(
                         color: fg,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
-                  ),
-                ),
-              ],
+                  if (widget.isLoading) ...[
+                    const SizedBox(width: 16),
+                    Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: fg.withValues(alpha: 0.15),
+                        shape: BoxShape.circle,
+                      ),
+                      child: Center(
+                        child: SizedBox(
+                          width: 16,
+                          height: 16,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: fg,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ] else if (widget.trailingIcon != null) ...[
+                    const SizedBox(width: 16),
+                    SlideTransition(
+                      position: _iconSlideAnimation,
+                      child: Container(
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          color: fg.withValues(alpha: 0.15),
+                          shape: BoxShape.circle,
+                        ),
+                        child: Center(
+                          child: Icon(
+                            widget.trailingIcon,
+                            size: 20,
+                            color: fg,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ],
+              ),
             ),
           ),
         ),

@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:go_router/go_router.dart';
 import '../../theme/m3_theme.dart';
+import '../../animations/m3_animations.dart';
 import '../../providers/order_provider.dart';
 import '../../providers/inventory_provider.dart';
 import '../../models/order.dart';
@@ -522,31 +523,28 @@ class _DashboardCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DoubleBezelContainer(
+    Widget content = DoubleBezelContainer(
       outerRadius: 32,
       padding: 4,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(28),
-        child: Padding(
-          padding: const EdgeInsets.all(32),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                title,
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.w800,
-                  letterSpacing: -0.5,
-                ),
+      child: Padding(
+        padding: const EdgeInsets.all(32),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              title,
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                fontWeight: FontWeight.w800,
+                letterSpacing: -0.5,
               ),
-              const SizedBox(height: 32),
-              child,
-            ],
-          ),
+            ),
+            const SizedBox(height: 32),
+            child,
+          ],
         ),
       ),
     );
+    return onTap != null ? M3PressScale(onTap: onTap!, child: content) : content;
   }
 }
 
@@ -567,48 +565,45 @@ class _KpiStatRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DoubleBezelContainer(
+    Widget content = DoubleBezelContainer(
       outerRadius: 28,
       padding: 4,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(24),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 28),
-          child: Row(
-            children: [
-              Container(
-                width: 44,
-                height: 44,
-                decoration: BoxDecoration(
-                  color: color.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Icon(icon, color: color, size: 22),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 28),
+        child: Row(
+          children: [
+            Container(
+              width: 44,
+              height: 44,
+              decoration: BoxDecoration(
+                color: color.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(12),
               ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Text(
-                  label,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: CafeColors.onSurfaceVariant,
-                    fontWeight: FontWeight.w600,
-                  ),
+              child: Icon(icon, color: color, size: 22),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Text(
+                label,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: CafeColors.onSurfaceVariant,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
-              Text(
-                value,
-                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                  fontWeight: FontWeight.w900,
-                  color: CafeColors.onSurface,
-                  letterSpacing: -1,
-                ),
+            ),
+            Text(
+              value,
+              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                fontWeight: FontWeight.w900,
+                color: CafeColors.onSurface,
+                letterSpacing: -1,
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
+    return onTap != null ? M3PressScale(onTap: onTap!, child: content) : content;
   }
 }
 
@@ -629,61 +624,58 @@ class _KpiFeaturedNumber extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DoubleBezelContainer(
+    Widget content = DoubleBezelContainer(
       outerRadius: 28,
       padding: 4,
       innerColor: color.withValues(alpha: 0.04),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(24),
-        child: Padding(
-          padding: const EdgeInsets.all(28),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                value,
-                style: Theme.of(context).textTheme.displaySmall?.copyWith(
-                  fontWeight: FontWeight.w900,
-                  color: CafeColors.onSurface,
-                  letterSpacing: -2,
-                  height: 1,
+      child: Padding(
+        padding: const EdgeInsets.all(28),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              value,
+              style: Theme.of(context).textTheme.displaySmall?.copyWith(
+                fontWeight: FontWeight.w900,
+                color: CafeColors.onSurface,
+                letterSpacing: -2,
+                height: 1,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              label,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: CafeColors.onSurfaceVariant,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            if (badge != null) ...[
+              const SizedBox(height: 10),
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 4,
+                ),
+                decoration: BoxDecoration(
+                  color: color.withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(100),
+                ),
+                child: Text(
+                  badge!,
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w700,
+                    color: color,
+                  ),
                 ),
               ),
-              const SizedBox(height: 8),
-              Text(
-                label,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: CafeColors.onSurfaceVariant,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              if (badge != null) ...[
-                const SizedBox(height: 10),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 4,
-                  ),
-                  decoration: BoxDecoration(
-                    color: color.withValues(alpha: 0.12),
-                    borderRadius: BorderRadius.circular(100),
-                  ),
-                  child: Text(
-                    badge!,
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w700,
-                      color: color,
-                    ),
-                  ),
-                ),
-              ],
             ],
-          ),
+          ],
         ),
       ),
     );
+    return onTap != null ? M3PressScale(onTap: onTap!, child: content) : content;
   }
 }
 
@@ -695,79 +687,76 @@ class _KpiRevenueCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DoubleBezelContainer(
+    Widget content = DoubleBezelContainer(
       outerRadius: 28,
       padding: 4,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(24),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 28),
-          child: Row(
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Revenue',
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: CafeColors.onSurfaceVariant,
-                        fontWeight: FontWeight.w600,
-                      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 28),
+        child: Row(
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Revenue',
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: CafeColors.onSurfaceVariant,
+                      fontWeight: FontWeight.w600,
                     ),
-                    const SizedBox(height: 8),
-                    Text(
-                      '\$${revenue.toStringAsFixed(0)}',
-                      style: Theme.of(context).textTheme.headlineSmall
-                          ?.copyWith(
-                            fontWeight: FontWeight.w900,
-                            color: CafeColors.onSurface,
-                            letterSpacing: -1,
-                          ),
-                    ),
-                    const SizedBox(height: 12),
-                    // Accent bar — fills proportionally (capped at 4 segments)
-                    LayoutBuilder(
-                      builder: (context, barConstraints) {
-                        final segments = 10;
-                        final filled = (revenue > 0)
-                            ? ((revenue / (revenue + 200)).clamp(0.08, 1.0) *
-                                      segments)
-                                  .round()
-                            : 0;
-                        return Row(
-                          children: List.generate(segments, (i) {
-                            final active = i < filled;
-                            final hue = active
-                                ? CafeColors.primary
-                                : CafeColors.outline;
-                            return Container(
-                              width:
-                                  (barConstraints.maxWidth -
-                                      (segments - 1) * 4) /
-                                  segments,
-                              height: 4,
-                              decoration: BoxDecoration(
-                                color: hue,
-                                borderRadius: BorderRadius.circular(2),
-                              ),
-                              margin: EdgeInsets.only(
-                                right: i < segments - 1 ? 4 : 0,
-                              ),
-                            );
-                          }),
-                        );
-                      },
-                    ),
-                  ],
-                ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    '\$${revenue.toStringAsFixed(0)}',
+                    style: Theme.of(context).textTheme.headlineSmall
+                        ?.copyWith(
+                          fontWeight: FontWeight.w900,
+                          color: CafeColors.onSurface,
+                          letterSpacing: -1,
+                        ),
+                  ),
+                  const SizedBox(height: 12),
+                  // Accent bar — fills proportionally (capped at 4 segments)
+                  LayoutBuilder(
+                    builder: (context, barConstraints) {
+                      final segments = 10;
+                      final filled = (revenue > 0)
+                          ? ((revenue / (revenue + 200)).clamp(0.08, 1.0) *
+                                    segments)
+                                .round()
+                          : 0;
+                      return Row(
+                        children: List.generate(segments, (i) {
+                          final active = i < filled;
+                          final hue = active
+                              ? CafeColors.primary
+                              : CafeColors.outline;
+                          return Container(
+                            width:
+                                (barConstraints.maxWidth -
+                                    (segments - 1) * 4) /
+                                segments,
+                            height: 4,
+                            decoration: BoxDecoration(
+                              color: hue,
+                              borderRadius: BorderRadius.circular(2),
+                            ),
+                            margin: EdgeInsets.only(
+                              right: i < segments - 1 ? 4 : 0,
+                            ),
+                          );
+                        }),
+                      );
+                    },
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
+    return onTap != null ? M3PressScale(onTap: onTap!, child: content) : content;
   }
 }
 

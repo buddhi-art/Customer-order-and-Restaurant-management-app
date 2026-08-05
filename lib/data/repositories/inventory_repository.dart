@@ -70,7 +70,7 @@ class InventoryRepository {
       name: json['name'] as String? ?? '',
       category: json['category'] as String? ?? 'General',
       currentStock: (json['current_stock'] as num?)?.toDouble() ?? 0,
-      minStock: (json['min_stock'] as num?)?.toDouble() ?? 10,
+      minStock: (json['min_stock'] as num?)?.toDouble() ?? 0,
       unit: json['unit'] as String? ?? 'units',
       costPerUnit: (json['cost_per_unit'] as num?)?.toDouble() ?? 0,
     );

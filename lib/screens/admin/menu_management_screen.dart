@@ -6,6 +6,7 @@ import '../../theme/m3_theme.dart';
 import '../../providers/menu_provider.dart';
 import '../../models/menu_item.dart';
 import '../../ui/core/widgets/double_bezel_container.dart';
+import '../../ui/core/widgets/premium_cta_button.dart';
 import 'admin_shell.dart';
 
 class MenuManagementScreen extends ConsumerWidget {
@@ -18,10 +19,10 @@ class MenuManagementScreen extends ConsumerWidget {
     return AdminShell(
       title: 'Menu',
       selectedIndex: 2,
-      floatingActionButton: FloatingActionButton.extended(
+      floatingActionButton: PremiumCtaButton(
+        text: 'Add Item',
         onPressed: () => _showAddItemDialog(context, ref),
-        icon: const Icon(Icons.add_rounded),
-        label: const Text('Add Item'),
+        trailingIcon: Icons.add_rounded,
       ),
       body: menuItems.isEmpty
           ? Center(
@@ -128,12 +129,15 @@ class MenuManagementScreen extends ConsumerWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  TextButton(
+                  PremiumCtaButton(
                     onPressed: () => Navigator.pop(ctx),
-                    child: const Text('Cancel'),
+                    text: 'Cancel',
+                    backgroundColor: Colors.transparent,
+                    foregroundColor: Theme.of(context).colorScheme.onSurface,
+                    trailingIcon: Icons.close_rounded,
                   ),
                   const SizedBox(width: 16),
-                  FilledButton(
+                  PremiumCtaButton(
                     onPressed: () async {
                       final name = nameController.text.trim();
                       final price =
@@ -162,7 +166,8 @@ class MenuManagementScreen extends ConsumerWidget {
                         debugPrint('Error adding item: $e');
                       }
                     },
-                    child: const Text('Add Item'),
+                    text: 'Add Item',
+                    trailingIcon: Icons.add_rounded,
                   ),
                 ],
               ),

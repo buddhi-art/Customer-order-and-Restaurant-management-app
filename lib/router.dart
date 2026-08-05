@@ -82,15 +82,17 @@ final router = GoRouter(
       ).read(adminStatusProvider);
 
       // If cache is null (not yet loaded), fetch and cache
-      bool isAdmin;
-      if (adminStatus == null) {
-        // Capture reference before the async gap to avoid
-        // use_build_context_synchronously.
-        final container = ProviderScope.containerOf(context, listen: false);
-        isAdmin = await _checkAdminStatus(user.id);
-        container.read(adminStatusProvider.notifier).setStatus(isAdmin);
-      } else {
-        isAdmin = adminStatus;
+      bool isAdmin = false;
+      try {
+        if (adminStatus == null) {
+          final container = ProviderScope.containerOf(context, listen: false);
+          isAdmin = await _checkAdminStatus(user.id);
+          container.read(adminStatusProvider.notifier).setStatus(isAdmin);
+        } else {
+          isAdmin = adminStatus;
+        }
+      } catch (_) {
+        isAdmin = false;
       }
 
       if (!isAdmin) {

@@ -1,10 +1,13 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../theme/cafe_colors.dart';
 import '../../animations/m3_animations.dart';
+import '../../ui/core/widgets/double_bezel_container.dart';
+import '../../ui/core/widgets/premium_cta_button.dart';
 
 class AdminLoginScreen extends StatefulWidget {
   const AdminLoginScreen({super.key});
@@ -145,6 +148,45 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (!kIsWeb) {
+      return Scaffold(
+        backgroundColor: CafeColors.surface,
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(
+                Icons.desktop_mac_rounded,
+                size: 64,
+                color: CafeColors.onSurfaceVariant,
+              ),
+              const SizedBox(height: 24),
+              Text(
+                'Admin Portal is Web Only',
+                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: CafeColors.onSurface,
+                ),
+              ),
+              const SizedBox(height: 12),
+              Text(
+                'Please access this page from a desktop browser.',
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                  color: CafeColors.onSurfaceVariant,
+                ),
+              ),
+              const SizedBox(height: 32),
+              PremiumCtaButton(
+                text: 'Back to Home',
+                onPressed: () => context.go('/'),
+                trailingIcon: Icons.home_rounded,
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
     final textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
@@ -290,55 +332,36 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
                       ),
                     ),
                     const SizedBox(height: 8),
-                    Container(
-                      padding: const EdgeInsets.all(6),
-                      decoration: BoxDecoration(
-                        color: CafeColors.surfaceContainerLow,
-                        borderRadius: BorderRadius.circular(24),
-                        border: Border.all(color: CafeColors.outline),
-                      ),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: CafeColors.surface,
-                          borderRadius: BorderRadius.circular(18),
-                          boxShadow: [
-                            BoxShadow(
-                              color: CafeColors.onSurface.withValues(
-                                alpha: 0.03,
-                              ),
-                              blurRadius: 4,
-                              offset: const Offset(0, 2),
+                    DoubleBezelContainer(
+                      outerRadius: 24,
+                      padding: 6,
+                      child: TextField(
+                        controller: _emailController,
+                        keyboardType: TextInputType.emailAddress,
+                        decoration: InputDecoration(
+                          prefixIcon: const Icon(
+                            Icons.email_outlined,
+                            color: CafeColors.primary,
+                            size: 20,
+                          ),
+                          border: InputBorder.none,
+                          enabledBorder: InputBorder.none,
+                          focusedBorder: InputBorder.none,
+                          filled: false,
+                          hintText: 'admin@kalpacoffee.com',
+                          hintStyle: TextStyle(
+                            color: CafeColors.onSurfaceVariant.withValues(
+                              alpha: 0.5,
                             ),
-                          ],
+                            fontSize: 15,
+                          ),
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 16,
+                          ),
                         ),
-                        child: TextField(
-                          controller: _emailController,
-                          keyboardType: TextInputType.emailAddress,
-                          decoration: InputDecoration(
-                            prefixIcon: const Icon(
-                              Icons.email_outlined,
-                              color: CafeColors.primary,
-                              size: 20,
-                            ),
-                            border: InputBorder.none,
-                            enabledBorder: InputBorder.none,
-                            focusedBorder: InputBorder.none,
-                            filled: false,
-                            hintText: 'admin@kalpacoffee.com',
-                            hintStyle: TextStyle(
-                              color: CafeColors.onSurfaceVariant.withValues(
-                                alpha: 0.5,
-                              ),
-                              fontSize: 15,
-                            ),
-                            contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 16,
-                            ),
-                          ),
-                          style: textTheme.bodyLarge?.copyWith(
-                            color: CafeColors.onSurface,
-                          ),
+                        style: textTheme.bodyLarge?.copyWith(
+                          color: CafeColors.onSurface,
                         ),
                       ),
                     ),
@@ -361,71 +384,52 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
                       ),
                     ),
                     const SizedBox(height: 8),
-                    Container(
-                      padding: const EdgeInsets.all(6),
-                      decoration: BoxDecoration(
-                        color: CafeColors.surfaceContainerLow,
-                        borderRadius: BorderRadius.circular(24),
-                        border: Border.all(color: CafeColors.outline),
-                      ),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: CafeColors.surface,
-                          borderRadius: BorderRadius.circular(18),
-                          boxShadow: [
-                            BoxShadow(
-                              color: CafeColors.onSurface.withValues(
-                                alpha: 0.03,
-                              ),
-                              blurRadius: 4,
-                              offset: const Offset(0, 2),
+                    DoubleBezelContainer(
+                      outerRadius: 24,
+                      padding: 6,
+                      child: TextField(
+                        controller: _passwordController,
+                        obscureText: _obscurePassword,
+                        onSubmitted: (_) => _signIn(),
+                        decoration: InputDecoration(
+                          prefixIcon: const Icon(
+                            Icons.lock_outline,
+                            color: CafeColors.primary,
+                            size: 20,
+                          ),
+                          suffixIcon: M3PressScale(
+                            onTap: () => setState(
+                              () => _obscurePassword = !_obscurePassword,
                             ),
-                          ],
+                            child: Container(
+                              margin: const EdgeInsets.only(right: 4),
+                              child: Icon(
+                                _obscurePassword
+                                    ? Icons.visibility_off_outlined
+                                    : Icons.visibility_outlined,
+                                color: CafeColors.onSurfaceVariant,
+                                size: 20,
+                              ),
+                            ),
+                          ),
+                          border: InputBorder.none,
+                          enabledBorder: InputBorder.none,
+                          focusedBorder: InputBorder.none,
+                          filled: false,
+                          hintText: '••••••••',
+                          hintStyle: TextStyle(
+                            color: CafeColors.onSurfaceVariant.withValues(
+                              alpha: 0.5,
+                            ),
+                            fontSize: 15,
+                          ),
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 16,
+                          ),
                         ),
-                        child: TextField(
-                          controller: _passwordController,
-                          obscureText: _obscurePassword,
-                          onSubmitted: (_) => _signIn(),
-                          decoration: InputDecoration(
-                            prefixIcon: const Icon(
-                              Icons.lock_outline,
-                              color: CafeColors.primary,
-                              size: 20,
-                            ),
-                            suffixIcon: M3PressScale(
-                              onTap: () => setState(
-                                () => _obscurePassword = !_obscurePassword,
-                              ),
-                              child: Container(
-                                margin: const EdgeInsets.only(right: 4),
-                                child: Icon(
-                                  _obscurePassword
-                                      ? Icons.visibility_off_outlined
-                                      : Icons.visibility_outlined,
-                                  color: CafeColors.onSurfaceVariant,
-                                  size: 20,
-                                ),
-                              ),
-                            ),
-                            border: InputBorder.none,
-                            enabledBorder: InputBorder.none,
-                            focusedBorder: InputBorder.none,
-                            filled: false,
-                            hintText: '••••••••',
-                            hintStyle: TextStyle(
-                              color: CafeColors.onSurfaceVariant.withValues(
-                                alpha: 0.5,
-                              ),
-                              fontSize: 15,
-                            ),
-                            contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 16,
-                            ),
-                          ),
-                          style: textTheme.bodyLarge?.copyWith(
-                            color: CafeColors.onSurface,
-                          ),
+                        style: textTheme.bodyLarge?.copyWith(
+                          color: CafeColors.onSurface,
                         ),
                       ),
                     ),
@@ -470,76 +474,21 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
 
               const SizedBox(height: 32),
 
-              // ── Sign In Button — Pill, Espresso Fill ────────────────────
+              // ── Sign In Button ──────────────────────────────────────────
               FadeInWidget(
                 duration: const Duration(milliseconds: 700),
                 delay: const Duration(milliseconds: 450),
-                child: M3PressScale(
-                  onTap: (_isLoading || _isLockedOut) ? null : _signIn,
-                  child: Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: _isLockedOut
-                          ? CafeColors.onSurface.withValues(alpha: 0.4)
-                          : CafeColors.onSurface,
-                      borderRadius: BorderRadius.circular(100),
-                      boxShadow: [
-                        BoxShadow(
-                          color: CafeColors.onSurface.withValues(alpha: 0.15),
-                          blurRadius: 24,
-                          offset: const Offset(0, 12),
-                        ),
-                      ],
-                    ),
-                    child: Row(
-                      children: [
-                        const SizedBox(width: 24),
-                        Expanded(
-                          child: Text(
-                            _isLockedOut
-                                ? 'Locked — retry in ${_lockoutRemaining}s'
-                                : 'Sign In',
-                            style: textTheme.titleMedium?.copyWith(
-                              color: CafeColors.surface,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                        ),
-                        if (_isLoading)
-                          Container(
-                            width: 48,
-                            height: 48,
-                            decoration: const BoxDecoration(
-                              color: Colors.white10,
-                              shape: BoxShape.circle,
-                            ),
-                            child: const Center(
-                              child: SizedBox(
-                                height: 20,
-                                width: 20,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2.5,
-                                  color: CafeColors.surface,
-                                ),
-                              ),
-                            ),
-                          )
-                        else
-                          Container(
-                            width: 48,
-                            height: 48,
-                            decoration: const BoxDecoration(
-                              color: Colors.white10,
-                              shape: BoxShape.circle,
-                            ),
-                            child: const Icon(
-                              Icons.arrow_forward,
-                              color: CafeColors.surface,
-                              size: 20,
-                            ),
-                          ),
-                      ],
-                    ),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: PremiumCtaButton(
+                    text: _isLockedOut
+                        ? 'Locked — retry in ${_lockoutRemaining}s'
+                        : 'Sign In',
+                    onPressed: _signIn,
+                    isLoading: _isLoading,
+                    isDisabled: _isLockedOut,
+                    trailingIcon: Icons.arrow_forward,
+                    isFullWidth: true,
                   ),
                 ),
               ),

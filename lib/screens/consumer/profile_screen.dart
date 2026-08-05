@@ -424,7 +424,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   }
 
   int get points {
-    return 250; // Mock fallback
+    return 0;
   }
 }
 

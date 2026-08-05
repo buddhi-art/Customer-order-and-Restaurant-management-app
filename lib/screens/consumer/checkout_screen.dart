@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:uuid/uuid.dart';
+import 'package:network_info_plus/network_info_plus.dart';
 
 import '../../providers/cart_provider.dart';
 import '../../providers/order_provider.dart';
@@ -292,12 +293,15 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                               if (!isSecure) {
                                 if (context.mounted) {
                                   setState(() => isCheckingOut = false);
+                                  final wifiName = await NetworkInfo().getWifiName();
+                                  final currentWifi = wifiName?.replaceAll('"', '') ?? 'Unknown';
+                                  if (!context.mounted) return;
                                   showDialog(
                                     context: context,
                                     builder: (ctx) => AlertDialog(
                                       backgroundColor: CafeColors.surface,
                                       title: const Text('Security Check Failed'),
-                                      content: Text('You must be connected to ${settings.wifiSSID} and be inside ${settings.cafeName} to order.'),
+                                      content: Text('You must be connected to ${settings.wifiSSID} or be inside ${settings.cafeName} to order.\n\n(Detected WiFi: $currentWifi)'),
                                       actions: [
                                         TextButton(
                                           onPressed: () => Navigator.pop(ctx),

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'dart:ui';
 import 'package:go_router/go_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../theme/m3_theme.dart' show CafeColors;
 import '../../animations/m3_animations.dart';
+import '../../widgets/responsive_widget.dart';
 
 class AdminShell extends StatelessWidget {
   final String title;
@@ -65,8 +67,109 @@ class AdminShell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     final textTheme = Theme.of(context).textTheme;
+    final isDesktop = ResponsiveUtils.isDesktop(context);
+
+    final drawerContent = Builder(
+      builder: (innerContext) => SafeArea(
+        bottom: false,
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(28, 24, 28, 24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Image.asset('assets/logo.png', height: 40, width: 40),
+                      const SizedBox(width: 12),
+                      Text(
+                        'कल्प',
+                        style: textTheme.displaySmall?.copyWith(
+                          fontWeight: FontWeight.w800,
+                          color: CafeColors.primary,
+                          letterSpacing: -1.0,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: CafeColors.onSurface,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: const Text(
+                      'ADMIN SYSTEM',
+                      style: TextStyle(
+                        fontSize: 9,
+                        fontWeight: FontWeight.w800,
+                        color: CafeColors.surface,
+                        letterSpacing: 2.0,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const Divider(indent: 28, endIndent: 28),
+            const SizedBox(height: 12),
+            Expanded(
+              child: ListView.builder(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                itemCount: _labels.length,
+                itemBuilder: (context, index) {
+                  final isSelected = selectedIndex == index;
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 4),
+                    child: M3PressScale(
+                      onTap: () {
+                        if (!isDesktop) {
+                          Navigator.of(innerContext).pop(); // Close drawer
+                        }
+                        if (!isSelected) {
+                          context.go(_routes[index]);
+                        }
+                      },
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 150),
+                        curve: m3FadeCurve,
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                        decoration: BoxDecoration(
+                          color: isSelected ? CafeColors.surfaceContainerHigh : Colors.transparent,
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(
+                              _icons[index],
+                              size: 20,
+                              color: isSelected ? CafeColors.onSurface : CafeColors.onSurfaceVariant,
+                            ),
+                            const SizedBox(width: 16),
+                            Text(
+                              _labels[index],
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+                                color: isSelected ? CafeColors.onSurface : CafeColors.onSurfaceVariant,
+                                letterSpacing: -0.2,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
 
     return Scaffold(
       backgroundColor: CafeColors.surface,
@@ -145,106 +248,33 @@ class AdminShell extends StatelessWidget {
           ),
         ],
       ),
-      drawer: Drawer(
-        backgroundColor: CafeColors.surface,
+      drawer: isDesktop ? null : Drawer(
+        backgroundColor: Colors.transparent,
         elevation: 0,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.horizontal(right: Radius.circular(32)),
-        ),
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(28, 64, 28, 24),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Image.asset('assets/logo.png', height: 40, width: 40),
-                      const SizedBox(width: 12),
-                      Text(
-                        'कल्प',
-                        style: textTheme.displaySmall?.copyWith(
-                          fontWeight: FontWeight.w800,
-                          color: CafeColors.primary,
-                          letterSpacing: -1.0,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 12),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: CafeColors.onSurface,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: const Text(
-                      'ADMIN SYSTEM',
-                      style: TextStyle(
-                        fontSize: 9,
-                        fontWeight: FontWeight.w800,
-                        color: CafeColors.surface,
-                        letterSpacing: 2.0,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+        child: ClipRect(
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+            child: Container(
+              color: CafeColors.surface.withValues(alpha: 0.85),
+              child: drawerContent,
             ),
-            const Divider(indent: 28, endIndent: 28),
-            const SizedBox(height: 12),
-            Expanded(
-              child: ListView.builder(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                itemCount: _labels.length,
-                itemBuilder: (context, index) {
-                  final isSelected = selectedIndex == index;
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 4),
-                    child: M3RippleButton(
-                      borderRadius: BorderRadius.circular(16),
-                      onTap: () {
-                        if (!isSelected) {
-                          context.go(_routes[index]);
-                        }
-                      },
-                      child: AnimatedContainer(
-                        duration: const Duration(milliseconds: 300),
-                        curve: const Cubic(0.32, 0.72, 0, 1),
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-                        decoration: BoxDecoration(
-                          color: isSelected ? CafeColors.surfaceContainerHigh : Colors.transparent,
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        child: Row(
-                          children: [
-                            Icon(
-                              _icons[index],
-                              size: 20,
-                              color: isSelected ? CafeColors.onSurface : CafeColors.onSurfaceVariant,
-                            ),
-                            const SizedBox(width: 16),
-                            Text(
-                              _labels[index],
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-                                color: isSelected ? CafeColors.onSurface : CafeColors.onSurfaceVariant,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-          ],
+          ),
         ),
       ),
-      body: body,
+      body: isDesktop ? Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: 280,
+            decoration: BoxDecoration(
+              color: CafeColors.surface,
+              border: Border(right: BorderSide(color: CafeColors.outline.withValues(alpha: 0.5))),
+            ),
+            child: drawerContent,
+          ),
+          Expanded(child: body),
+        ],
+      ) : body,
       floatingActionButton: floatingActionButton,
     );
   }

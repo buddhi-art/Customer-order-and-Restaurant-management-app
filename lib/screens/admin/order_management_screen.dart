@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../theme/m3_theme.dart';
 import '../../ui/core/widgets/double_bezel_container.dart';
+import '../../ui/core/widgets/premium_cta_button.dart';
 import '../../providers/order_provider.dart';
 import '../../models/order.dart';
 import '../../utils/print_receipt.dart';
@@ -122,30 +123,41 @@ class _StatusChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.12),
-        borderRadius: BorderRadius.circular(24),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            width: 8,
-            height: 8,
-            decoration: BoxDecoration(color: color, shape: BoxShape.circle),
-          ),
-          const SizedBox(width: 8),
-          Text(
-            '$label • $count',
-            style: TextStyle(
-              fontWeight: FontWeight.w600,
-              fontSize: 13,
-              color: color,
+    return DoubleBezelContainer(
+      outerRadius: 100,
+      padding: 2,
+      innerColor: color.withValues(alpha: 0.08),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 8,
+              height: 8,
+              decoration: BoxDecoration(
+                color: color, 
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: color.withValues(alpha: 0.4),
+                    blurRadius: 4,
+                    offset: const Offset(0, 1),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+            const SizedBox(width: 8),
+            Text(
+              '$label • $count',
+              style: TextStyle(
+                fontWeight: FontWeight.w700,
+                fontSize: 13,
+                color: color,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -398,60 +410,35 @@ class _OrderCard extends ConsumerWidget {
                     // Print Bill button — shown for served orders
                     if (order.status == OrderStatus.served) ...[
                       Expanded(
-                        child: OutlinedButton.icon(
+                        child: PremiumCtaButton(
+                          text: 'Bill',
                           onPressed: () => _printBill(context),
-                          icon: const Icon(Icons.print_rounded, size: 16),
-                          label: const Text(
-                            'Bill',
-                            style: TextStyle(fontSize: 12),
-                          ),
-                          style: OutlinedButton.styleFrom(
-                            foregroundColor: colorScheme.primary,
-                            side: BorderSide(color: colorScheme.outlineVariant),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            padding: const EdgeInsets.symmetric(vertical: 8),
-                          ),
+                          trailingIcon: Icons.print_rounded,
+                          backgroundColor: Colors.transparent,
+                          foregroundColor: colorScheme.primary,
                         ),
                       ),
                       const SizedBox(width: 8),
                     ],
                     // Details button
                     Expanded(
-                      child: OutlinedButton(
+                      child: PremiumCtaButton(
+                        text: 'Details',
                         onPressed: () => _showOrderDetail(context, order),
-                        style: OutlinedButton.styleFrom(
-                          foregroundColor: colorScheme.primary,
-                          side: BorderSide(color: colorScheme.outlineVariant),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          padding: const EdgeInsets.symmetric(vertical: 8),
-                        ),
-                        child: const Text(
-                          'Details',
-                          style: TextStyle(fontSize: 12),
-                        ),
+                        backgroundColor: Colors.transparent,
+                        foregroundColor: colorScheme.primary,
+                        trailingIcon: null, // No icon for details
                       ),
                     ),
                     // Advance button - shown for ALL statuses except paid
                     const SizedBox(width: 8),
                     Expanded(
-                      child: FilledButton(
+                      child: PremiumCtaButton(
+                        text: _nextLabel(),
                         onPressed: () => _advanceOrder(context, ref),
-                        style: FilledButton.styleFrom(
-                          backgroundColor: _nextColor(colorScheme),
-                          foregroundColor: colorScheme.onPrimary,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          padding: const EdgeInsets.symmetric(vertical: 8),
-                        ),
-                        child: Text(
-                          _nextLabel(),
-                          style: const TextStyle(fontSize: 12),
-                        ),
+                        backgroundColor: _nextColor(colorScheme),
+                        foregroundColor: colorScheme.onPrimary,
+                        trailingIcon: Icons.arrow_forward_rounded,
                       ),
                     ),
                   ],
@@ -535,23 +522,22 @@ class _OrderCard extends ConsumerWidget {
           'Mark this order as paid in cash at the counter?',
         ),
         actions: [
-          TextButton(
+          PremiumCtaButton(
+            text: 'Cancel',
             onPressed: () => Navigator.of(ctx).pop(),
-            child: const Text('Cancel'),
+            backgroundColor: Colors.transparent,
+            foregroundColor: Theme.of(context).colorScheme.onSurface,
+            trailingIcon: Icons.close_rounded,
           ),
-          FilledButton.icon(
+          PremiumCtaButton(
+            text: 'Mark Paid — Cash',
             onPressed: () {
               Navigator.of(ctx).pop();
               _handlePayment(context, ref, 'cash');
             },
-            icon: const Icon(Icons.money_rounded),
-            label: const Text('Mark Paid — Cash'),
-            style: FilledButton.styleFrom(
-              backgroundColor: CafeColors.success,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-            ),
+            trailingIcon: Icons.money_rounded,
+            backgroundColor: CafeColors.success,
+            foregroundColor: Colors.white,
           ),
         ],
       ),

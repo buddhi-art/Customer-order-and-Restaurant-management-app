@@ -45,6 +45,14 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	
+	<!-- Required for Geofencing and WiFi SSID reading -->
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>This app requires location access to verify you are at the cafe to place an order, or to verify you are on the cafe's WiFi network.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>This app requires location access to verify you are at the cafe to place an order, or to verify you are on the cafe's WiFi network.</string>
+	<key>NSLocationUsageDescription</key>
+	<string>This app requires location access to verify you are at the cafe to place an order.</string>
 	<!-- Force Impeller (Metal) for hardware-accelerated animations -->
 	<key>FLTEnableImpeller</key>
 	<true/>

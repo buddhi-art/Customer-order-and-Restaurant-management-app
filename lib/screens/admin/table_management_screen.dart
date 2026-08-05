@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import '../../theme/m3_theme.dart';
+import '../../theme/cafe_colors.dart';
 import '../../providers/order_provider.dart';
 import '../../models/order.dart';
 import '../../ui/core/widgets/double_bezel_container.dart';
+import '../../ui/core/widgets/premium_cta_button.dart';
+import '../../animations/m3_animations.dart';
 import '../../utils/qr_service.dart';
 import 'admin_shell.dart';
 
@@ -53,10 +56,10 @@ class _TableManagementScreenState extends ConsumerState<TableManagementScreen> {
     return AdminShell(
       title: 'Tables',
       selectedIndex: 3,
-      floatingActionButton: FloatingActionButton.extended(
+      floatingActionButton: PremiumCtaButton(
+        text: 'Add Table',
         onPressed: _addTable,
-        icon: const Icon(Icons.add_rounded),
-        label: const Text('Add Table'),
+        trailingIcon: Icons.add_rounded,
       ),
       body: Padding(
         padding: const EdgeInsets.all(24),
@@ -348,7 +351,7 @@ class _TableCard extends StatelessWidget {
             child: Row(
               children: [
                 Expanded(
-                  child: InkWell(
+                  child: M3PressScale(
                     onTap: onDownloadQr,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10),
@@ -384,7 +387,7 @@ class _TableCard extends StatelessWidget {
                     color: colorScheme.outlineVariant.withValues(alpha: 0.5),
                   ),
                   Expanded(
-                    child: InkWell(
+                    child: M3PressScale(
                       onTap: onDelete,
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10),
