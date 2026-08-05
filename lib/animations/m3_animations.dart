@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'dart:ui';
+
 import 'package:flutter_animate/flutter_animate.dart';
 import '../theme/cafe_colors.dart';
 
@@ -68,7 +68,6 @@ class M3PressScale extends StatefulWidget {
   final VoidCallback? onTap;
   final VoidCallback? onLongPress;
   final double scaleTo;
-  final bool blurOnPress;
 
   const M3PressScale({
     super.key,
@@ -76,7 +75,6 @@ class M3PressScale extends StatefulWidget {
     this.onTap,
     this.onLongPress,
     this.scaleTo = 0.97,
-    this.blurOnPress = true,
   });
 
   @override
@@ -87,7 +85,8 @@ class _M3PressScaleState extends State<M3PressScale>
     with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
   late final Animation<double> _scaleAnimation;
-  late final Animation<double> _blurAnimation;
+
+  bool _isHovered = false;
 
   @override
   void initState() {
@@ -108,7 +107,6 @@ class _M3PressScaleState extends State<M3PressScale>
       begin: 1.0,
       end: widget.scaleTo,
     ).animate(curved);
-    _blurAnimation = Tween<double>(begin: 0.0, end: 2.0).animate(curved);
   }
 
   @override
@@ -132,31 +130,32 @@ class _M3PressScaleState extends State<M3PressScale>
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
-      onTapDown: _onTapDown,
-      onTapUp: _onTapUp,
-      onTapCancel: _onTapCancel,
-      onLongPress: widget.onLongPress,
-      child: AnimatedBuilder(
-        animation: _controller,
-        builder: (context, child) {
-          final scaledChild = Transform.scale(
-            scale: _scaleAnimation.value,
-            child: child,
-          );
-          if (widget.blurOnPress && _blurAnimation.value > 0) {
-            return ImageFiltered(
-              imageFilter: ImageFilter.blur(
-                sigmaX: _blurAnimation.value,
-                sigmaY: _blurAnimation.value,
-              ),
-              child: scaledChild,
+    return MouseRegion(
+      onEnter: (_) => setState(() => _isHovered = true),
+      onExit: (_) => setState(() => _isHovered = false),
+      cursor: widget.onTap != null || widget.onLongPress != null 
+          ? SystemMouseCursors.click 
+          : SystemMouseCursors.basic,
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTapDown: _onTapDown,
+        onTapUp: _onTapUp,
+        onTapCancel: _onTapCancel,
+        onLongPress: widget.onLongPress,
+        child: AnimatedBuilder(
+          animation: _controller,
+          builder: (context, child) {
+            return Transform.scale(
+              scale: _scaleAnimation.value,
+              child: child,
             );
-          }
-          return scaledChild;
-        },
-        child: widget.child,
+          },
+          child: widget.child,
+        ),
+      ).animate(target: _isHovered ? 1 : 0).scaleXY(
+        end: 1.02, 
+        duration: const Duration(milliseconds: 150), 
+        curve: Curves.easeOutCubic,
       ),
     );
   }
@@ -183,17 +182,27 @@ class PremiumMorphTransition extends StatelessWidget {
   Widget build(BuildContext context) {
     final fadeAnim = CurvedAnimation(
       parent: animation,
-      curve: m3FadeCurve,
-      reverseCurve: m3FadeCurve,
+      curve: Curves.easeOutCubic,
+      reverseCurve: Curves.easeInCubic,
     );
     final slideAnim = Tween<Offset>(
-      begin: const Offset(0.03, 0),
+      begin: const Offset(0.04, 0),
       end: Offset.zero,
+    ).animate(CurvedAnimation(parent: animation, curve: premiumFluidCurve));
+    final scaleAnim = Tween<double>(
+      begin: 0.97,
+      end: 1.0,
     ).animate(CurvedAnimation(parent: animation, curve: premiumFluidCurve));
 
     return SlideTransition(
       position: slideAnim,
-      child: FadeTransition(opacity: fadeAnim, child: child),
+      child: FadeTransition(
+        opacity: fadeAnim, 
+        child: ScaleTransition(
+          scale: scaleAnim,
+          child: child,
+        ),
+      ),
     );
   }
 }

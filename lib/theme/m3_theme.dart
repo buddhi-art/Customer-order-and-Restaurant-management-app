@@ -262,7 +262,27 @@ class M3Theme {
         backgroundColor: CafeColors.onSurface,
         foregroundColor: CafeColors.surface,
         elevation: 0,
+        hoverElevation: 6,
+        focusElevation: 2,
+        highlightElevation: 1,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      ),
+      textButtonTheme: TextButtonThemeData(
+        style: TextButton.styleFrom(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+          textStyle: bodyFont(fontSize: 16, fontWeight: FontWeight.w600),
+        ).copyWith(
+          overlayColor: WidgetStateProperty.resolveWith((states) {
+            if (states.contains(WidgetState.hovered)) {
+              return CafeColors.onSurface.withValues(alpha: 0.08);
+            }
+            if (states.contains(WidgetState.pressed)) {
+              return CafeColors.onSurface.withValues(alpha: 0.12);
+            }
+            return null;
+          }),
+        ),
       ),
 
       chipTheme: ChipThemeData(
@@ -365,15 +385,20 @@ class M3Theme {
               ),
               textStyle: bodyFont(fontSize: 16, fontWeight: FontWeight.w600),
             ).copyWith(
-              // Subtle hover state
+              // Enhanced hover state for animation
               overlayColor: WidgetStateProperty.resolveWith((states) {
                 if (states.contains(WidgetState.hovered)) {
-                  return Colors.white.withValues(alpha: 0.05);
+                  return Colors.white.withValues(alpha: 0.15);
                 }
                 if (states.contains(WidgetState.pressed)) {
-                  return Colors.white.withValues(alpha: 0.1);
+                  return Colors.white.withValues(alpha: 0.25);
                 }
                 return null;
+              }),
+              elevation: WidgetStateProperty.resolveWith((states) {
+                if (states.contains(WidgetState.hovered)) return 6.0;
+                if (states.contains(WidgetState.pressed)) return 1.0;
+                return 0.0;
               }),
             ),
       ),
@@ -384,6 +409,21 @@ class M3Theme {
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
           textStyle: bodyFont(fontSize: 16, fontWeight: FontWeight.w600),
+        ).copyWith(
+          elevation: WidgetStateProperty.resolveWith((states) {
+            if (states.contains(WidgetState.hovered)) return 4.0;
+            if (states.contains(WidgetState.pressed)) return 1.0;
+            return 0.0;
+          }),
+          overlayColor: WidgetStateProperty.resolveWith((states) {
+            if (states.contains(WidgetState.hovered)) {
+              return Colors.white.withValues(alpha: 0.15);
+            }
+            if (states.contains(WidgetState.pressed)) {
+              return Colors.white.withValues(alpha: 0.25);
+            }
+            return null;
+          }),
         ),
       ),
 
@@ -393,6 +433,16 @@ class M3Theme {
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
           side: const BorderSide(color: CafeColors.outlineVariant),
           textStyle: bodyFont(fontSize: 16, fontWeight: FontWeight.w600),
+        ).copyWith(
+          overlayColor: WidgetStateProperty.resolveWith((states) {
+            if (states.contains(WidgetState.hovered)) {
+              return CafeColors.onSurface.withValues(alpha: 0.08);
+            }
+            if (states.contains(WidgetState.pressed)) {
+              return CafeColors.onSurface.withValues(alpha: 0.12);
+            }
+            return null;
+          }),
         ),
       ),
 

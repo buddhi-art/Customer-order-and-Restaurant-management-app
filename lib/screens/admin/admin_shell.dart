@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'dart:ui';
+
 import 'package:go_router/go_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../theme/m3_theme.dart' show CafeColors;
@@ -269,17 +269,9 @@ class AdminShell extends StatelessWidget {
       drawer: isDesktop
           ? null
           : Drawer(
-              backgroundColor: Colors.transparent,
+              backgroundColor: CafeColors.surface,
               elevation: 0,
-              child: ClipRect(
-                child: BackdropFilter(
-                  filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
-                  child: Container(
-                    color: CafeColors.surface.withValues(alpha: 0.85),
-                    child: drawerContent,
-                  ),
-                ),
-              ),
+              child: drawerContent,
             ),
       body: isDesktop
           ? Row(
